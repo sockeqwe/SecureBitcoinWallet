@@ -28,4 +28,9 @@ dependencies {
 
   apt 'frankiesardo:icepick-processor:3.0.2'
   apt 'com.hannesdorfmann.fragmentargs:processor:2.1.0'
+
+
+  // UI libs
+  compile 'com.github.castorflex.smoothprogressbar:library-circular:1.1.0'
+
 }
