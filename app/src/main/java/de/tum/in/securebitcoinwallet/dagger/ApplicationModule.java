@@ -16,6 +16,9 @@ import javax.inject.Singleton;
  */
 @Module(
 
+    library =  true,
+    complete =  false // TODO remove this
+
 ) public class ApplicationModule {
 
   private Context context;

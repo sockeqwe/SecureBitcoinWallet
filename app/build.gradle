@@ -29,6 +29,7 @@ dependencies {
 
   apt 'frankiesardo:icepick-processor:3.0.2'
   apt 'com.hannesdorfmann.fragmentargs:processor:2.1.0'
+  apt 'com.squareup.dagger:dagger-compiler:1.2.2'
 
 
   // UI libs
