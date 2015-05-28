@@ -17,7 +17,7 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
   RecyclerView recyclerView;
 
 
-  
+
 
 
 
