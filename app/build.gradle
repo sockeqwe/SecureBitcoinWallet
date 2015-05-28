@@ -20,6 +20,8 @@ android {
   }
 }
 
+def annotatedAdapter = '1.0.0'
+
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
   compile 'com.android.support:appcompat-v7:22.1.1'
@@ -33,8 +35,14 @@ dependencies {
   apt 'com.squareup.dagger:dagger-compiler:1.2.2'
 
 
+  compile 'de.greenrobot:eventbus:2.4.0'
+
 
   // UI libs
   compile 'com.github.castorflex.smoothprogressbar:library-circular:1.1.0'
+
+  apt 'com.hannesdorfmann.annotatedadapter:processor:' + annotatedAdapter
+  compile 'com.hannesdorfmann.annotatedadapter:annotation:' + annotatedAdapter
+  compile 'com.hannesdorfmann.annotatedadapter:support-recyclerview:' + annotatedAdapter
 
 }

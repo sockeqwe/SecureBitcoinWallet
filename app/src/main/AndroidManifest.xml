@@ -3,10 +3,12 @@
     package="de.tum.in.securebitcoinwallet" >
 
     <application
+        android:name=".SecureWalletApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        >
         <activity
             android:name=".AccountListActivity"
             android:label="@string/app_name" >
