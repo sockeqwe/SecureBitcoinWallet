@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:layout_height="80dp" >
+    <LinearLayout
+        android:id="@+id/addressLayout"
+        android:orientation="vertical"
+        android:layout_weight="5"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center|center_horizontal" >
+
+        <TextView
+            android:id="@+id/textViewAccountName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="start|center_vertical"
+            android:textSize="34sp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="MyAccountName" />
+
+        <TextView
+            android:id="@+id/textViewAddress"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:textColor="#ff909090"
+            android:gravity="start|center_vertical"
+            android:textSize="20sp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="17sn3uaksjdhaskdjhaksjdasdasdasd" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/amountLayout"
+        android:orientation="vertical"
+        android:layout_weight="2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center|center_horizontal" >
+    <TextView
+        android:id="@+id/amountBitcoin"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="end|center_vertical"
+        android:textSize="24sp"
+        android:textColor="#ff00842f"
+        android:maxLines="1"
+        android:text="1.4245B" />
+
+    <TextView
+        android:id="@+id/amountCustomCurrency"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="end|center_vertical"
+        android:textSize="18sp"
+        android:maxLines="1"
+        android:text="≈ 334,32€" />
+
+    </LinearLayout>
+
+</LinearLayout>
