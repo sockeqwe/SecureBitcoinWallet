@@ -41,4 +41,17 @@ public class Address {
   public void setAmount(long amount) {
     this.amount = amount;
   }
+
+  @Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Address address1 = (Address) o;
+
+    return address.equals(address1.address);
+  }
+
+  @Override public int hashCode() {
+    return address.hashCode();
+  }
 }

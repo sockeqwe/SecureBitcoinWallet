@@ -46,7 +46,7 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
   }
 
   @Override public Observable<Boolean> isPinSet() {
-    return Observable.just(true);
+    return Observable.just(PIN!=null && !PIN.equals(""));
   }
 
   @Override public Observable<Void> changePin(final String oldPin, final String newPin) {

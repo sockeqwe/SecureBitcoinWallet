@@ -23,6 +23,7 @@ android {
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
   compile 'com.android.support:appcompat-v7:22.1.1'
+  compile 'com.android.support:recyclerview-v7:22.1.1'
 
   compile 'com.hannesdorfmann.mosby:viewstate-dagger1:1.1.0'
   compile 'com.hannesdorfmann.mosby:rx:1.1.0'
@@ -30,6 +31,7 @@ dependencies {
   apt 'frankiesardo:icepick-processor:3.0.2'
   apt 'com.hannesdorfmann.fragmentargs:processor:2.1.0'
   apt 'com.squareup.dagger:dagger-compiler:1.2.2'
+
 
 
   // UI libs

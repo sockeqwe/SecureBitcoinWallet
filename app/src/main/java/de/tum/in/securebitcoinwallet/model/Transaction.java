@@ -3,7 +3,7 @@ package de.tum.in.securebitcoinwallet.model;
 /**
  * @author Hannes Dorfmann
  */
-public abstract class Transaction {
+public class Transaction {
 
   String name;
   String id;

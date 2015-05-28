@@ -18,6 +18,6 @@ public class SecureWalletApplication extends Application implements Injector{
   }
 
   @Override public ObjectGraph getObjectGraph() {
-    return null;
+    return objectGraph;
   }
 }

@@ -3,6 +3,7 @@ package de.tum.in.securebitcoinwallet.dagger;
 import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
+import de.tum.in.securebitcoinwallet.BaseActivity;
 import de.tum.in.securebitcoinwallet.model.PrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.TransactionManager;
 import de.tum.in.securebitcoinwallet.model.WalletManager;
@@ -16,6 +17,9 @@ import javax.inject.Singleton;
  */
 @Module(
 
+    injects = {
+        BaseActivity.class
+    },
     library =  true,
     complete =  false // TODO remove this
 

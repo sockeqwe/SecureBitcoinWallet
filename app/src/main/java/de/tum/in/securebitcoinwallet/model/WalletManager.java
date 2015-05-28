@@ -26,7 +26,7 @@ public interface WalletManager {
    * Generates and stores a new {@link Address}
    * @return the new generated Address
    */
-  public Observable<Address> generateAddress();
+  public Observable<Address> generateAddress(String name);
 
   public void importWallet();
 
