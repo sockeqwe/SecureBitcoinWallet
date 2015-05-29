@@ -14,4 +14,16 @@
 
   <color name="accent_dark">#FFA000</color>
 
+
+  <!-- FAB Menu -->
+  <color name="menu_background">#FFFFFF</color>
+  <color name="menu_label_background">#3D3D3D</color>
+  <color name="menu_label_text_color">#FFFFFF</color>
+  <color name="menu_icon1">#673AB7</color>
+  <color name="menu_icon1_pressed">#512DA8</color>
+  <color name="menu_icon2">#9C27B0</color>
+  <color name="menu_icon2_pressed">#7B1FA2</color>
+  <color name="menu_icon3">#E91E63</color>
+  <color name="menu_icon3_pressed">#C2185B</color>
+
 </resources>

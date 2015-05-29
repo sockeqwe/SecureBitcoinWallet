@@ -7,4 +7,9 @@
   <string name="error_pin_incorrect">Pin is incorrect</string>
   <string name="error_unknown">An unknown error has occrred</string>
   <string name="error_not_found">Oops, the thing you are looking for has not been found.</string>
+
+
+  <string name="menu_address_import">Import</string>
+  <string name="menu_address_new">Create new</string>
+
 </resources>

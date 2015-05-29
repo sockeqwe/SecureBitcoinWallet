@@ -16,8 +16,14 @@ import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingFragmentLceViewState;
+import com.wangjie.androidbucket.utils.ABTextUtil;
 import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton;
+import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionHelper;
+import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout;
+import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RFACLabelItem;
+import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RapidFloatingActionContentLabelList;
 import de.tum.in.securebitcoinwallet.R;
+import de.tum.in.securebitcoinwallet.view.fab.RecyclerViewScrollDetector;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -26,16 +32,39 @@ import javax.inject.Inject;
  */
 public abstract class RecyclerViewFragment<M extends List<?>, V extends MvpLceView<M>, P extends MvpPresenter<V>>
     extends Dagger1MvpLceViewStateFragment<SwipeRefreshLayout, M, V, P>
-    implements SwipeRefreshLayout.OnRefreshListener {
+    implements SwipeRefreshLayout.OnRefreshListener,
+    RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener {
 
   @InjectView(R.id.recyclerView) RecyclerView recyclerView;
   @InjectView(R.id.emptyView) View emptyView;
   @InjectView(R.id.fab) RapidFloatingActionButton fab;
+  @InjectView(R.id.fabMenuLayout) RapidFloatingActionLayout fabMenuLayout;
   @Inject ErrorMessageDeterminer errorMessageDeterminer;
+
+  protected RapidFloatingActionHelper fabHelper;
 
   protected ListAdapter<M> adapter;
 
+  /**
+   * The adapter used to display the items (RecyclerView)
+   *
+   * @return Adapter
+   */
   protected abstract ListAdapter<M> createAdapter();
+
+  /**
+   * Get the item the Floating Action Button displays
+   *
+   * @return List of items
+   */
+  protected abstract List<RFACLabelItem> getFabMenuItems();
+
+  /**
+   * Called when a menu item has been clicked
+   * @param postion the index / position of the list returne in {@link #getFabMenuItems()}
+   * @param item the clicked item
+   */
+  protected abstract void onFabMeuItemClicked(int postion, RFACLabelItem item);
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
@@ -48,6 +77,20 @@ public abstract class RecyclerViewFragment<M extends List<?>, V extends MvpLceVi
     int[] colors = getActivity().getResources().getIntArray(R.array.loading_colors);
     contentView.setColorSchemeColors(colors);
     contentView.setOnRefreshListener(this);
+
+    // Fab
+    RecyclerViewScrollDetector scrollDetector = new RecyclerViewScrollDetector(fab);
+    recyclerView.addOnScrollListener(scrollDetector);
+    RapidFloatingActionContentLabelList rfaContent =
+        new RapidFloatingActionContentLabelList(getActivity());
+    rfaContent.setOnRapidFloatingActionContentLabelListListener(this);
+    rfaContent.setItems(getFabMenuItems())
+        .setIconShadowRadius(ABTextUtil.dip2px(getActivity(), 5))
+        .setIconShadowColor(0xff888888)
+        .setIconShadowDy(ABTextUtil.dip2px(getActivity(), 5));
+
+    fabHelper =
+        new RapidFloatingActionHelper(getActivity(), fabMenuLayout, fab, rfaContent).build();
   }
 
   @Override protected int getLayoutRes() {
@@ -145,5 +188,15 @@ public abstract class RecyclerViewFragment<M extends List<?>, V extends MvpLceVi
       fab.setVisibility(View.GONE);
     }
     contentView.setRefreshing(false);
+  }
+
+  @Override
+  public void onRFACItemLabelClick(int position, RFACLabelItem item) {
+    fabHelper.toggleContent();
+  }
+
+  @Override
+  public void onRFACItemIconClick(int position, RFACLabelItem item) {
+    fabHelper.toggleContent();
   }
 }
