@@ -41,6 +41,7 @@
       android:layout_marginRight="15dp"
       android:layout_marginBottom="15dp"
       android:padding="8dp"
+      android:visibility="gone"
       rfab:rfab_size="normal"
       rfab:rfab_drawable="@drawable/rfab__drawable_rfab_default"
       rfab:rfab_color_normal="@color/accent"

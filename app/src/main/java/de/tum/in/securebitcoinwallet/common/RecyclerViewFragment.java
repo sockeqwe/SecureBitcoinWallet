@@ -3,11 +3,13 @@ package de.tum.in.securebitcoinwallet.common;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import butterknife.InjectView;
 import com.hannesdorfmann.mosby.dagger1.viewstate.lce.Dagger1MvpLceViewStateFragment;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
@@ -96,6 +98,26 @@ public abstract class RecyclerViewFragment<M extends List<?>, V extends MvpLceVi
       emptyView.setVisibility(View.GONE);
     }
 
+    // Floating Action Button
+    if (fab.getVisibility() != View.VISIBLE) {
+
+      if (!isRestoringViewState()) {
+        PropertyValuesHolder holderX = PropertyValuesHolder.ofFloat("scaleX", 0, 1);
+        PropertyValuesHolder holderY = PropertyValuesHolder.ofFloat("scaleY", 0, 1);
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(fab, holderX, holderY);
+        animator.setInterpolator(new OvershootInterpolator());
+
+        animator.addListener(new AnimatorListenerAdapter() {
+          @Override public void onAnimationStart(Animator animation) {
+            fab.setVisibility(View.VISIBLE);
+          }
+        });
+        animator.setStartDelay(500);
+        animator.start();
+      } else {
+        fab.setVisibility(View.VISIBLE);
+      }
+    }
     super.showContent();
   }
 
@@ -103,6 +125,7 @@ public abstract class RecyclerViewFragment<M extends List<?>, V extends MvpLceVi
     super.showLoading(pullToRefresh);
     if (!pullToRefresh) {
       emptyView.setVisibility(View.GONE);
+      fab.setVisibility(View.GONE);
     }
 
     if (pullToRefresh && !contentView.isRefreshing()) {
@@ -119,6 +142,7 @@ public abstract class RecyclerViewFragment<M extends List<?>, V extends MvpLceVi
     super.showError(e, pullToRefresh);
     if (!pullToRefresh) {
       emptyView.setVisibility(View.GONE);
+      fab.setVisibility(View.GONE);
     }
     contentView.setRefreshing(false);
   }
