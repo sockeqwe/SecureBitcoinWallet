@@ -4,9 +4,15 @@ import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
 import de.greenrobot.event.EventBus;
-import de.tum.in.securebitcoinwallet.AccountListActivity;
-import de.tum.in.securebitcoinwallet.BaseActivity;
+import de.tum.in.securebitcoinwallet.accountlist.AccountListActivity;
+import de.tum.in.securebitcoinwallet.accountlist.AccountListAdapter;
+import de.tum.in.securebitcoinwallet.accountlist.AccountListPresenter;
+import de.tum.in.securebitcoinwallet.common.BaseActivity;
+import de.tum.in.securebitcoinwallet.common.ErrorMessageDeterminer;
+import de.tum.in.securebitcoinwallet.common.RecyclerViewFragment;
 import de.tum.in.securebitcoinwallet.lock.LockFragment;
+import de.tum.in.securebitcoinwallet.lock.LockPresenter;
+import de.tum.in.securebitcoinwallet.model.CurrencyManager;
 import de.tum.in.securebitcoinwallet.model.PrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.TransactionManager;
 import de.tum.in.securebitcoinwallet.model.WalletManager;
@@ -21,11 +27,11 @@ import javax.inject.Singleton;
 @Module(
 
     injects = {
-        BaseActivity.class, AccountListActivity.class,
-        LockFragment.class
+        BaseActivity.class, AccountListActivity.class, LockFragment.class, LockPresenter.class,
+        RecyclerViewFragment.class, AccountListPresenter.class, AccountListAdapter.class,
     },
-    library =  true,
-    complete =  false // TODO remove this
+    library = true,
+    complete = false // TODO remove this
 
 ) public class ApplicationModule {
 
@@ -49,7 +55,15 @@ import javax.inject.Singleton;
     return new MockWalletManager(keyManager);
   }
 
-  @Provides @Singleton public EventBus provideEventBus(){
+  @Provides @Singleton public EventBus provideEventBus() {
     return EventBus.getDefault();
+  }
+
+  @Provides @Singleton public ErrorMessageDeterminer provideErrorMessageDeterminer() {
+    return new ErrorMessageDeterminer(context);
+  }
+
+  @Provides @Singleton public CurrencyManager provideCurrencyManager() {
+    return new CurrencyManager();
   }
 }

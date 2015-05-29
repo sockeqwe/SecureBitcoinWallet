@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <!-- Pin -->
+  <dimen name="pin_code_width_height">20dp</dimen>
+  <dimen name="pin_code_margin_left_right">5dp</dimen>
+
+  <dimen name="pin_logo_width">120dp</dimen>
+  <dimen name="pin_logo_height">120dp</dimen>
+
+  <dimen name="pin_space_logo_pins">60dp</dimen>
+  <dimen name="pin_space_pins_numbers">60dp</dimen>
+
+</resources>

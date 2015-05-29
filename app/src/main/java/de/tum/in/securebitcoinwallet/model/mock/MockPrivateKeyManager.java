@@ -10,6 +10,7 @@ import rx.functions.Func0;
 
 /**
  * Simple mock implementation of {@link PrivateKeyManager}
+ *
  * @author Hannes Dorfmann
  */
 public class MockPrivateKeyManager implements PrivateKeyManager {
@@ -36,6 +37,8 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
     return Observable.defer(new Func0<Observable<String>>() {
       @Override public Observable<String> call() {
 
+        MockDelayer.delay();
+
         if (!isPinCorrect(pin)) {
           return Observable.error(new IncorrectPinException());
         }
@@ -46,13 +49,15 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
   }
 
   @Override public Observable<Boolean> isPinSet() {
-    return Observable.just(PIN!=null && !PIN.equals(""));
+    return Observable.just(PIN != null && !PIN.equals(""));
   }
 
   @Override public Observable<Void> changePin(final String oldPin, final String newPin) {
 
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
+
+        MockDelayer.delay();
 
         if (!isPinCorrect(oldPin)) {
           return Observable.error(new IncorrectPinException());
@@ -70,6 +75,8 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
 
+        MockDelayer.delay();
+
         if (!isPinCorrect(pin)) {
           return Observable.error(new IncorrectPinException());
         }
@@ -86,6 +93,8 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
 
+        MockDelayer.delay();
+
         if (!isPinCorrect(pin)) {
           return Observable.error(new IncorrectPinException());
         }
@@ -95,6 +104,20 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
           return Observable.error(new NotFoundException());
         }
 
+        return Observable.empty();
+      }
+    });
+  }
+
+  @Override public Observable<Void> checkPin(final String pin) {
+    return Observable.defer(new Func0<Observable<Void>>() {
+      @Override public Observable<Void> call() {
+
+        MockDelayer.delay();
+
+        if (!isPinCorrect(pin)) {
+          return Observable.error(new IncorrectPinException());
+        }
         return Observable.empty();
       }
     });

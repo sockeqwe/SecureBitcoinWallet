@@ -22,5 +22,10 @@ allprojects {
       // For icepick
       url 'https://clojars.org/repo/'
     }
+
+    // PIN view
+    maven{
+      url "https://github.com/omadahealth/omada-nexus/raw/master/release"
+    }
   }
 }

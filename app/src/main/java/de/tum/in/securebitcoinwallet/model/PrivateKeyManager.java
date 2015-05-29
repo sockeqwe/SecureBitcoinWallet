@@ -56,4 +56,13 @@ public interface PrivateKeyManager {
    * be called
    */
   public Observable<Void> removeAddress(String pin, String address);
+
+  /**
+   * Checks if the pin is correct
+   *
+   * @param pin The pin to check
+   * @return nothing, {@link Subscriber#onCompleted()} or {@link Subscriber#onError(Throwable)} will
+   * be called
+   */
+  public Observable<Void> checkPin(String pin);
 }

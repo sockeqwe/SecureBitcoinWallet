@@ -15,11 +15,24 @@
   ~ limitations under the License.
   -->
 
-<resources>
-  <array name="loading_colors">
-    <item>@color/accent</item>
-    <item>@color/primary_dark</item>
-  </array>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:interpolator/accelerate_decelerate">
 
-  <integer name="pin_ripple_duration">180</integer>
-</resources>
+  <scale
+      android:fromXScale="100%"
+      android:toXScale="150%"
+      android:fromYScale="100%"
+      android:toYScale="150%"
+      android:pivotX="50%"
+      android:pivotY="50%"
+      android:duration="400"
+      />
+
+  <alpha
+      android:fromAlpha="1.0"
+      android:toAlpha="0"
+      android:duration="200"
+      android:startOffset="100"
+      />
+
+</set>

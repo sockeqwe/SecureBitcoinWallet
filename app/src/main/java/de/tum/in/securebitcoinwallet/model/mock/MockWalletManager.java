@@ -24,6 +24,7 @@ public class MockWalletManager implements WalletManager {
 
     return Observable.defer(new Func0<Observable<List<Transaction>>>() {
       @Override public Observable<List<Transaction>> call() {
+        MockDelayer.delay();
         return Observable.just(database.getTransactions(address));
       }
     });
@@ -33,6 +34,9 @@ public class MockWalletManager implements WalletManager {
 
     return Observable.defer(new Func0<Observable<List<Address>>>() {
       @Override public Observable<List<Address>> call() {
+
+        MockDelayer.delay();
+
         return Observable.just(database.getAddresses());
       }
     });
@@ -48,6 +52,8 @@ public class MockWalletManager implements WalletManager {
 
     return Observable.defer(new Func0<Observable<Address>>() {
       @Override public Observable<Address> call() {
+
+        MockDelayer.delay();
 
         database.addAddress(a);
         return Observable.just(a);

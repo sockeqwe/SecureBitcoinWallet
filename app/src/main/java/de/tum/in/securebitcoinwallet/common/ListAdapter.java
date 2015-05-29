@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.tum.in.securebitcoinwallet;
+package de.tum.in.securebitcoinwallet.common;
 
 import android.content.Context;
 import com.hannesdorfmann.annotatedadapter.support.recyclerview.SupportAnnotatedAdapter;

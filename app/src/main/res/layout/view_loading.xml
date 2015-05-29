@@ -15,11 +15,17 @@
   ~ limitations under the License.
   -->
 
-<resources>
-  <array name="loading_colors">
-    <item>@color/accent</item>
-    <item>@color/primary_dark</item>
-  </array>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-  <integer name="pin_ripple_duration">180</integer>
-</resources>
+    <fr.castorflex.android.circularprogressbar.CircularProgressBar
+        android:id="@+id/loadingView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        />
+
+</merge>

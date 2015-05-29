@@ -40,6 +40,15 @@ dependencies {
 
   // UI libs
   compile 'com.github.castorflex.smoothprogressbar:library-circular:1.1.0'
+  compile 'com.github.traex.rippleeffect:ripple:1.2.3.2-OG'
+  compile 'com.github.wangjiegulu:RapidFloatingActionButton:1.0.1'
+  compile 'com.nineoldandroids:library:2.4.0'
+  compile 'com.github.wangjiegulu:AndroidBucket:1.0.2'
+  compile 'com.github.wangjiegulu:AndroidInject:1.0.2'
+  compile 'com.github.wangjiegulu:ShadowViewHelper:1.0.1'
+
+  // https://github.com/wangjiegulu/RapidFloatingActionButton
+  // https://github.com/AlexKolpa/fab-toolbar
 
   apt 'com.hannesdorfmann.annotatedadapter:processor:' + annotatedAdapter
   compile 'com.hannesdorfmann.annotatedadapter:annotation:' + annotatedAdapter

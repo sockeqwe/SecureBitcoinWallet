@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <LinearLayout
+      android:id="@+id/pinContainer"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:clipToPadding="false"
+      android:paddingTop="@dimen/pin_space_logo_pins"
+      android:layout_gravity="center_horizontal">
+
+    <de.tum.in.securebitcoinwallet.view.pin.PinView
+        android:id="@+id/pin1"
+        android:layout_width="@dimen/pin_code_width_height"
+        android:layout_height="@dimen/pin_code_width_height"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/pin_code_margin_left_right"
+        android:layout_marginRight="@dimen/pin_code_margin_left_right"
+        />
+
+    <de.tum.in.securebitcoinwallet.view.pin.PinView
+        android:id="@+id/pin2"
+        android:layout_width="@dimen/pin_code_width_height"
+        android:layout_height="@dimen/pin_code_width_height"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/pin_code_margin_left_right"
+        android:layout_marginRight="@dimen/pin_code_margin_left_right"
+        />
+
+    <de.tum.in.securebitcoinwallet.view.pin.PinView
+        android:id="@+id/pin3"
+        android:layout_width="@dimen/pin_code_width_height"
+        android:layout_height="@dimen/pin_code_width_height"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/pin_code_margin_left_right"
+        android:layout_marginRight="@dimen/pin_code_margin_left_right"
+        />
+
+    <de.tum.in.securebitcoinwallet.view.pin.PinView
+        android:id="@+id/pin4"
+        android:layout_width="@dimen/pin_code_width_height"
+        android:layout_height="@dimen/pin_code_width_height"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/pin_code_margin_left_right"
+        android:layout_marginRight="@dimen/pin_code_margin_left_right"
+        />
+
+  </LinearLayout>
+
+
+  <View
+      android:id="@+id/pinLine"
+      android:layout_width="140dp" android:layout_height="1dp"
+      android:background="@color/white" android:layout_marginTop="20dp"
+      android:layout_gravity="center_horizontal"
+     />
+
+  <TextView
+      android:id="@+id/errorView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:textColor="@color/red"
+      android:textSize="20sp"
+      android:text="@string/error_pin_incorrect"
+      android:layout_marginTop="12dp"
+      android:visibility="gone"
+      />
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:orientation="horizontal"
+      android:layout_marginTop="@dimen/pin_space_pins_numbers"
+      >
+
+    <com.andexert.library.RippleView
+        android:id="@+id/button1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:rv_color="@color/accent"
+        app:rv_centered="true"
+        app:rv_rippleDuration="@integer/pin_ripple_duration"
+        >
+
+      <de.tum.in.securebitcoinwallet.view.AutoResizeTextView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:text="1"
+          android:gravity="center"
+          android:textColor="@color/white"
+          android:textSize="30sp"
+          android:layout_centerInParent="true"
+
+          />
+
+    </com.andexert.library.RippleView>
+
+
+    <com.andexert.library.RippleView
+        android:id="@+id/button2"
+        app:rv_color="@color/accent"
+        app:rv_centered="true"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:rv_rippleDuration="@integer/pin_ripple_duration"
+        >
+
+      <de.tum.in.securebitcoinwallet.view.AutoResizeTextView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:text="2"
+          android:gravity="center"
+          android:textColor="@color/white"
+          android:textSize="30sp"
+          android:layout_centerInParent="true"
+          />
+
+    </com.andexert.library.RippleView>
+
+
+    <com.andexert.library.RippleView
+        android:id="@+id/button3"
+        app:rv_color="@color/accent"
+        app:rv_centered="true"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:rv_rippleDuration="@integer/pin_ripple_duration"
+        >
+
+      <de.tum.in.securebitcoinwallet.view.AutoResizeTextView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:text="3"
+          android:gravity="center"
+          android:textColor="@color/white"
+          android:textSize="30sp"
+          android:layout_centerInParent="true"
+          />
+
+    </com.andexert.library.RippleView>
+
+
+  </LinearLayout>
+
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:orientation="horizontal"
+      >
+
+    <com.andexert.library.RippleView
+        android:id="@+id/button4"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:rv_color="@color/accent"
+        app:rv_centered="true"
+        app:rv_rippleDuration="@integer/pin_ripple_duration"
+        >
+
+      <de.tum.in.securebitcoinwallet.view.AutoResizeTextView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:text="4"
+          android:gravity="center"
+          android:textColor="@color/white"
+          android:textSize="30sp"
+          android:layout_centerInParent="true"
+          />
+
+    </com.andexert.library.RippleView>
+
+
+    <com.andexert.library.RippleView
+        android:id="@+id/button5"
+        app:rv_color="@color/accent"
+        app:rv_centered="true"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:rv_rippleDuration="@integer/pin_ripple_duration"
+        >
+
+      <de.tum.in.securebitcoinwallet.view.AutoResizeTextView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:text="5"
+          android:gravity="center"
+          android:textColor="@color/white"
+          android:textSize="30sp"
+          android:layout_centerInParent="true"
+          />
+
+    </com.andexert.library.RippleView>
+
+
+    <com.andexert.library.RippleView
+        android:id="@+id/button6"
+        app:rv_color="@color/accent"
+        app:rv_centered="true"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:rv_rippleDuration="@integer/pin_ripple_duration"
+        >
+
+      <de.tum.in.securebitcoinwallet.view.AutoResizeTextView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:text="6"
+          android:gravity="center"
+          android:textColor="@color/white"
+          android:textSize="30sp"
+          android:layout_centerInParent="true"
+          />
+
+    </com.andexert.library.RippleView>
+
+
+  </LinearLayout>
+
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:orientation="horizontal"
+      >
+
+    <com.andexert.library.RippleView
+        android:id="@+id/button7"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:rv_color="@color/accent"
+        app:rv_centered="true"
+        app:rv_rippleDuration="@integer/pin_ripple_duration"
+        >
+
+      <de.tum.in.securebitcoinwallet.view.AutoResizeTextView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:text="7"
+          android:gravity="center"
+          android:textColor="@color/white"
+          android:textSize="30sp"
+          android:layout_centerInParent="true"
+          />
+
+    </com.andexert.library.RippleView>
+
+
+    <com.andexert.library.RippleView
+        android:id="@+id/button8"
+        app:rv_color="@color/accent"
+        app:rv_centered="true"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:rv_rippleDuration="@integer/pin_ripple_duration"
+        >
+
+      <de.tum.in.securebitcoinwallet.view.AutoResizeTextView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:text="8"
+          android:gravity="center"
+          android:textColor="@color/white"
+          android:textSize="30sp"
+          android:layout_centerInParent="true"
+          />
+
+    </com.andexert.library.RippleView>
+
+
+    <com.andexert.library.RippleView
+        android:id="@+id/button9"
+        app:rv_color="@color/accent"
+        app:rv_centered="true"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:rv_rippleDuration="@integer/pin_ripple_duration"
+        >
+
+      <de.tum.in.securebitcoinwallet.view.AutoResizeTextView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:text="9"
+          android:gravity="center"
+          android:textColor="@color/white"
+          android:textSize="30sp"
+          android:layout_centerInParent="true"
+          />
+
+    </com.andexert.library.RippleView>
+
+
+  </LinearLayout>
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:orientation="horizontal"
+      >
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        />
+
+
+
+    <com.andexert.library.RippleView
+        android:id="@+id/button0"
+        app:rv_color="@color/accent"
+        app:rv_centered="true"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:rv_rippleDuration="@integer/pin_ripple_duration"
+        >
+
+      <de.tum.in.securebitcoinwallet.view.AutoResizeTextView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:text="0"
+          android:gravity="center"
+          android:textColor="@color/white"
+          android:textSize="30sp"
+          android:layout_centerInParent="true"
+          />
+
+    </com.andexert.library.RippleView>
+
+
+    <com.andexert.library.RippleView
+        android:id="@+id/buttonDelete"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:rv_color="@color/accent"
+        app:rv_centered="true"
+        app:rv_rippleDuration="@integer/pin_ripple_duration"
+        >
+
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:src="@drawable/ic_backspace"
+          android:padding="8dp"
+          />
+
+    </com.andexert.library.RippleView>
+
+
+  </LinearLayout>
+
+</merge>

@@ -1,9 +1,11 @@
-package de.tum.in.securebitcoinwallet;
+package de.tum.in.securebitcoinwallet.common;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import com.hannesdorfmann.mosby.dagger1.Dagger1MosbyActivity;
 import de.greenrobot.event.EventBus;
+import de.tum.in.securebitcoinwallet.R;
 import de.tum.in.securebitcoinwallet.lock.LockEvent;
 import de.tum.in.securebitcoinwallet.lock.LockFragment;
 import de.tum.in.securebitcoinwallet.lock.UnlockEvent;
@@ -46,7 +48,7 @@ public abstract class BaseActivity extends Dagger1MosbyActivity {
     // TODO implement check lock with shared preferences?
     long lockAfter = 20 * 1000;
     long diff = System.currentTimeMillis() - lastUnlock;
-    return  diff > lockAfter;
+    return diff > lockAfter;
   }
 
   public void onEventMainThread(UnlockEvent event) {
@@ -69,15 +71,17 @@ public abstract class BaseActivity extends Dagger1MosbyActivity {
   private void showContentFragment() {
 
     if (currentFragment == null || currentFragment instanceof LockFragment) {
-      currentFragment = getContentFragment();
-      getSupportFragmentManager().beginTransaction()
-          .replace(R.id.fragmentContainer, currentFragment, FRAGMENT_TAG)
-          .commit();
+      Fragment contentFragment = getContentFragment();
+      FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+      if (currentFragment != null) {
+        transaction.setCustomAnimations(0, R.anim.zoom_out);
+      }
+      transaction.replace(R.id.fragmentContainer, contentFragment, FRAGMENT_TAG).commit();
 
+      currentFragment = contentFragment;
 
       lastUnlock = System.currentTimeMillis();
     }
-
   }
 
   protected abstract Fragment getContentFragment();
