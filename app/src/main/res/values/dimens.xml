@@ -4,4 +4,7 @@
   <dimen name="activity_vertical_margin">16dp</dimen>
 
 
+  <dimen name="list_transaction_space_name_recipient">8dp</dimen>
+  <dimen name="list_transaction_space_name_value">8dp</dimen>
+  <dimen name="list_transaction_value_width">80dp</dimen>
 </resources>

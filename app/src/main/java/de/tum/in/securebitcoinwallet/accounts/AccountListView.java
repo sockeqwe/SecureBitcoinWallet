@@ -1,4 +1,4 @@
-package de.tum.in.securebitcoinwallet.accountlist;
+package de.tum.in.securebitcoinwallet.accounts;
 
 import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
 import de.tum.in.securebitcoinwallet.model.Address;

@@ -1,4 +1,4 @@
-package de.tum.in.securebitcoinwallet.accountlist;
+package de.tum.in.securebitcoinwallet.accounts;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -43,7 +43,7 @@ public class AccountListFragment
         .setLabelColor(res.getColor(R.color.menu_label_text_color))
         .setLabelBackgroundDrawable(background)
         .setWrapper(3));
-    
+
     items.add(new RFACLabelItem<Integer>().setLabel(getString(R.string.menu_address_import))
         .setResId(R.drawable.ic_cards)
         .setIconNormalColor(res.getColor(R.color.menu_icon1))

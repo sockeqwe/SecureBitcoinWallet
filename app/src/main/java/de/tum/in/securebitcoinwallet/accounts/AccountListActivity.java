@@ -1,4 +1,4 @@
-package de.tum.in.securebitcoinwallet.accountlist;
+package de.tum.in.securebitcoinwallet.accounts;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
