@@ -46,7 +46,7 @@ public abstract class BaseActivity extends Dagger1MosbyActivity {
 
   private boolean isLocked() {
     // TODO implement check lock with shared preferences?
-    long lockAfter = 20 * 1000;
+    long lockAfter = 60 * 1000;
     long diff = System.currentTimeMillis() - lastUnlock;
     return diff > lockAfter;
   }

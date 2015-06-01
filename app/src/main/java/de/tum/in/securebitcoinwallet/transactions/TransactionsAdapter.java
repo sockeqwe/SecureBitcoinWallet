@@ -39,6 +39,7 @@ public class TransactionsAdapter extends ListAdapter<List<Transaction>>
 
   @Override
   public void bindViewHolder(TransactionsAdapterHolders.TransactionViewHolder vh, int position) {
+
     Transaction transaction = items.get(position);
     vh.name.setText(transaction.getName());
     vh.bitcoins.setText(currencyManager.satoshiToBitcoin(transaction.getAmount()));
@@ -49,5 +50,17 @@ public class TransactionsAdapter extends ListAdapter<List<Transaction>>
         // TODO implement? Open details?
       }
     });
+
+    // TODO impleement
+    if (position % 3 == 0){
+      vh.indicator.setImageResource(R.drawable.transaction_state_waiting);
+    } else {
+      if (transaction.getAmount() < 0 ){
+        vh.indicator.setImageResource(R.drawable.transaction_state_out);
+      } else {
+        vh.indicator.setImageResource(R.drawable.transaction_state_in);
+      }
+    }
   }
+
 }

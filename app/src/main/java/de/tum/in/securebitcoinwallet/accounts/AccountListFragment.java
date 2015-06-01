@@ -2,6 +2,10 @@ package de.tum.in.securebitcoinwallet.accounts;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import butterknife.InjectView;
 import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RFACLabelItem;
 import de.tum.in.securebitcoinwallet.R;
 import de.tum.in.securebitcoinwallet.common.ListAdapter;
@@ -16,6 +20,8 @@ import java.util.List;
 public class AccountListFragment
     extends RecyclerViewFragment<List<Address>, AccountListView, AccountListPresenter>
     implements AccountListView {
+
+  @InjectView(R.id.toolbar) Toolbar toolbar;
 
   @Override protected ListAdapter<List<Address>> createAdapter() {
     return new AccountListAdapter(getActivity(), getObjectGraph());
@@ -58,5 +64,10 @@ public class AccountListFragment
 
   @Override protected void onFabMeuItemClicked(int postion, RFACLabelItem item) {
 
+  }
+
+  @Override public void onViewCreated(View view, Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    toolbar.setTitle(R.string.app_name);
   }
 }
