@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.tum.in.securebitcoinwallet" >
+    package="de.tum.in.securebitcoinwallet">
 
-    <application
-        android:name=".SecureWalletApplication"
-        android:allowBackup="true"
-        android:icon="@drawable/ic_lock"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        >
-        <activity
-            android:name=".accounts.AccountListActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+  <application
+      android:name=".SecureWalletApplication"
+      android:allowBackup="true"
+      android:icon="@drawable/ic_lock"
+      android:label="@string/app_name"
+      android:theme="@style/AppTheme"
+      >
+    <activity
+        android:name=".accounts.AccountListActivity"
+        android:label="@string/app_name">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
 
-      <activity android:name=".transactions.TransactionsActivity"
+    <activity android:name=".transactions.TransactionsActivity"
         />
-    </application>
+
+    <activity
+        android:theme="@style/PreferencesTheme"
+        android:name=".preferences.PreferencesActivity"
+        android:label="@string/activity_settings"/>
+
+  </application>
 
 </manifest>
