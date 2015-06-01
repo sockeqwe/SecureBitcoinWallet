@@ -27,6 +27,9 @@
         android:label="@string/activity_settings">
     </activity>
 
+
+    <activity android:name=".transactions.TransactionsActivity" />
+
     />
 
   </application>
