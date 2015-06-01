@@ -1,15 +1,18 @@
 package de.tum.in.securebitcoinwallet.accounts;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import butterknife.InjectView;
 import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RFACLabelItem;
 import de.tum.in.securebitcoinwallet.R;
 import de.tum.in.securebitcoinwallet.common.ListAdapter;
 import de.tum.in.securebitcoinwallet.common.RecyclerViewFragment;
+import de.tum.in.securebitcoinwallet.preferences.SettingsActivity;
 import de.tum.in.securebitcoinwallet.model.Address;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +61,6 @@ public class AccountListFragment
         .setLabelBackgroundDrawable(background)
         .setWrapper(3));
 
-
     return items;
   }
 
@@ -69,5 +71,16 @@ public class AccountListFragment
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     toolbar.setTitle(R.string.app_name);
+    toolbar.inflateMenu(R.menu.menu_account_list);
+    toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+      @Override public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {
+          Intent settings = new Intent(getActivity(), SettingsActivity.class);
+          startActivity(settings);
+          return true;
+        }
+        return false;
+      }
+    });
   }
 }

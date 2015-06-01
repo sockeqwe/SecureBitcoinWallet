@@ -1,6 +1,8 @@
 package de.tum.in.securebitcoinwallet.common;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import com.hannesdorfmann.mosby.dagger1.Dagger1MosbyActivity;
@@ -45,7 +47,10 @@ public abstract class BaseActivity extends Dagger1MosbyActivity {
   }
 
   private boolean isLocked() {
-    // TODO implement check lock with shared preferences?
+    if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_lock", true)) {
+      return false;
+    }
+    // TODO: Use shared preferences for timeout
     long lockAfter = 60 * 1000;
     long diff = System.currentTimeMillis() - lastUnlock;
     return diff > lockAfter;

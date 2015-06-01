@@ -18,4 +18,8 @@
   <string name="menu_transaction_send">Send Bitcoins</string>
   <string name="menu_transaction_receive">Receive Bitcoins</string>
 
+  <string name="pref_lock">Lock Application</string>
+  <string name="pref_lock_summ">Secure the application with a pincode</string>
+  <string name="pref_lock_timeout">Lock Timeout</string>
+  <string name="pref_lock_timeout_summ">Time in seconds until the application gets locked</string>
 </resources>
