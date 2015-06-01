@@ -27,7 +27,7 @@ public class MockDatabase {
     Random random = new Random();
 
     int transactionSize = 20;
-    long amountAddress = 20000;
+    long amountAddress = 20000000;
 
     for (int addressCounter = 0; addressCounter < 8; addressCounter++) {
 
