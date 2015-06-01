@@ -31,7 +31,7 @@ import javax.inject.Inject;
  * @author Hannes Dorfmann
  */
 public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends MvpPresenter<V>>
-    extends Dagger1MvpLceViewStateFragment<SwipeRefreshLayout, M, V, P>
+    extends Dagger1MvpLceViewStateFragment<View, M, V, P>
     implements SwipeRefreshLayout.OnRefreshListener,
     RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener {
 
@@ -39,8 +39,8 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
   @InjectView(R.id.emptyView) View emptyView;
   @InjectView(R.id.fab) RapidFloatingActionButton fab;
   @InjectView(R.id.fabMenuLayout) RapidFloatingActionLayout fabMenuLayout;
-  @Inject ErrorMessageDeterminer errorMessageDeterminer;
 
+  @Inject ErrorMessageDeterminer errorMessageDeterminer;
   protected RapidFloatingActionHelper fabHelper;
 
   protected ListAdapter adapter;
@@ -61,10 +61,15 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
 
   /**
    * Called when a menu item has been clicked
+   *
    * @param postion the index / position of the list returne in {@link #getFabMenuItems()}
    * @param item the clicked item
    */
   protected abstract void onFabMeuItemClicked(int postion, RFACLabelItem item);
+
+  protected SwipeRefreshLayout getSwipeRefreshLayout() {
+    return (SwipeRefreshLayout) contentView;
+  }
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
@@ -75,8 +80,9 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
 
     // SwipeRefresh
     int[] colors = getActivity().getResources().getIntArray(R.array.loading_colors);
-    contentView.setColorSchemeColors(colors);
-    contentView.setOnRefreshListener(this);
+    SwipeRefreshLayout refreshLayout = getSwipeRefreshLayout();
+    refreshLayout.setColorSchemeColors(colors);
+    refreshLayout.setOnRefreshListener(this);
 
     // Fab
     RecyclerViewScrollDetector scrollDetector = new RecyclerViewScrollDetector(fab);
@@ -102,7 +108,7 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
   }
 
   @Override protected String getErrorMessage(Throwable throwable, boolean b) {
-    return errorMessageDeterminer.getString(throwable, b);
+    return errorMessageDeterminer.getString( throwable, b);
   }
 
   @Override public LceViewState<M, V> createViewState() {
@@ -110,17 +116,17 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
   }
 
   @Override public M getData() {
-    return (M)adapter.getItems();
+    return (M) adapter.getItems();
   }
 
   @Override public void setData(M data) {
-    adapter.setItems((List)data);
+    adapter.setItems((List) data);
     adapter.notifyDataSetChanged();
   }
 
   @Override public void showContent() {
 
-    contentView.setRefreshing(false);
+    getSwipeRefreshLayout().setRefreshing(false);
 
     // Empty View
     if (adapter.getItemCount() == 0) {
@@ -170,12 +176,13 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
       emptyView.setVisibility(View.GONE);
       fab.setVisibility(View.GONE);
     }
+    final SwipeRefreshLayout refreshLayout = getSwipeRefreshLayout();
 
-    if (pullToRefresh && !contentView.isRefreshing()) {
+    if (pullToRefresh && !refreshLayout.isRefreshing()) {
       // Workaround for measure bug: https://code.google.com/p/android/issues/detail?id=77712
-      contentView.post(new Runnable() {
+      refreshLayout.post(new Runnable() {
         @Override public void run() {
-          contentView.setRefreshing(true);
+          refreshLayout.setRefreshing(true);
         }
       });
     }
@@ -187,16 +194,20 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
       emptyView.setVisibility(View.GONE);
       fab.setVisibility(View.GONE);
     }
-    contentView.setRefreshing(false);
+    getSwipeRefreshLayout().setRefreshing(false);
   }
 
-  @Override
-  public void onRFACItemLabelClick(int position, RFACLabelItem item) {
+  @Override public void onRFACItemLabelClick(int position, RFACLabelItem item) {
     fabHelper.toggleContent();
   }
 
-  @Override
-  public void onRFACItemIconClick(int position, RFACLabelItem item) {
+  @Override public void onRFACItemIconClick(int position, RFACLabelItem item) {
     fabHelper.toggleContent();
   }
+
+
+  @Override protected void injectDependencies() {
+    getObjectGraph().inject(this);
+  }
+
 }

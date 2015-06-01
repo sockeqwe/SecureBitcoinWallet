@@ -5,6 +5,7 @@
   <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout
 
       xmlns:rfal="http://schemas.android.com/apk/res-auto"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
       android:layout_width="match_parent"
       android:layout_height="0dp"
       android:layout_weight="1"
@@ -28,6 +29,7 @@
           android:paddingTop="@dimen/list_item_padding_top_bottom"
           android:paddingBottom="@dimen/list_item_padding_top_bottom"
           android:clipToPadding="false"
+          app:layout_behavior="@string/appbar_scrolling_view_behavior"
           />
 
     </android.support.v4.widget.SwipeRefreshLayout>

@@ -7,6 +7,7 @@ import de.greenrobot.event.EventBus;
 import de.tum.in.securebitcoinwallet.IntentStarter;
 import de.tum.in.securebitcoinwallet.accounts.AccountListActivity;
 import de.tum.in.securebitcoinwallet.accounts.AccountListAdapter;
+import de.tum.in.securebitcoinwallet.accounts.AccountListFragment;
 import de.tum.in.securebitcoinwallet.accounts.AccountListPresenter;
 import de.tum.in.securebitcoinwallet.common.BaseActivity;
 import de.tum.in.securebitcoinwallet.common.ErrorMessageDeterminer;
@@ -32,10 +33,10 @@ import javax.inject.Singleton;
 @Module(
 
     injects = {
-        BaseActivity.class, AccountListActivity.class, LockFragment.class, LockPresenter.class,
-        RecyclerViewFragment.class, AccountListPresenter.class, AccountListAdapter.class,
-        TransactionsPresenter.class, TransactionsFragment.class, TransactionsAdapter.class,
-        TransactionsActivity.class,
+        BaseActivity.class, RecyclerViewFragment.class, AccountListActivity.class,
+        LockFragment.class, LockPresenter.class, AccountListFragment.class,
+        AccountListPresenter.class, AccountListAdapter.class, TransactionsPresenter.class,
+        TransactionsFragment.class, TransactionsAdapter.class, TransactionsActivity.class,
     },
     library = true,
     complete = false // TODO remove this
@@ -66,15 +67,15 @@ import javax.inject.Singleton;
     return EventBus.getDefault();
   }
 
-  @Provides @Singleton public ErrorMessageDeterminer provideErrorMessageDeterminer() {
-    return new ErrorMessageDeterminer(context);
-  }
-
   @Provides @Singleton public CurrencyManager provideCurrencyManager() {
     return new CurrencyManager();
   }
 
-  @Provides @Singleton public IntentStarter provideIntentStarter(){
+  @Provides @Singleton public ErrorMessageDeterminer provideErrorMessageDeterminer(){
+    return new ErrorMessageDeterminer(context);
+  }
+
+  @Provides @Singleton public IntentStarter provideIntentStarter() {
     return new IntentStarter();
   }
 }
