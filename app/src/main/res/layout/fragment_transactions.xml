@@ -28,7 +28,7 @@
           app:layout_scrollFlags="scroll|exitUntilCollapsed"
           app:contentScrim="?attr/colorPrimary"
           app:expandedTitleMarginStart="48dp"
-          app:expandedTitleMarginEnd="64dp">
+          app:expandedTitleMarginEnd="48dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
