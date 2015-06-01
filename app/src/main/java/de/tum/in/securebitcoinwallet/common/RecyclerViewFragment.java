@@ -30,7 +30,7 @@ import javax.inject.Inject;
 /**
  * @author Hannes Dorfmann
  */
-public abstract class RecyclerViewFragment<M extends List<?>, V extends MvpLceView<M>, P extends MvpPresenter<V>>
+public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends MvpPresenter<V>>
     extends Dagger1MvpLceViewStateFragment<SwipeRefreshLayout, M, V, P>
     implements SwipeRefreshLayout.OnRefreshListener,
     RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener {
@@ -43,14 +43,14 @@ public abstract class RecyclerViewFragment<M extends List<?>, V extends MvpLceVi
 
   protected RapidFloatingActionHelper fabHelper;
 
-  protected ListAdapter<M> adapter;
+  protected ListAdapter adapter;
 
   /**
    * The adapter used to display the items (RecyclerView)
    *
    * @return Adapter
    */
-  protected abstract ListAdapter<M> createAdapter();
+  protected abstract ListAdapter createAdapter();
 
   /**
    * Get the item the Floating Action Button displays
@@ -110,11 +110,11 @@ public abstract class RecyclerViewFragment<M extends List<?>, V extends MvpLceVi
   }
 
   @Override public M getData() {
-    return adapter.getItems();
+    return (M)adapter.getItems();
   }
 
   @Override public void setData(M data) {
-    adapter.setItems(data);
+    adapter.setItems((List)data);
     adapter.notifyDataSetChanged();
   }
 

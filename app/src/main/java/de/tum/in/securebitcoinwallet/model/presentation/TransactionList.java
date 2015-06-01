@@ -9,8 +9,13 @@ import java.util.List;
  */
 public class TransactionList {
 
-  Address address;
-  List<Transaction> transactions;
+  private Address address;
+  private List<Transaction> transactions;
+
+  public TransactionList(Address address, List<Transaction> transactions) {
+    this.address = address;
+    this.transactions = transactions;
+  }
 
   public Address getAddress() {
     return address;

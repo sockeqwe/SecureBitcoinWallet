@@ -4,6 +4,7 @@ import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
 import de.greenrobot.event.EventBus;
+import de.tum.in.securebitcoinwallet.IntentStarter;
 import de.tum.in.securebitcoinwallet.accounts.AccountListActivity;
 import de.tum.in.securebitcoinwallet.accounts.AccountListAdapter;
 import de.tum.in.securebitcoinwallet.accounts.AccountListPresenter;
@@ -19,6 +20,10 @@ import de.tum.in.securebitcoinwallet.model.WalletManager;
 import de.tum.in.securebitcoinwallet.model.mock.MockPrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.mock.MockTransactionManager;
 import de.tum.in.securebitcoinwallet.model.mock.MockWalletManager;
+import de.tum.in.securebitcoinwallet.transactions.TransactionsActivity;
+import de.tum.in.securebitcoinwallet.transactions.TransactionsAdapter;
+import de.tum.in.securebitcoinwallet.transactions.TransactionsFragment;
+import de.tum.in.securebitcoinwallet.transactions.TransactionsPresenter;
 import javax.inject.Singleton;
 
 /**
@@ -29,6 +34,8 @@ import javax.inject.Singleton;
     injects = {
         BaseActivity.class, AccountListActivity.class, LockFragment.class, LockPresenter.class,
         RecyclerViewFragment.class, AccountListPresenter.class, AccountListAdapter.class,
+        TransactionsPresenter.class, TransactionsFragment.class, TransactionsAdapter.class,
+        TransactionsActivity.class,
     },
     library = true,
     complete = false // TODO remove this
@@ -65,5 +72,9 @@ import javax.inject.Singleton;
 
   @Provides @Singleton public CurrencyManager provideCurrencyManager() {
     return new CurrencyManager();
+  }
+
+  @Provides @Singleton public IntentStarter provideIntentStarter(){
+    return new IntentStarter();
   }
 }

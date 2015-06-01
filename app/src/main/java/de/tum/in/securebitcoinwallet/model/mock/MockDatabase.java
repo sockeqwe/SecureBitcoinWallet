@@ -18,6 +18,7 @@ public class MockDatabase {
    * A map with address as key and transation as value
    */
   private Map<Address, List<Transaction>> transactionMap = new HashMap<>();
+  private Map<String, Address> addressMap = new HashMap<>();
 
   public MockDatabase() {
 
@@ -36,6 +37,8 @@ public class MockDatabase {
       a.setName("MockAddress" + i);
       a.setPublicKey("MockPublicKey" + i);
       a.setAmount(amountAddress);
+
+      addressMap.put(a.getAddress(), a);
 
       List<Transaction> transactions = new ArrayList<>(transactionSize);
       for (int j = 0; j < transactionSize; j++) {
@@ -61,7 +64,8 @@ public class MockDatabase {
    * Get a list of transactions associated to the given address
    */
   public List<Transaction> getTransactions(String address) {
-    return transactionMap.get(address);
+    Address a = addressMap.get(address);
+    return transactionMap.get(a);
   }
 
   public List<Address> getAddresses() {
@@ -70,14 +74,18 @@ public class MockDatabase {
 
   /**
    * Adds a new Address with an empty list of transactions
-   * @param address
    */
-  public void addAddress(Address address){
+  public void addAddress(Address address) {
+    addressMap.put(address.getAddress(), address);
     transactionMap.put(address, new ArrayList<Transaction>());
   }
 
-  public String nextAddressId(){
-    return "MockAddress" + (++addressCounter);
+  public Address getAddress(String address) {
+
+    return addressMap.get(address);
   }
 
+  public String nextAddressId() {
+    return "MockAddress" + (++addressCounter);
+  }
 }

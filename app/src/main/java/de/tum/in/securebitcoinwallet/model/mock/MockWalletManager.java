@@ -4,6 +4,7 @@ import de.tum.in.securebitcoinwallet.model.Address;
 import de.tum.in.securebitcoinwallet.model.PrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.Transaction;
 import de.tum.in.securebitcoinwallet.model.WalletManager;
+import de.tum.in.securebitcoinwallet.model.exception.NotFoundException;
 import java.util.List;
 import rx.Observable;
 import rx.functions.Func0;
@@ -56,6 +57,21 @@ public class MockWalletManager implements WalletManager {
         MockDelayer.delay();
 
         database.addAddress(a);
+        return Observable.just(a);
+      }
+    });
+  }
+
+  @Override public Observable<Address> getAddress(final String address) {
+    return Observable.defer(new Func0<Observable<Address>>() {
+      @Override public Observable<Address> call() {
+        MockDelayer.delay();
+        Address a = database.getAddress(address);
+
+        if (a == null) {
+          return Observable.error(new NotFoundException());
+        }
+
         return Observable.just(a);
       }
     });

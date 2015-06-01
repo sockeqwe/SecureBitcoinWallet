@@ -9,7 +9,7 @@ public class AccountListActivity extends BaseActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_account_list);
+    setContentView(R.layout.activity_fragement_container);
   }
 
   @Override protected Fragment getContentFragment() {
