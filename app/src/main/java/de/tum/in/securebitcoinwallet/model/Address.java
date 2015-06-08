@@ -5,6 +5,11 @@ package de.tum.in.securebitcoinwallet.model;
  */
 public class Address {
 
+  public static final String TABLE = "Address";
+  public static final String COL_ADDRESS = "address";
+  public static final String COL_PUBLIC_KEY = "address";
+  public static final String COL_NAME = "address";
+
   String address;
   String publicKey;
   String name;

@@ -15,6 +15,7 @@ public class SecureWalletApplication extends Application implements Injector{
   @Override public void onCreate() {
     super.onCreate();
     objectGraph = ObjectGraph.create(new ApplicationModule(this));
+
   }
 
   @Override public ObjectGraph getObjectGraph() {

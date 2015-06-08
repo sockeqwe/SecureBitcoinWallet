@@ -4,6 +4,7 @@ import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
 import de.greenrobot.event.EventBus;
+import de.tum.in.securebitcoinwallet.BuildConfig;
 import de.tum.in.securebitcoinwallet.IntentStarter;
 import de.tum.in.securebitcoinwallet.accounts.AccountListActivity;
 import de.tum.in.securebitcoinwallet.accounts.AccountListAdapter;
@@ -18,6 +19,7 @@ import de.tum.in.securebitcoinwallet.model.CurrencyManager;
 import de.tum.in.securebitcoinwallet.model.PrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.TransactionManager;
 import de.tum.in.securebitcoinwallet.model.WalletManager;
+import de.tum.in.securebitcoinwallet.model.database.Dao;
 import de.tum.in.securebitcoinwallet.model.mock.MockPrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.mock.MockTransactionManager;
 import de.tum.in.securebitcoinwallet.model.mock.MockWalletManager;
@@ -71,11 +73,22 @@ import javax.inject.Singleton;
     return new CurrencyManager();
   }
 
-  @Provides @Singleton public ErrorMessageDeterminer provideErrorMessageDeterminer(){
+  @Provides @Singleton public ErrorMessageDeterminer provideErrorMessageDeterminer() {
     return new ErrorMessageDeterminer(context);
   }
 
   @Provides @Singleton public IntentStarter provideIntentStarter() {
     return new IntentStarter();
+  }
+
+  @Provides @Singleton Dao provideDao() {
+
+    Dao dao = new Dao(context);
+
+    if (BuildConfig.DEBUG) {
+      dao.setLogging(true);
+    }
+
+    return dao;
   }
 }
