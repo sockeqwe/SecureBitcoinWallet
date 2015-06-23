@@ -9,13 +9,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 import rx.Subscription;
 import rx.functions.Action1;
 
 /**
  * @author Hannes Dorfmann
  */
-@RunWith(RobolectricTestRunner.class) public class AdressDaoTest {
+@RunWith(RobolectricTestRunner.class)
+@Config(emulateSdk = 18)
+public class AdressDaoTest {
 
   @Test public void insertAddress() {
 

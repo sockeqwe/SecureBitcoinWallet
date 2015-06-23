@@ -71,5 +71,6 @@ dependencies {
   // Testing
   testCompile 'junit:junit:4.12'
   testCompile 'org.robolectric:robolectric:2.4'
+  testProvided 'com.hannesdorfmann.sqlbrite:object-mapper:'+sqlbriteDao
 
 }
