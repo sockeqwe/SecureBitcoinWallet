@@ -48,7 +48,6 @@ public class MockWalletManager implements WalletManager {
     final Address a = new Address();
     a.setAmount(0);
     a.setAddress(database.nextAddressId());
-    a.setPublicKey("PublicKey-" + a.getAddress());
     a.setName(name);
 
     return Observable.defer(new Func0<Observable<Address>>() {

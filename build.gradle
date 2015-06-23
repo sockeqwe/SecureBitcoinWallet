@@ -7,6 +7,7 @@ buildscript {
   dependencies {
     classpath 'com.android.tools.build:gradle:1.2.3'
     classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+    classpath 'org.robolectric:robolectric-gradle-plugin:1.1.0'
 
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle files
@@ -21,6 +22,10 @@ allprojects {
     maven {
       // For icepick
       url 'https://clojars.org/repo/'
+    }
+
+    maven {
+      url 'https://oss.sonatype.org/content/repositories/releases/'
     }
 
     // PIN view

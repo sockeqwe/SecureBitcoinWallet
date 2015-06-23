@@ -1,10 +1,10 @@
 package de.tum.in.securebitcoinwallet.dagger;
 
 import android.content.Context;
+import com.hannesdorfmann.sqlbrite.dao.DaoManager;
 import dagger.Module;
 import dagger.Provides;
 import de.greenrobot.event.EventBus;
-import de.tum.in.securebitcoinwallet.BuildConfig;
 import de.tum.in.securebitcoinwallet.IntentStarter;
 import de.tum.in.securebitcoinwallet.accounts.AccountListActivity;
 import de.tum.in.securebitcoinwallet.accounts.AccountListAdapter;
@@ -19,7 +19,7 @@ import de.tum.in.securebitcoinwallet.model.CurrencyManager;
 import de.tum.in.securebitcoinwallet.model.PrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.TransactionManager;
 import de.tum.in.securebitcoinwallet.model.WalletManager;
-import de.tum.in.securebitcoinwallet.model.database.Dao;
+import de.tum.in.securebitcoinwallet.model.database.AddressDao;
 import de.tum.in.securebitcoinwallet.model.mock.MockPrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.mock.MockTransactionManager;
 import de.tum.in.securebitcoinwallet.model.mock.MockWalletManager;
@@ -47,10 +47,13 @@ import javax.inject.Singleton;
 
   private Context context;
   private PrivateKeyManager privateKeyManager;
+  private AddressDao walletDao;
 
   public ApplicationModule(Context context) {
     this.context = context;
     privateKeyManager = new MockPrivateKeyManager();
+    walletDao = new AddressDao();
+    new DaoManager(context, "wallet.db", 1, walletDao);
   }
 
   @Provides @Singleton public PrivateKeyManager providesPrivateKeyManager() {
@@ -81,14 +84,8 @@ import javax.inject.Singleton;
     return new IntentStarter();
   }
 
-  @Provides @Singleton Dao provideDao() {
+  @Provides @Singleton AddressDao provideDao() {
 
-    Dao dao = new Dao(context);
-
-    if (BuildConfig.DEBUG) {
-      dao.setLogging(true);
-    }
-
-    return dao;
+    return walletDao;
   }
 }

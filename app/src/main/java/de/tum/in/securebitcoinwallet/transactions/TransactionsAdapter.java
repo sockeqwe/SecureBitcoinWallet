@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.hannesdorfmann.annotatedadapter.annotation.Field;
+import com.hannesdorfmann.annotatedadapter.annotation.ViewField;
 import com.hannesdorfmann.annotatedadapter.annotation.ViewType;
 import dagger.ObjectGraph;
 import de.tum.in.securebitcoinwallet.R;
@@ -21,13 +21,13 @@ public class TransactionsAdapter extends ListAdapter<List<Transaction>>
     implements TransactionsAdapterBinder {
 
   @ViewType(layout = R.layout.listelement_transaction,
-      fields = {
-          @Field(id = R.id.cardContainer, type= View.class, name="card"),
-          @Field(id = R.id.indicator, type = ImageView.class, name = "indicator"),
-          @Field(id = R.id.name, type = TextView.class, name = "name"),
-          @Field(id = R.id.recipient, type = TextView.class, name = "recipient"),
-          @Field(id = R.id.bitcoins, type = TextView.class, name = "bitcoins"),
-          @Field(id = R.id.bitcoinsCurency, type = TextView.class, name = "bitcoinsCurency")
+      views = {
+          @ViewField(id = R.id.cardContainer, type= View.class, name="card"),
+          @ViewField(id = R.id.indicator, type = ImageView.class, name = "indicator"),
+          @ViewField(id = R.id.name, type = TextView.class, name = "name"),
+          @ViewField(id = R.id.recipient, type = TextView.class, name = "recipient"),
+          @ViewField(id = R.id.bitcoins, type = TextView.class, name = "bitcoins"),
+          @ViewField(id = R.id.bitcoinsCurency, type = TextView.class, name = "bitcoinsCurency")
       }) public final int transaction = 0;
 
   @Inject CurrencyManager currencyManager;

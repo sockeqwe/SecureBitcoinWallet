@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'org.robolectric'
 
 android {
   compileSdkVersion 22
@@ -20,9 +21,10 @@ android {
   }
 }
 
-def annotatedAdapter = '1.0.0'
+def annotatedAdapter = '1.1.0'
 def supportLib = '22.2.0'
 def mosby = '1.1.0'
+def sqlbriteDao ='0.2.1'
 
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -40,7 +42,14 @@ dependencies {
 
 
   compile 'de.greenrobot:eventbus:2.4.0'
+  compile 'com.squareup.retrofit:retrofit:1.9.0'
+  apt 'com.bluelinelabs:logansquare-compiler:1.1.0'
+  compile 'com.bluelinelabs:logansquare:1.1.0'
   compile 'com.squareup.sqlbrite:sqlbrite:0.1.0'
+  compile 'com.hannesdorfmann.sqlbrite:dao:'+sqlbriteDao
+  compile 'com.hannesdorfmann.sqlbrite:annotations:'+sqlbriteDao
+  apt 'com.hannesdorfmann.sqlbrite:object-mapper:'+sqlbriteDao
+
 
 
   // UI libs
@@ -58,5 +67,9 @@ dependencies {
   apt 'com.hannesdorfmann.annotatedadapter:processor:' + annotatedAdapter
   compile 'com.hannesdorfmann.annotatedadapter:annotation:' + annotatedAdapter
   compile 'com.hannesdorfmann.annotatedadapter:support-recyclerview:' + annotatedAdapter
+
+  // Testing
+  testCompile 'junit:junit:4.12'
+  testCompile 'org.robolectric:robolectric:2.4'
 
 }

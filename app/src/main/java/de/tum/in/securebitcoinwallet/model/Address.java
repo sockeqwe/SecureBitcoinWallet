@@ -1,19 +1,27 @@
 package de.tum.in.securebitcoinwallet.model;
 
+import com.bluelinelabs.logansquare.annotation.JsonField;
+import com.bluelinelabs.logansquare.annotation.JsonObject;
+import com.hannesdorfmann.sqlbrite.objectmapper.annotation.Column;
+import com.hannesdorfmann.sqlbrite.objectmapper.annotation.ObjectMappable;
+
 /**
  * @author Hannes Dorfmann
  */
-public class Address {
+@ObjectMappable @JsonObject public class Address {
 
   public static final String TABLE = "Address";
   public static final String COL_ADDRESS = "address";
-  public static final String COL_PUBLIC_KEY = "address";
-  public static final String COL_NAME = "address";
+  public static final String COL_AMOUNT = "amount";
+  public static final String COL_TOTAL_SENT = "totalSent";
+  public static final String COL_TOTAL_RECEIVED = "totalReceived";
+  public static final String COL_NAME = "name";
 
-  String address;
-  String publicKey;
-  String name;
-  long amount;
+  @Column(COL_ADDRESS) @JsonField(name = "address") String address;
+  @Column(COL_AMOUNT) @JsonField(name = "final_balance") long amount;
+  @Column(COL_TOTAL_SENT) @JsonField(name = "total_sent") long totalSent;
+  @Column(COL_TOTAL_RECEIVED) @JsonField(name = "total_received") long totalReceived;
+  @Column(COL_NAME) String name;
 
   public String getAddress() {
     return address;
@@ -21,14 +29,6 @@ public class Address {
 
   public void setAddress(String address) {
     this.address = address;
-  }
-
-  public String getPublicKey() {
-    return publicKey;
-  }
-
-  public void setPublicKey(String publicKey) {
-    this.publicKey = publicKey;
   }
 
   public String getName() {
@@ -45,6 +45,22 @@ public class Address {
 
   public void setAmount(long amount) {
     this.amount = amount;
+  }
+
+  public long getTotalSent() {
+    return totalSent;
+  }
+
+  public void setTotalSent(long totalSent) {
+    this.totalSent = totalSent;
+  }
+
+  public long getTotalReceived() {
+    return totalReceived;
+  }
+
+  public void setTotalReceived(long totalReceived) {
+    this.totalReceived = totalReceived;
   }
 
   @Override public boolean equals(Object o) {

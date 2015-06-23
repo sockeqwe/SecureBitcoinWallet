@@ -35,7 +35,6 @@ public class MockDatabase {
       Address a = new Address();
       a.setAddress("MockAddress" + i);
       a.setName("MockAddress" + i);
-      a.setPublicKey("MockPublicKey" + i);
       a.setAmount(amountAddress);
 
       addressMap.put(a.getAddress(), a);
