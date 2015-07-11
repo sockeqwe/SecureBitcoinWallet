@@ -47,6 +47,7 @@ public class APDUCommand {
     this.ins = ins;
     this.p1 = p1;
     this.p2 = p2;
+
     this.data = data;
   }
 
@@ -66,6 +67,20 @@ public class APDUCommand {
   }
 
   /**
+   * Creates a new APDU command with the provided byte array.
+   *
+   */
+  public APDUCommand(byte[] apdu) {
+    if (apdu.length < 4) {
+      throw new RuntimeException("Wrong APDU length. Has to be at least 4 bytes.");
+    }
+    this.cla = apdu[0];
+    this.ins = apdu[1];
+    this.p1 = apdu[2];
+    this.p2 = apdu[3];
+  }
+
+  /**
    * Adds the given byte array to the end of data.
    *
    * @param additionalData The additional bytes to at to the data of this APDU.
@@ -78,13 +93,8 @@ public class APDUCommand {
     byte[] newData = new byte[data.length + additionalData.length];
 
     // assemble newData
-    for (int i = 0; i < data.length; i++) {
-      newData[i] = data[i];
-    }
-
-    for (int i = 0; i < additionalData.length; i++) {
-      newData[i + data.length] = additionalData[i];
-    }
+    System.arraycopy(data, 0, newData, 0, data.length);
+    System.arraycopy(additionalData, 0, newData, data.length, additionalData.length);
 
     data = newData;
   }
@@ -97,9 +107,7 @@ public class APDUCommand {
     byte[] apdu = new byte[header.length + data.length];
 
     // assemble apdu
-    for (int i = 0; i < header.length; i++) {
-      apdu[i] = header[i];
-    }
+    System.arraycopy(header, 0, apdu, 0, header.length);
 
     apdu[header.length] = (byte) data.length;
 
