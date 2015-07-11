@@ -62,8 +62,8 @@ public class SmartCardManager {
 
   /**
    * Generates a new public and private keypair on the smartcard. The private key is stored on the
-   * card, the public one is returned. After generation, the private key can be used to sign
-   * messages with the bitcoin address calculated from the public key.
+   * card, the public key is returned. After generation, the private key can be used to sign
+   * messages by using the bitcoin address calculated from the returned public key.
    *
    * @return The public key of the generated keypair.
    * @throws SmartcardException If the communication with the card failed.
@@ -88,7 +88,7 @@ public class SmartCardManager {
       publicKey =
           KeyFactory.getInstance("EC").generatePublic(new X509EncodedKeySpec(response.getData()));
     } catch (InvalidKeySpecException e) {
-      throw new RuntimeException("Could not konvert key!", e);
+      throw new RuntimeException("Could not convert key!", e);
     } catch (NoSuchAlgorithmException e) {
       throw new RuntimeException("Algorithm not found!", e);
     }
@@ -116,9 +116,7 @@ public class SmartCardManager {
 
     byte[] address = bitcoinAddress.getBytes();
 
-    if (address.length < 26 || address.length > 35) {
-      throw new RuntimeException("Bitcoin address is faulty");
-    }
+    validateBitcoinAddress(address);
 
     authenticate();
 
@@ -154,9 +152,7 @@ public class SmartCardManager {
   public byte[] exportEncryptedPrivateKey(String bitcoinAddress) throws SmartcardException {
     byte[] address = bitcoinAddress.getBytes();
 
-    if (address.length < 26 || address.length > 35) {
-      throw new RuntimeException("Bitcoin address is faulty");
-    }
+    validateBitcoinAddress(address);
 
     authenticate();
 
@@ -182,6 +178,44 @@ public class SmartCardManager {
   }
 
   /**
+   * Deletes the private key specified by the given Bitcoin address.
+   *
+   * @param bitcoinAddress The Bitcoin address for which the key should be deleted.
+   * @throws SmartcardException If communication with the smartcard failed.
+   */
+  public void deleteKey(String bitcoinAddress) throws SmartcardException {
+    byte[] address = bitcoinAddress.getBytes();
+
+    validateBitcoinAddress(address);
+
+    authenticate();
+
+    APDUCommand deleteKeyCommand = new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
+        AppletInstructions.INS_DELETE_PRIVATE_KEY, (byte) 0x00, (byte) 0x00, address);
+
+    APDUResponse response = smartCard.sendAPDU(deleteKeyCommand);
+
+    if (!response.wasSuccessful()) {
+      throw new SmartcardRuntimeException(
+              "Error during key deletion. Unknown statuscode: " + response.getStatusCode());
+    }
+
+    // Lock the card.
+    closeSession();
+  }
+
+  /**
+   * Validates the given Bitcoin address.
+   *
+   * @param address The Bitcoin address to validate.
+   */
+  private void validateBitcoinAddress(byte[] address) {
+    if (address.length < 26 || address.length > 35) {
+      throw new RuntimeException("Bitcoin address is faulty");
+    }
+  }
+
+  /**
    * Signs the given transaction.
    *
    * @param hash The SHA-256 hash to sign. Has to be 32 bytes.
@@ -200,7 +234,6 @@ public class SmartCardManager {
     authenticate();
 
     selectPrivateKey(bitcoinAddress.getBytes());
-
 
     APDUCommand signCommand = new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
         AppletInstructions.INS_SIGN_SHA256_HASH, (byte) 0, (byte) 0, hash);
