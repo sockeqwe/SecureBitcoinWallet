@@ -1,14 +1,12 @@
 package de.tum.in.securebitcoinwallet.model;
 
-import com.bluelinelabs.logansquare.annotation.JsonField;
-import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.hannesdorfmann.sqlbrite.objectmapper.annotation.Column;
 import com.hannesdorfmann.sqlbrite.objectmapper.annotation.ObjectMappable;
 
 /**
  * @author Hannes Dorfmann
  */
-@ObjectMappable @JsonObject public class Address {
+@ObjectMappable public class Address {
 
   public static final String TABLE = "Address";
   public static final String COL_ADDRESS = "address";
@@ -17,10 +15,10 @@ import com.hannesdorfmann.sqlbrite.objectmapper.annotation.ObjectMappable;
   public static final String COL_TOTAL_RECEIVED = "totalReceived";
   public static final String COL_NAME = "name";
 
-  @Column(COL_ADDRESS) @JsonField(name = "address") String address;
-  @Column(COL_AMOUNT) @JsonField(name = "final_balance") long amount;
-  @Column(COL_TOTAL_SENT) @JsonField(name = "total_sent") long totalSent;
-  @Column(COL_TOTAL_RECEIVED) @JsonField(name = "total_received") long totalReceived;
+  @Column(COL_ADDRESS) String address;
+  @Column(COL_AMOUNT) long amount;
+  @Column(COL_TOTAL_SENT) long totalSent;
+  @Column(COL_TOTAL_RECEIVED) long totalReceived;
   @Column(COL_NAME) String name;
 
   public String getAddress() {

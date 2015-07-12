@@ -2,7 +2,6 @@ package de.tum.in.securebitcoinwallet.model.database;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import com.hannesdorfmann.sqlbrite.dao.Dao;
 import com.squareup.sqlbrite.SqlBrite;
 import de.tum.in.securebitcoinwallet.model.Address;
 import de.tum.in.securebitcoinwallet.model.AddressMapper;
@@ -10,14 +9,19 @@ import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
 
-import static de.tum.in.securebitcoinwallet.model.Address.*;
+import static de.tum.in.securebitcoinwallet.model.Address.COL_ADDRESS;
+import static de.tum.in.securebitcoinwallet.model.Address.COL_AMOUNT;
+import static de.tum.in.securebitcoinwallet.model.Address.COL_NAME;
+import static de.tum.in.securebitcoinwallet.model.Address.COL_TOTAL_RECEIVED;
+import static de.tum.in.securebitcoinwallet.model.Address.COL_TOTAL_SENT;
+import static de.tum.in.securebitcoinwallet.model.Address.TABLE;
 
 /**
  * DAO (Data Access Object) for accessing the list of addresses
  *
  * @author Hannes Dorfmann
  */
-public class AddressDao extends Dao {
+public class AddressDao extends AbsDao {
 
   @Override public void createTable(SQLiteDatabase sqLiteDatabase) {
 
@@ -32,15 +36,17 @@ public class AddressDao extends Dao {
 
   /**
    * Get the list of addresses
+   *
    * @return list of all addresses
    */
   public Observable<List<Address>> getAddresses() {
-    return query(SELECT(COL_ADDRESS, COL_NAME, COL_AMOUNT, COL_TOTAL_RECEIVED, COL_TOTAL_SENT).FROM(
-        TABLE)).map(new Func1<SqlBrite.Query, List<Address>>() {
+    return defer(query(
+        SELECT(COL_ADDRESS, COL_NAME, COL_AMOUNT, COL_TOTAL_RECEIVED, COL_TOTAL_SENT).FROM(
+            TABLE)).map(new Func1<SqlBrite.Query, List<Address>>() {
       @Override public List<Address> call(SqlBrite.Query query) {
         return AddressMapper.list(query.run());
       }
-    });
+    }));
   }
 
   /**
@@ -65,10 +71,20 @@ public class AddressDao extends Dao {
 
     ContentValues cv = builder.build();
 
-    return insert(TABLE, cv, SQLiteDatabase.CONFLICT_REPLACE).map(new Func1<Long, Address>() {
+    return defer(insert(TABLE, cv, SQLiteDatabase.CONFLICT_REPLACE).map(new Func1<Long, Address>() {
       @Override public Address call(Long aLong) {
         return a;
       }
-    });
+    }));
+  }
+
+  /**
+   * Deletes an address
+   *
+   * @param address The address to delete
+   * @return The number of deleted entries (Should always be 1 or 0)
+   */
+  public Observable<Integer> delete(final Address address) {
+    return defer(delete(TABLE, COL_ADDRESS + " = ?", address.getAddress()));
   }
 }

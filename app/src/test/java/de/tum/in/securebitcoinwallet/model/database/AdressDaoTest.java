@@ -10,17 +10,14 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import rx.Subscription;
 import rx.functions.Action1;
 
 /**
  * @author Hannes Dorfmann
  */
-@RunWith(RobolectricTestRunner.class)
-@Config(emulateSdk = 18)
-public class AdressDaoTest {
+@RunWith(RobolectricTestRunner.class) @Config(emulateSdk = 18) public class AdressDaoTest {
 
-  @Test public void insertAddress() {
+  @Test public void insertUpdateDelete() {
 
     Context context = Robolectric.getShadowApplication().getApplicationContext();
     AddressDao dao = new AddressDao();
@@ -45,7 +42,7 @@ public class AdressDaoTest {
       }
     });
 
-    Subscription sub = dao.getAddresses().subscribe(new Action1<List<Address>>() {
+    dao.getAddresses().subscribe(new Action1<List<Address>>() {
       @Override public void call(List<Address> addresses) {
         Assert.assertEquals(1, addresses.size());
         Address queried = addresses.get(0);
@@ -56,10 +53,7 @@ public class AdressDaoTest {
         Assert.assertEquals(sent, queried.getTotalSent());
         Assert.assertEquals(received, queried.getTotalReceived());
       }
-    });
-
-    sub.unsubscribe();
-
+    }).unsubscribe();
 
     // Insert updated
 
@@ -81,7 +75,7 @@ public class AdressDaoTest {
       }
     });
 
-   sub = dao.getAddresses().subscribe(new Action1<List<Address>>() {
+    dao.getAddresses().subscribe(new Action1<List<Address>>() {
       @Override public void call(List<Address> addresses) {
         Assert.assertEquals(1, addresses.size());
         Address queried = addresses.get(0);
@@ -92,8 +86,20 @@ public class AdressDaoTest {
         Assert.assertEquals(sent2, queried.getTotalSent());
         Assert.assertEquals(received2, queried.getTotalReceived());
       }
-    });
+    }).unsubscribe();
 
-    sub.unsubscribe();
+    // Delete
+    dao.delete(a2).subscribe(new Action1<Integer>() {
+      @Override public void call(Integer count) {
+        Assert.assertEquals(1, (int) count);
+      }
+    }).unsubscribe();
+
+    // Check empty
+    dao.getAddresses().subscribe(new Action1<List<Address>>() {
+      @Override public void call(List<Address> addresses) {
+        Assert.assertTrue(addresses.isEmpty());
+      }
+    }).unsubscribe();
   }
 }
