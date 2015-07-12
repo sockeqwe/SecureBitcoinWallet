@@ -98,6 +98,16 @@ import rx.observers.TestSubscriber;
       addressSub.assertNoErrors();
       Assert.assertEquals(tests - 1 - i, addressSub.getOnNextEvents().get(0).size());
     }
+
+
+    // Delete non exising transaction
+    TestSubscriber<Integer> subscriber = new TestSubscriber<>();
+    dao.deleteTransactionById("fooId").subscribe(subscriber);
+    subscriber.assertNoErrors();
+    Assert.assertEquals(1, subscriber.getOnNextEvents().size());
+    Assert.assertEquals(0, (int) subscriber.getOnNextEvents().get(0));
+    subscriber.unsubscribe();
+
   }
 
   /**
