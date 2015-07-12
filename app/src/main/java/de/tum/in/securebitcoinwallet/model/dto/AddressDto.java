@@ -13,6 +13,7 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
   @JsonField(name = "final_balance") long amount;
   @JsonField(name = "total_sent") long totalSent;
   @JsonField(name = "total_received") long totalReceived;
+  @JsonField(name = "n_tx") int transactionsCount;
 
   public String getAddress() {
     return address;
@@ -28,6 +29,10 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 
   public long getTotalReceived() {
     return totalReceived;
+  }
+
+  public int getTransactionsCount() {
+    return transactionsCount;
   }
 
   @Override public boolean equals(Object o) {
