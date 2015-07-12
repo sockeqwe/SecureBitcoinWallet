@@ -300,7 +300,7 @@ public class SmartCardManager {
       switch (response.getStatusCode()) {
         case StatusCodes.KEY_NOT_FOUND:
           throw new KeyNotFoundException();
-        case StatusCodes.SECURITY_STATUS_NOT_SATISFIED:
+        case StatusCodes.PIN_VERIFICATION_REQUIRED:
           throw new SmartcardRuntimeException("PIN not validated. Should not have happened");
         default:
           throw new SmartcardRuntimeException("Unknown statuscode: " + response.getStatusCode());
