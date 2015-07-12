@@ -20,52 +20,52 @@ public interface AppletInstructions {
 	 * Unlock instructions. Used to unlock the card, if the pin has been entered
 	 * wrong too many times.
 	 */
-	byte INS_UNLOCK = (byte) 0x22;
+	byte INS_UNLOCK = (byte) 0x04;
 
 	/**
 	 * User authentication instruction.
 	 */
-	byte INS_AUTHENTICATE = (byte) 0x04;
+	byte INS_AUTHENTICATE = (byte) 0x06;
 
 	/**
 	 * Set pin instruction.
 	 */
-	byte INS_CHANGE_PIN = (byte) 0x06;
+	byte INS_CHANGE_PIN = (byte) 0x08;
 
 	/**
 	 * Pin validated instruction.
 	 */
-	byte INS_PIN_VALIDATED = (byte) 0x08;
+	byte INS_PIN_VALIDATED = (byte) 0x0A;
 
 	/**
 	 * Select key instruction.
 	 */
-	byte INS_SELECT_KEY = (byte) 0xAA;
+	byte INS_SELECT_KEY = (byte) 0x0C;
 
 	/**
 	 * Sign Bitcoin transaction instruction.
 	 */
-	byte INS_SIGN_SHA256_HASH = (byte) 0xAC;
-	
+	byte INS_SIGN_SHA256_HASH = (byte) 0x0E;
+
 	/**
 	 * Generate new key pair instruction.
 	 */
-	byte INS_GENERATE_KEY = (byte) 0xAD;
-	
+	byte INS_GENERATE_KEY = (byte) 0x20;
+
 	/**
 	 * Put private key instruction.
 	 */
-	byte INS_IMPORT_PRIVATE_KEY = (byte) 0xD8;
+	byte INS_IMPORT_PRIVATE_KEY = (byte) 0x22;
 
 	/**
 	 * Get private key instruction.
 	 */
-	byte INS_GET_PRIVATE_KEY = (byte) 0xB0;
+	byte INS_GET_PRIVATE_KEY = (byte) 0x24;
 
 	/**
 	 * Delete private key instruction.
 	 */
-	byte INS_DELETE_PRIVATE_KEY = (byte) 0xE4;
+	byte INS_DELETE_PRIVATE_KEY = (byte) 0x26;
 
 	/**
 	 * Get remaining memory instruction.
