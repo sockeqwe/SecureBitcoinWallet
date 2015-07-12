@@ -197,7 +197,7 @@ public class SmartCardManager {
 
     if (!response.wasSuccessful()) {
       throw new SmartcardRuntimeException(
-              "Error during key deletion. Unknown statuscode: " + response.getStatusCode());
+          "Error during key deletion. Unknown statuscode: " + response.getStatusCode());
     }
 
     // Lock the card.
@@ -254,6 +254,29 @@ public class SmartCardManager {
     closeSession();
 
     return response.getData();
+  }
+
+  /**
+   * Gets the remaining free slots for private keys.
+   *
+   * @throws SmartcardException If communication with the smartcard failed.
+   */
+  public int getFreeSlots() throws SmartcardException {
+    APDUCommand getFreeSlotsCommand = new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
+        AppletInstructions.INS_GET_REMAINING_MEMORY, (byte) 0, (byte) 0);
+
+    APDUResponse response = smartCard.sendAPDU(getFreeSlotsCommand);
+
+    if (!response.wasSuccessful()) {
+      throw new SmartcardRuntimeException(
+          "Error during requesting free slots. Unknown statuscode: " + response.getStatusCode());
+    }
+
+    // Lock the card.
+    closeSession();
+    byte[] data = response.getData();
+
+    return (data[0] << 8) + data[1];
   }
 
   /**
