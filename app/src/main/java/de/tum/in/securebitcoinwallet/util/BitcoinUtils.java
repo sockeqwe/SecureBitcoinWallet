@@ -67,6 +67,17 @@ public class BitcoinUtils {
    * @return The Bitcoin address as a Base58 encoded string
    */
   public static String calculateBitcoinAddress(ECPublicKey publicKey) {
+    return calculateBitcoinAddress(publicKey.getEncoded());
+  }
+
+  /**
+   * Calculates the bitcoinaddress for the given byte array containing the public key and returns it
+   * as a String.
+   *
+   * @param publicKey A byte array containing the public key to calulcate the address for
+   * @return The Bitcoin address as a Base58 encoded string
+   */
+  public static String calculateBitcoinAddress(byte[] publicKey) {
     MessageDigest ripemd160;
     MessageDigest sha256;
     try {
@@ -76,7 +87,7 @@ public class BitcoinUtils {
       throw new RuntimeException("RIPEMD-160 digest not found");
     }
 
-    byte[] ripemdHash = ripemd160.digest(publicKey.getEncoded());
+    byte[] ripemdHash = ripemd160.digest(publicKey);
     byte[] sha256Hash = sha256.digest(ripemdHash);
     sha256Hash = sha256.digest(sha256Hash);
 
@@ -115,7 +126,7 @@ public class BitcoinUtils {
     ECPoint point = ecSpec.getCurve().decodePoint(data);
     ECPublicKeySpec spec = new ECPublicKeySpec(point, ecSpec);
     try {
-      return  (ECPublicKey) kf.generatePublic(spec);
+      return (ECPublicKey) kf.generatePublic(spec);
     } catch (InvalidKeySpecException e) {
       throw new RuntimeException("Key specification is invalid!");
     }
