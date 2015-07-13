@@ -4,19 +4,16 @@ import android.content.Context;
 import de.tum.in.securebitcoinwallet.smartcard.exception.AppletAlreadyInitializedException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.AppletNotInitializedException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.AuthenticationFailedExeption;
+import de.tum.in.securebitcoinwallet.smartcard.exception.CardLockedException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.InvalidBitcoinAddressException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.KeyNotFoundException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.KeyStoreFullException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.SmartCardException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.SmartcardRuntimeException;
 import de.tum.in.securebitcoinwallet.util.BitcoinUtils;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
+import java.security.KeyPair;
+import org.bouncycastle.jce.interfaces.ECPrivateKey;
+import org.bouncycastle.jce.interfaces.ECPublicKey;
 
 /**
  * Manager providing functions for the communication with the smartcard.
@@ -65,6 +62,63 @@ public class SmartCardManager {
   }
 
   /**
+   * Authenticates with the given PIN.
+   *
+   * @param pin The PIN to use
+   * @throws CardLockedException If the card is locked and has to be unlocked with the PUK
+   * @throws AuthenticationFailedExeption If the Authentication failed because a wrong PIN was used
+   * @throws SmartCardException If the communication with the card failed.
+   */
+  public void authenticate(byte[] pin) throws SmartCardException {
+    if (isPINValidated()) {
+      return;
+    }
+
+    APDUCommand authenticateCommand = new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
+        AppletInstructions.INS_AUTHENTICATE, (byte) 0, (byte) 0, pin);
+
+    APDUResponse response = smartCard.sendAPDU(authenticateCommand);
+
+    if (!response.wasSuccessful()) {
+      switch (response.getStatusCode()) {
+        case StatusCodes.CARD_LOCKED:
+          throw new CardLockedException();
+        case StatusCodes.AUTH_FAILED:
+          throw new AuthenticationFailedExeption();
+        default:
+          throw new SmartcardRuntimeException("Unknown statuscode: " + response.getStatusCode());
+      }
+    }
+  }
+
+  /**
+   * Checks if the applet has already been initialized with the setup function.
+   *
+   * @return True, if the applet has already been initialized, false otherwise.
+   * @throws SmartCardException If the communication with the card failed.
+   */
+  public boolean isAppletInitialized() throws SmartCardException {
+    // Calling INS_PIN_VALIDATED. No PIN is needed for this and the card reports back with
+    // CONDITIONS_NOT_SATISFIED, if the setup has not yet been done.
+    APDUCommand checkAuthenticationCommand =
+        new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
+            AppletInstructions.INS_PIN_VALIDATED, (byte) 0, (byte) 0);
+
+    APDUResponse response = smartCard.sendAPDU(checkAuthenticationCommand);
+
+    if (response.wasSuccessful()) {
+      return true;
+    } else {
+      switch (response.getStatusCode()) {
+        case StatusCodes.CONDITIONS_NOT_SATISFIED:
+          return false;
+        default:
+          throw new SmartcardRuntimeException("Unknown statuscode: " + response.getStatusCode());
+      }
+    }
+  }
+
+  /**
    * Generates a new public and private keypair on the smartcard. The private key is stored on the
    * card, the public key is returned. After generation, the private key can be used to sign
    * messages by using the bitcoin address calculated from the returned public key.
@@ -75,8 +129,6 @@ public class SmartCardManager {
    * done with {@link #setup()}.
    */
   public ECPublicKey generateNewKey() throws SmartCardException {
-    authenticate();
-
     APDUCommand generateKeyCommand = new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
         AppletInstructions.INS_GENERATE_KEY, (byte) 0, (byte) 0);
 
@@ -98,22 +150,25 @@ public class SmartCardManager {
   /**
    * Imports the given private key into the keystore on the smartcard.
    *
-   * @param privateKey The private key to import. Has to be 256 bits.
+   * @param keyPair The keypair containing the private key to import. Has to be 256 bits
    * @throws KeyStoreFullException If no more space is left on the smartcard
    * @throws SmartCardException If communication with the smartcard failed
    */
-  public void importKey(ECPrivateKey privateKey) throws SmartCardException {
+  public void importKey(KeyPair keyPair) throws SmartCardException {
+    ECPrivateKey privateKey;
+    if (!(keyPair.getPrivate() instanceof ECPrivateKey)) {
+      throw new RuntimeException("Not a key suitable for ECDSA/Bitcoin");
+    }
+    privateKey = (ECPrivateKey) keyPair.getPrivate();
 
-    byte[] secret = privateKey.getS().toByteArray();
+    byte[] secret = privateKey.getEncoded();
 
     if (secret.length != 32) {
       throw new RuntimeException("Private key has wrong length!");
     }
-
-    byte[] bitcoinAddress =
-        BitcoinUtils.calculateBitcoinAddress(BitcoinUtils.getPublicKeyForPrivateKey(privateKey));
-
-    authenticate();
+    String bitcoinAddressString =
+        BitcoinUtils.calculateBitcoinAddress((ECPublicKey) keyPair.getPublic());
+    byte[] bitcoinAddress = bitcoinAddressString.getBytes();
 
     APDUCommand importKeyCommand = new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
         AppletInstructions.INS_IMPORT_PRIVATE_KEY, (byte) bitcoinAddress.length,
@@ -150,8 +205,6 @@ public class SmartCardManager {
 
     validateBitcoinAddress(address);
 
-    authenticate();
-
     APDUCommand exportKeyCommand = new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
         AppletInstructions.INS_GET_PRIVATE_KEY, (byte) 0x00, (byte) 0x00, address);
 
@@ -185,8 +238,6 @@ public class SmartCardManager {
 
     validateBitcoinAddress(address);
 
-    authenticate();
-
     APDUCommand deleteKeyCommand = new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
         AppletInstructions.INS_DELETE_PRIVATE_KEY, (byte) 0x00, (byte) 0x00, address);
 
@@ -218,8 +269,6 @@ public class SmartCardManager {
       throw new RuntimeException("Incorrect hash length");
     }
 
-    authenticate();
-
     selectPrivateKey(bitcoinAddress.getBytes());
 
     APDUCommand signCommand = new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
@@ -229,7 +278,7 @@ public class SmartCardManager {
 
     if (!response.wasSuccessful()) {
       switch (response.getStatusCode()) {
-        case StatusCodes.CONDITIONS_NOT_SATISFIED:
+        case StatusCodes.NO_KEY_SELECTED:
           throw new SmartcardRuntimeException("KeySelection failed.");
         default:
           throw new SmartcardRuntimeException(
@@ -253,8 +302,6 @@ public class SmartCardManager {
     if (newPin.length > 8 || newPin.length < 4) {
       throw new RuntimeException("PIN has wrong length. May only be between 4 and 8 characters");
     }
-
-    authenticate();
 
     APDUCommand changePINCommand = new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
         AppletInstructions.INS_CHANGE_PIN, (byte) 0, (byte) 0, newPin);
@@ -367,40 +414,11 @@ public class SmartCardManager {
   }
 
   /**
-   * Authenticates with the given PIN. Shows a dialog asking the user for the PIN.
-   *
-   * @throws SmartCardException If the communication with the card failed.
-   */
-  private void authenticate() throws SmartCardException {
-    if (isPINValidated()) {
-      return;
-    }
-
-    APDUCommand authenticateCommand = new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
-        AppletInstructions.INS_AUTHENTICATE, (byte) 0, (byte) 0, getPINFromUser());
-
-    APDUResponse response = smartCard.sendAPDU(authenticateCommand);
-
-    if (!response.wasSuccessful()) {
-      switch (response.getStatusCode()) {
-        case StatusCodes.CARD_LOCKED:
-          // TODO: unlock
-          break;
-        case StatusCodes.AUTH_FAILED:
-          // TODO: retry?
-          break;
-        default:
-          throw new SmartcardRuntimeException("Unknown statuscode: " + response.getStatusCode());
-      }
-    }
-  }
-
-  /**
    * Checks whether the user is authenticated at the card.
    *
    * @return True, if the user is authenticated and may perform secure operations.
-   * @throws SmartCardException If the communication with the card failed.
    * @throws AppletNotInitializedException If the applet has not been initialized yet
+   * @throws SmartCardException If the communication with the card failed.
    */
   private boolean isPINValidated() throws SmartCardException {
     APDUCommand checkAuthenticationCommand =
@@ -426,13 +444,5 @@ public class SmartCardManager {
    */
   private void closeSession() {
     smartCard.closeSession();
-  }
-
-  /**
-   * TODO
-   */
-  private byte[] getPINFromUser() {
-    // TODO implement
-    return new byte[0];
   }
 }

@@ -1,12 +1,13 @@
 package de.tum.in.securebitcoinwallet.model.impl;
 
-import android.content.Context;
 import de.tum.in.securebitcoinwallet.model.PrivateKeyManager;
 import de.tum.in.securebitcoinwallet.smartcard.SmartCardManager;
 import de.tum.in.securebitcoinwallet.smartcard.exception.SmartCardException;
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
+import de.tum.in.securebitcoinwallet.util.BitcoinUtils;
+import java.io.File;
+import java.security.KeyPair;
 import javax.inject.Inject;
+import org.bouncycastle.jce.interfaces.ECPublicKey;
 import rx.Observable;
 import rx.functions.Func0;
 
@@ -19,16 +20,23 @@ import rx.functions.Func0;
 public class PrivateKeyManagerImpl implements PrivateKeyManager {
 
   /**
-   * The {@link SmartCardManager} of this PrivateKeyManager. TODO has to be initialized with
-   * context!
+   * The {@link SmartCardManager} of this PrivateKeyManager.
    */
   private SmartCardManager smartCardManager;
 
-  /**
-   * The {@link Context} of this manager.
-   */
-  private Context context;
+  @Override public Observable<Boolean> isCardInitialized() {
+    return Observable.defer(new Func0<Observable<Boolean>>() {
+      @Override public Observable<Boolean> call() {
+        try {
+          return Observable.just(smartCardManager.isAppletInitialized());
+        } catch (SmartCardException e) {
+          return Observable.error(e);
+        }
+      }
+    });
+  }
 
+<<<<<<< HEAD
   @Inject
   public PrivateKeyManagerImpl(SmartCardManager smartCardManager) {
     this.smartCardManager = smartCardManager;
@@ -36,9 +44,13 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
 
 
   @Override public Observable<byte[]> getEncryptedPrivateKey(final String address) {
+=======
+  @Override public Observable<byte[]> getEncryptedPrivateKey(final byte[] pin, final String address) {
+>>>>>>> ac1278cc74dcd4d191dec2cdf46a8ad59e6b15aa
     return Observable.defer(new Func0<Observable<byte[]>>() {
       @Override public Observable<byte[]> call() {
         try {
+          smartCardManager.authenticate(pin);
           return Observable.just(smartCardManager.exportEncryptedPrivateKey(address));
         } catch (SmartCardException e) {
           return Observable.error(e);
@@ -47,10 +59,11 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<Integer> getRemainingSlots() {
+  @Override public Observable<Integer> getRemainingSlots(final byte[] pin) {
     return Observable.defer(new Func0<Observable<Integer>>() {
       @Override public Observable<Integer> call() {
         try {
+          smartCardManager.authenticate(pin);
           return Observable.just(smartCardManager.getFreeSlots());
         } catch (SmartCardException e) {
           return Observable.error(e);
@@ -59,10 +72,11 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<Void> changePin(final byte[] newPin) {
+  @Override public Observable<Void> changePin(final byte[] pin, final byte[] newPin) {
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
         try {
+          smartCardManager.authenticate(pin);
           smartCardManager.changePIN(newPin);
           return Observable.empty();
         } catch (SmartCardException e) {
@@ -85,11 +99,13 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<Void> addPrivateKey(final ECPrivateKey privateKey) {
+  @Override public Observable<Void> addPrivateKey(final byte[] pin, final File keyFile) {
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
+        KeyPair keyPair = BitcoinUtils.getKeyPairOfFile(keyFile);
         try {
-          smartCardManager.importKey(privateKey);
+          smartCardManager.authenticate(pin);
+          smartCardManager.importKey(keyPair);
           return Observable.empty();
         } catch (SmartCardException e) {
           return Observable.error(e);
@@ -98,10 +114,11 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<ECPublicKey> generateNewKey() {
+  @Override public Observable<ECPublicKey> generateNewKey(final byte[] pin) {
     return Observable.defer(new Func0<Observable<ECPublicKey>>() {
       @Override public Observable<ECPublicKey> call() {
         try {
+          smartCardManager.authenticate(pin);
           return Observable.just(smartCardManager.generateNewKey());
         } catch (SmartCardException e) {
           return Observable.error(e);
@@ -110,10 +127,11 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<Void> removePrivateKeyForAddress(final String address) {
+  @Override public Observable<Void> removePrivateKeyForAddress(final byte[] pin, final String address) {
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
         try {
+          smartCardManager.authenticate(pin);
           smartCardManager.deleteKey(address);
           return Observable.empty();
         } catch (SmartCardException e) {
@@ -123,11 +141,12 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override
-  public Observable<byte[]> signSHA256Hash(final String address, final byte[] sha256hash) {
+  @Override public Observable<byte[]> signSHA256Hash(final byte[] pin, final String address,
+      final byte[] sha256hash) {
     return Observable.defer(new Func0<Observable<byte[]>>() {
       @Override public Observable<byte[]> call() {
         try {
+          smartCardManager.authenticate(pin);
           return Observable.just(smartCardManager.signSHA256Hash(sha256hash, address));
         } catch (SmartCardException e) {
           return Observable.error(e);

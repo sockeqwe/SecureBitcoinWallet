@@ -62,7 +62,8 @@ import retrofit.client.OkClient;
 
   public ApplicationModule(Context context) {
     this.context = context;
-    privateKeyManager = new MockPrivateKeyManager(context);
+
+    privateKeyManager = new MockPrivateKeyManager();
     addressDao = new AddressDao();
     transactionDao = new TransactionDao();
     new DaoManager(context, "wallet.db", 1, addressDao, transactionDao);

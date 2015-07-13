@@ -80,7 +80,7 @@ public class AccountListFragment
     if (item == fabNew) {
       intentStarter.showCreateAddress(getActivity(), location[0], location[1]);
     } else {
-      // it's an import
+
     }
   }
 

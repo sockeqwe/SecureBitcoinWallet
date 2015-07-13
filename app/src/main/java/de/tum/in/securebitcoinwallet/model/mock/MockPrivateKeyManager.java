@@ -1,14 +1,13 @@
 package de.tum.in.securebitcoinwallet.model.mock;
 
-import android.content.Context;
 import de.tum.in.securebitcoinwallet.model.PrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.exception.NotFoundException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.SmartCardException;
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import org.bouncycastle.jce.interfaces.ECPublicKey;
 import rx.Observable;
 import rx.functions.Func0;
 
@@ -16,11 +15,10 @@ import rx.functions.Func0;
  * Simple mock implementation of {@link PrivateKeyManager}
  *
  * @author Hannes Dorfmann
+ * @deprecated Implementation is missing functionality.
  */
-public class MockPrivateKeyManager implements PrivateKeyManager {
+@Deprecated public class MockPrivateKeyManager implements PrivateKeyManager {
   private final static int MAX_SLOTS = 15;
-
-  private final Context context;
 
   /**
    * Map from address to private key
@@ -28,9 +26,7 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
   private Map<String, byte[]> privateKeyMap = new HashMap<>();
   private int remainingSlots = MAX_SLOTS;
 
-  public MockPrivateKeyManager(Context context) {
-    this.context = context;
-
+  public MockPrivateKeyManager() {
     // generate sample data
     for (int i = 0; i < 10; i++) {
       privateKeyMap.put("address" + i, ("privateKey" + i).getBytes());
@@ -38,26 +34,31 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
     }
   }
 
-  @Override public Observable<byte[]> getEncryptedPrivateKey(final String address) {
+  @Override public Observable<Boolean> isCardInitialized() {
+    return Observable.defer(new Func0<Observable<Boolean>>() {
+      @Override public Observable<Boolean> call() {
+        return Observable.just(false);
+      }
+    });
+  }
+
+  @Override public Observable<byte[]> getEncryptedPrivateKey(byte[] pin, final String address) {
     return Observable.defer(new Func0<Observable<byte[]>>() {
       @Override public Observable<byte[]> call() {
-        checkPIN();
-
         return Observable.just(privateKeyMap.get(address));
       }
     });
   }
 
-  @Override public Observable<Integer> getRemainingSlots() {
+  @Override public Observable<Integer> getRemainingSlots(byte[] pin) {
     return Observable.defer(new Func0<Observable<Integer>>() {
       @Override public Observable<Integer> call() {
-        checkPIN();
         return Observable.just(remainingSlots);
       }
     });
   }
 
-  @Override public Observable<Void> changePin(byte[] newPin) {
+  @Override public Observable<Void> changePin(byte[] pin, byte[] newPin) {
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
         return Observable.empty();
@@ -73,7 +74,7 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<Void> addPrivateKey(ECPrivateKey privateKey) {
+  @Override public Observable<Void> addPrivateKey(byte[] pin, File keyFile) {
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
 
@@ -82,22 +83,17 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<ECPublicKey> generateNewKey() {
+  @Override public Observable<ECPublicKey> generateNewKey(byte[] pin) {
     return Observable.defer(new Func0<Observable<ECPublicKey>>() {
       @Override public Observable<ECPublicKey> call() {
-
-        checkPIN();
         return Observable.error(new SmartCardException("Could not generate new key!"));
       }
     });
   }
 
-  @Override public Observable<Void> removePrivateKeyForAddress(final String address) {
+  @Override public Observable<Void> removePrivateKeyForAddress(byte[] pin, final String address) {
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
-
-        checkPIN();
-
         if (privateKeyMap.containsKey(address)) {
           privateKeyMap.remove(address);
           remainingSlots--;
@@ -109,12 +105,10 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<byte[]> signSHA256Hash(final String address, byte[] sha256hash) {
+  @Override
+  public Observable<byte[]> signSHA256Hash(byte[] pin, final String address, byte[] sha256hash) {
     return Observable.defer(new Func0<Observable<byte[]>>() {
       @Override public Observable<byte[]> call() {
-
-        checkPIN();
-
         if (privateKeyMap.containsKey(address)) {
           byte[] fakeSignature = new byte[70];
 
@@ -126,12 +120,5 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
         }
       }
     });
-  }
-
-  /**
-   * Shows the screen for entering the pin.
-   */
-  private void checkPIN() {
-    // TODO
   }
 }

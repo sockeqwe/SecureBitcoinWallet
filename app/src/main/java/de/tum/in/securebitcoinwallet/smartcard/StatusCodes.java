@@ -87,4 +87,9 @@ public interface StatusCodes {
    * Key already in store.
    */
   short KEY_ALREADY_IN_STORE = (short) 0x6A89;
+
+  /**
+   * No key selected for signature.
+   */
+  short NO_KEY_SELECTED = (short) 0x6A01;
 }

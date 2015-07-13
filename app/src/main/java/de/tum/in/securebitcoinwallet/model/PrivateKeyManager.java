@@ -1,7 +1,7 @@
 package de.tum.in.securebitcoinwallet.model;
 
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
+import java.io.File;
+import org.bouncycastle.jce.interfaces.ECPublicKey;
 import rx.Observable;
 import rx.Subscriber;
 
@@ -13,28 +13,36 @@ import rx.Subscriber;
 public interface PrivateKeyManager {
 
   /**
+   * Checks whether the card has been initialized yet.
+   */
+  public Observable<Boolean> isCardInitialized();
+
+  /**
    * Get the encrypted private key from secure sd card
    *
+   * @param pin the card's PIN
    * @param address The address you want to get the private key for
    * @return The encrypted private key as a byte array
    */
-  public Observable<byte[]> getEncryptedPrivateKey(String address);
+  public Observable<byte[]> getEncryptedPrivateKey(byte[] pin, String address);
 
   /**
-   * Gets the remainign space in key slots from the card.
+   * Gets the remaining space in key slots from the card.
    *
+   * @param pin the card's PIN
    * @return The amount of free slots on the card
    */
-  public Observable<Integer> getRemainingSlots();
+  public Observable<Integer> getRemainingSlots(byte[] pin);
 
   /**
    * Change the PIN
    *
+   * @param pin the card's PIN
    * @param newPin the new PIN
    * @return nothing, {@link Subscriber#onCompleted()} or {@link Subscriber#onError(Throwable)} will
    * be called
    */
-  public Observable<Void> changePin(byte[] newPin);
+  public Observable<Void> changePin(byte[] pin, byte[] newPin);
 
   /**
    * If the smartcard is locked, this method can be used to unlock it with the PUK.
@@ -48,35 +56,39 @@ public interface PrivateKeyManager {
   /**
    * Adds a raw private key to the secure storage.
    *
-   * @param privateKey the new private key
+   * @param pin the card's PIN
+   * @param keyFile Keyfile conatining the key pair to import
    * @return nothing, {@link Subscriber#onCompleted()} or {@link Subscriber#onError(Throwable)} will
    * be called
    */
-  public Observable<Void> addPrivateKey(ECPrivateKey privateKey);
+  public Observable<Void> addPrivateKey(byte[] pin, File keyFile);
 
   /**
    * Generates a new key pair on the card. The private key is stored on the card, the public one is
    * returned.
    *
+   * @param pin the card's PIN
    * @return The generated public key. The private key is stored on the card.
    */
-  public Observable<ECPublicKey> generateNewKey();
+  public Observable<ECPublicKey> generateNewKey(byte[] pin);
 
   /**
    * Removes an address
    *
+   * @param pin the card's PIN
    * @param address the address to delete
    * @return nothing, {@link Subscriber#onCompleted()} or {@link Subscriber#onError(Throwable)} will
    * be called
    */
-  public Observable<Void> removePrivateKeyForAddress(String address);
+  public Observable<Void> removePrivateKeyForAddress(byte[] pin, String address);
 
   /**
    * Signs the giben hash with the private key specified by the Bitcoin address.
    *
+   * @param pin the card's PIN
    * @param address The Bitcoin address specifying the private key to use for signing
    * @param sha256hash The hash which should be signed.
    * @return The signature as a byte array.
    */
-  public Observable<byte[]> signSHA256Hash(String address, byte[] sha256hash);
+  public Observable<byte[]> signSHA256Hash(byte[] pin, String address, byte[] sha256hash);
 }

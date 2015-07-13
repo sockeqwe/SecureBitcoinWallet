@@ -80,4 +80,6 @@ dependencies {
   testCompile 'org.robolectric:robolectric:2.4'
   testProvided 'com.hannesdorfmann.sqlbrite:object-mapper:'+sqlbriteDao
 
+  // Bouncycastle provider
+  compile 'org.bouncycastle:bcprov-jdk15on:1.52'
 }
