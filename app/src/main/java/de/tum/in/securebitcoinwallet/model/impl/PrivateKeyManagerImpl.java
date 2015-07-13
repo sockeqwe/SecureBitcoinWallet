@@ -6,7 +6,6 @@ import de.tum.in.securebitcoinwallet.smartcard.exception.SmartCardException;
 import de.tum.in.securebitcoinwallet.util.BitcoinUtils;
 import java.io.File;
 import java.security.KeyPair;
-import javax.inject.Inject;
 import org.bouncycastle.jce.interfaces.ECPublicKey;
 import rx.Observable;
 import rx.functions.Func0;
@@ -36,17 +35,8 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-<<<<<<< HEAD
-  @Inject
-  public PrivateKeyManagerImpl(SmartCardManager smartCardManager) {
-    this.smartCardManager = smartCardManager;
-  }
-
-
-  @Override public Observable<byte[]> getEncryptedPrivateKey(final String address) {
-=======
-  @Override public Observable<byte[]> getEncryptedPrivateKey(final byte[] pin, final String address) {
->>>>>>> ac1278cc74dcd4d191dec2cdf46a8ad59e6b15aa
+  @Override
+  public Observable<byte[]> getEncryptedPrivateKey(final byte[] pin, final String address) {
     return Observable.defer(new Func0<Observable<byte[]>>() {
       @Override public Observable<byte[]> call() {
         try {
@@ -127,7 +117,8 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<Void> removePrivateKeyForAddress(final byte[] pin, final String address) {
+  @Override
+  public Observable<Void> removePrivateKeyForAddress(final byte[] pin, final String address) {
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
         try {
