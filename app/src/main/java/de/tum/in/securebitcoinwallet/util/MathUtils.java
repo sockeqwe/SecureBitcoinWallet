@@ -4,6 +4,7 @@ import java.util.Random;
 
 /**
  * Little helper class that provides some useful mathematical methods
+ *
  * @author Hannes Dorfmann
  */
 public class MathUtils {
@@ -19,20 +20,15 @@ public class MathUtils {
    * targetStart <= returnValue <= targetEnd
    * </p>
    *
-   * @param x
-   *            The value that should be mapped
-   * @param sourceStart
-   *            The source range start (inclusive)
-   * @param sourceEnd
-   *            The source range end (inclusive)
-   * @param targetStart
-   *            The target range start (inclusive)
-   * @param targetEnd
-   *            The target range end (inclusive)
+   * @param x The value that should be mapped
+   * @param sourceStart The source range start (inclusive)
+   * @param sourceEnd The source range end (inclusive)
+   * @param targetStart The target range start (inclusive)
+   * @param targetEnd The target range end (inclusive)
    * @return The corresponding value of x in the target range
    */
-  public static float mapPoint(float x, float sourceStart, float sourceEnd,
-      float targetStart, float targetEnd) {
+  public static float mapPoint(float x, float sourceStart, float sourceEnd, float targetStart,
+      float targetEnd) {
 
     if (x <= sourceStart) {
       return targetStart;
@@ -42,8 +38,7 @@ public class MathUtils {
       return targetEnd;
     }
 
-    return (x - sourceStart) / (sourceEnd - sourceStart)
-        * (targetEnd - targetStart) + targetStart;
+    return (x - sourceStart) / (sourceEnd - sourceStart) * (targetEnd - targetStart) + targetStart;
   }
 
   /**
@@ -60,20 +55,15 @@ public class MathUtils {
    * targetStart <= returnValue <= targetEnd
    * </p>
    *
-   * @param x
-   *            The value that should be mapped
-   * @param sourceStart
-   *            The source range start (inclusive)
-   * @param sourceEnd
-   *            The source range end (inclusive)
-   * @param targetStart
-   *            The target range start (inclusive)
-   * @param targetEnd
-   *            The target range end (inclusive)
+   * @param x The value that should be mapped
+   * @param sourceStart The source range start (inclusive)
+   * @param sourceEnd The source range end (inclusive)
+   * @param targetStart The target range start (inclusive)
+   * @param targetEnd The target range end (inclusive)
    * @return The corresponding value of x in the target range
    */
-  public static int mapPoint(float x, float sourceStart, float sourceEnd,
-      int targetStart, int targetEnd) {
+  public static int mapPoint(float x, float sourceStart, float sourceEnd, int targetStart,
+      int targetEnd) {
 
     if (x <= sourceStart) {
       return targetStart;
@@ -83,8 +73,8 @@ public class MathUtils {
       return targetEnd;
     }
 
-    float fRes = (x - sourceStart) / (sourceEnd - sourceStart)
-        * (targetEnd - targetStart) + targetStart;
+    float fRes =
+        (x - sourceStart) / (sourceEnd - sourceStart) * (targetEnd - targetStart) + targetStart;
 
     return (int) fRes;
   }
@@ -102,20 +92,15 @@ public class MathUtils {
    * targetStart <= returnValue <= targetEnd
    * </p>
    *
-   * @param x
-   *            The value that should be mapped
-   * @param sourceStart
-   *            The source range start (inclusive)
-   * @param sourceEnd
-   *            The source range end (inclusive)
-   * @param targetStart
-   *            The target range start (inclusive)
-   * @param targetEnd
-   *            The target range end (inclusive)
+   * @param x The value that should be mapped
+   * @param sourceStart The source range start (inclusive)
+   * @param sourceEnd The source range end (inclusive)
+   * @param targetStart The target range start (inclusive)
+   * @param targetEnd The target range end (inclusive)
    * @return The corresponding value of x in the target range
    */
-  public static int mapPointRound(float x, float sourceStart,
-      float sourceEnd, int targetStart, int targetEnd) {
+  public static int mapPointRound(float x, float sourceStart, float sourceEnd, int targetStart,
+      int targetEnd) {
 
     if (x <= sourceStart) {
       return targetStart;
@@ -125,8 +110,8 @@ public class MathUtils {
       return targetEnd;
     }
 
-    float fRes = (x - sourceStart) / (sourceEnd - sourceStart)
-        * (targetEnd - targetStart) + targetStart;
+    float fRes =
+        (x - sourceStart) / (sourceEnd - sourceStart) * (targetEnd - targetStart) + targetStart;
 
     return (int) (fRes + 0.5f);
   }
@@ -151,5 +136,4 @@ public class MathUtils {
   public static int randomInt() {
     return random.nextInt(Integer.MAX_VALUE - 1);
   }
-
 }

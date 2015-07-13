@@ -28,7 +28,7 @@ public class DimensUtils {
    *
    * @param context The context
    * @param px the pixel value
-   * @return  value in dp
+   * @return value in dp
    */
   public static int pxToDp(Context context, int px) {
     DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
