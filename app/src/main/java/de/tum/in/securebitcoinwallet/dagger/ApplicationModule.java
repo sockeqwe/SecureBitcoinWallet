@@ -27,6 +27,7 @@ import de.tum.in.securebitcoinwallet.model.database.TransactionDao;
 import de.tum.in.securebitcoinwallet.model.mock.MockPrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.mock.MockTransactionManager;
 import de.tum.in.securebitcoinwallet.model.mock.MockWalletManager;
+import de.tum.in.securebitcoinwallet.smartcard.SmartCardManager;
 import de.tum.in.securebitcoinwallet.transactions.TransactionsActivity;
 import de.tum.in.securebitcoinwallet.transactions.TransactionsAdapter;
 import de.tum.in.securebitcoinwallet.transactions.TransactionsFragment;
@@ -60,7 +61,7 @@ import retrofit.client.OkClient;
 
   public ApplicationModule(Context context) {
     this.context = context;
-    privateKeyManager = new MockPrivateKeyManager();
+    privateKeyManager = new MockPrivateKeyManager(context);
     addressDao = new AddressDao();
     transactionDao = new TransactionDao();
     new DaoManager(context, "wallet.db", 1, addressDao, transactionDao);
@@ -118,5 +119,9 @@ import retrofit.client.OkClient;
   @Provides @Singleton BitcoinSync provideBitcoinSync(BackendApi backendApi, AddressDao addressDao,
       TransactionDao transactionDao) {
     return new BitcoinSync(backendApi, addressDao, transactionDao);
+  }
+
+  @Singleton @Provides public SmartCardManager provideSmartCardManager() {
+    return new SmartCardManager(context);
   }
 }

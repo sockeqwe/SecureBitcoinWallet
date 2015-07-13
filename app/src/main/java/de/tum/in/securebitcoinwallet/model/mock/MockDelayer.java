@@ -5,7 +5,7 @@ package de.tum.in.securebitcoinwallet.model.mock;
  */
 public class MockDelayer {
 
-  public static int DELAY = 1500;
+  public static int DELAY = 1000;
 
   public static void delay() {
 

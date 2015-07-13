@@ -1,68 +1,82 @@
 package de.tum.in.securebitcoinwallet.model;
 
+import java.security.interfaces.ECPrivateKey;
+import java.security.interfaces.ECPublicKey;
 import rx.Observable;
 import rx.Subscriber;
 
 /**
- * This class is responsible to manage and access the private key from secure element.
+ * This class is responsible to manage and access the private keys on the secure element.
  *
  * @author Hannes Dorfmann
  */
 public interface PrivateKeyManager {
 
   /**
-   * Get the private key from secure sd card
+   * Get the encrypted private key from secure sd card
    *
-   * @param pin The secure pin to access
    * @param address The address you want to get the private key for
-   * @return The private key as String
+   * @return The encrypted private key as a byte array
    */
-  public Observable<String> getPrivateKey(String pin, String address);
+  public Observable<byte[]> getEncryptedPrivateKey(String address);
 
   /**
-   * Is a PIN set?
+   * Gets the remainign space in key slots from the card.
    *
-   * @return true if sd card is protected with a PIN, otherwise false
+   * @return The amount of free slots on the card
    */
-  public Observable<Boolean> isPinSet();
+  public Observable<Integer> getRemainingSlots();
 
   /**
    * Change the PIN
    *
-   * @param oldPin the old PIN
    * @param newPin the new PIN
    * @return nothing, {@link Subscriber#onCompleted()} or {@link Subscriber#onError(Throwable)} will
    * be called
    */
-  public Observable<Void> changePin(String oldPin, String newPin);
+  public Observable<Void> changePin(byte[] newPin);
 
   /**
-   * Adds an address / private key and address to the secucre storage
+   * If the smartcard is locked, this method can be used to unlock it with the PUK.
    *
-   * @param pin The PIN
-   * @param privateKey the new private key
-   * @param address the Address
+   * @param puk The PUK from the card's setup
    * @return nothing, {@link Subscriber#onCompleted()} or {@link Subscriber#onError(Throwable)} will
    * be called
    */
-  public Observable<Void> addAddress(String pin, String privateKey, String address);
+  public Observable<Void> unlockSmartcard(byte[] puk, byte[] newPin);
 
   /**
-   * Removes  an address
+   * Adds a raw private key to the secure storage.
    *
-   * @param pin The PIN
+   * @param privateKey the new private key
+   * @return nothing, {@link Subscriber#onCompleted()} or {@link Subscriber#onError(Throwable)} will
+   * be called
+   */
+  public Observable<Void> addPrivateKey(ECPrivateKey privateKey);
+
+  /**
+   * Generates a new key pair on the card. The private key is stored on the card, the public one is
+   * returned.
+   *
+   * @return The generated public key. The private key is stored on the card.
+   */
+  public Observable<ECPublicKey> generateNewKey();
+
+  /**
+   * Removes an address
+   *
    * @param address the address to delete
    * @return nothing, {@link Subscriber#onCompleted()} or {@link Subscriber#onError(Throwable)} will
    * be called
    */
-  public Observable<Void> removeAddress(String pin, String address);
+  public Observable<Void> removePrivateKeyForAddress(String address);
 
   /**
-   * Checks if the pin is correct
+   * Signs the giben hash with the private key specified by the Bitcoin address.
    *
-   * @param pin The pin to check
-   * @return nothing, {@link Subscriber#onCompleted()} or {@link Subscriber#onError(Throwable)} will
-   * be called
+   * @param address The Bitcoin address specifying the private key to use for signing
+   * @param sha256hash The hash which should be signed.
+   * @return The signature as a byte array.
    */
-  public Observable<Void> checkPin(String pin);
+  public Observable<byte[]> signSHA256Hash(String address, byte[] sha256hash);
 }

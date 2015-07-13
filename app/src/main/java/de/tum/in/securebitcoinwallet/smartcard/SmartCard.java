@@ -2,8 +2,8 @@ package de.tum.in.securebitcoinwallet.smartcard;
 
 import android.content.Context;
 import com.secureflashcard.sfclibrary.SfcTerminal;
-import de.tum.in.securebitcoinwallet.smartcard.exception.SmartcardException;
-import de.tum.in.securebitcoinwallet.smartcard.exception.SmartcardNotConnectedException;
+import de.tum.in.securebitcoinwallet.smartcard.exception.SmartCardException;
+import de.tum.in.securebitcoinwallet.smartcard.exception.SmartCardNotConnectedException;
 
 /**
  * Basic interface for the smartcard. Sends and receives commands to and from the card.
@@ -44,26 +44,26 @@ public class SmartCard {
    *
    * @param apdu The APDU command. See JavaCard specification for details.
    * @return The response of the command, or null, if no response has been generated.
-   * @throws SmartcardNotConnectedException If the smartcard could not be found
-   * @throws SmartcardException If the communication was not successful or the applet could not be
+   * @throws SmartCardNotConnectedException If the smartcard could not be found
+   * @throws SmartCardException If the communication was not successful or the applet could not be
    * selected.
    */
-  public APDUResponse sendAPDU(APDUCommand apdu) throws SmartcardException {
+  public APDUResponse sendAPDU(APDUCommand apdu) throws SmartCardException {
     try {
       sfcTerminal.connect();
     } catch (Exception e) {
-      throw new SmartcardNotConnectedException(
+      throw new SmartCardNotConnectedException(
           "Could not establish connection to smartcard: " + e.getMessage());
     }
 
     try {
       APDUResponse response = new APDUResponse(sfcTerminal.transmit(SELECT_APPLET_INSTRUCTION));
       if (!response.wasSuccessful()) {
-        throw new SmartcardException("Could not select applet: " + response.getStatusCode());
+        throw new SmartCardException("Could not select applet: " + response.getStatusCode());
       }
       return new APDUResponse(sfcTerminal.transmit(apdu.getBytes()));
     } catch (Exception e) {
-      throw new SmartcardException("Error during command transmission: " + e.getMessage());
+      throw new SmartCardException("Error during command transmission: " + e.getMessage());
     }
   }
 

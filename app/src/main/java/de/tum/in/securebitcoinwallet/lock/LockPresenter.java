@@ -29,7 +29,8 @@ public class LockPresenter extends MvpRxPresenter<LockView, Void> {
     if (isViewAttached()) {
       getView().showLoading();
     }
-    subscribe(keyManager.checkPin(pin));
+    // TODO check pin from local storage
+    //subscribe(keyManager.checkPin(pin));
   }
 
   @Override protected void onNext(Void aVoid) {

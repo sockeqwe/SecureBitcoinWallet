@@ -5,5 +5,5 @@ package de.tum.in.securebitcoinwallet.smartcard.exception;
  *
  * @author Benedikt Schlagberger
  */
-public class KeyNotFoundException extends SmartcardException {
+public class KeyNotFoundException extends SmartCardException {
 }

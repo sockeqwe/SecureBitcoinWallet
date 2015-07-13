@@ -5,5 +5,5 @@ package de.tum.in.securebitcoinwallet.smartcard.exception;
  *
  * @author Benedikt Schlagberger
  */
-public class AuthenticationFailedExeption extends SmartcardException {
+public class AuthenticationFailedExeption extends SmartCardException {
 }
