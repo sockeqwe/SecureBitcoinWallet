@@ -3,6 +3,7 @@ package de.tum.in.securebitcoinwallet.smartcard;
 import android.content.Context;
 import de.tum.in.securebitcoinwallet.smartcard.exception.AppletAlreadyInitializedException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.AppletNotInitializedException;
+import de.tum.in.securebitcoinwallet.smartcard.exception.AuthenticationFailedExeption;
 import de.tum.in.securebitcoinwallet.smartcard.exception.KeyNotFoundException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.KeyStoreFullException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.SmartcardException;
@@ -66,7 +67,7 @@ public class SmartCardManager {
    * messages by using the bitcoin address calculated from the returned public key.
    *
    * @return The public key of the generated keypair.
-   * @throws SmartcardException If the communication with the card failed.
+   * @throws SmartcardException If the communication with the card failed
    * @throws AppletNotInitializedException If the applet has not been initialized yet. This can be
    * done with {@link #setup()}.
    */
@@ -105,7 +106,7 @@ public class SmartCardManager {
    * @param privateKey The private key to import. Has to be 256 bits.
    * @param bitcoinAddress The Bitcoin address of the private key. // TODO: calculate?
    * @throws KeyStoreFullException If no more space is left on the smartcard
-   * @throws SmartcardException If communication with the smartcard failed.
+   * @throws SmartcardException If communication with the smartcard failed
    */
   public void importKey(ECPrivateKey privateKey, String bitcoinAddress) throws SmartcardException {
     byte[] secret = privateKey.getS().toByteArray();
@@ -146,8 +147,8 @@ public class SmartCardManager {
    *
    * @param bitcoinAddress The Bitcoin address for which the private key will be fetched.
    * @return The encrypted private key
-   * @throws SmartcardException If communication with the smartcard failed.
-   * @throws KeyNotFoundException If the requested key could not be found.
+   * @throws SmartcardException If communication with the smartcard failed
+   * @throws KeyNotFoundException If the requested key could not be found
    */
   public byte[] exportEncryptedPrivateKey(String bitcoinAddress) throws SmartcardException {
     byte[] address = bitcoinAddress.getBytes();
@@ -180,8 +181,8 @@ public class SmartCardManager {
   /**
    * Deletes the private key specified by the given Bitcoin address.
    *
-   * @param bitcoinAddress The Bitcoin address for which the key should be deleted.
-   * @throws SmartcardException If communication with the smartcard failed.
+   * @param bitcoinAddress The Bitcoin address for which the key should be deleted
+   * @throws SmartcardException If communication with the smartcard failed
    */
   public void deleteKey(String bitcoinAddress) throws SmartcardException {
     byte[] address = bitcoinAddress.getBytes();
@@ -205,25 +206,14 @@ public class SmartCardManager {
   }
 
   /**
-   * Validates the given Bitcoin address.
-   *
-   * @param address The Bitcoin address to validate.
-   */
-  private void validateBitcoinAddress(byte[] address) {
-    if (address.length < 26 || address.length > 35) {
-      throw new RuntimeException("Bitcoin address is faulty");
-    }
-  }
-
-  /**
    * Signs the given transaction.
    *
    * @param hash The SHA-256 hash to sign. Has to be 32 bytes.
    * @param bitcoinAddress The Bitcoin address of which the private key should be used to sign the
    * hash
-   * @return The signature of the transaction.
+   * @return The signature of the transaction
    * @throws KeyNotFoundException If the key for the Bitcoin address could not be found.
-   * @throws SmartcardException If communication with the smartcard failed.
+   * @throws SmartcardException If communication with the smartcard failed
    */
   public byte[] signSHA256Hash(byte[] hash, String bitcoinAddress) throws SmartcardException {
     // SHA256 has 256 bits.
@@ -257,6 +247,66 @@ public class SmartCardManager {
   }
 
   /**
+   * Changes the PIN to the desired value.
+   *
+   * @param newPin The new PIN
+   * @throws SmartcardException If communication with the smartcard failed
+   */
+  public void changePIN(byte[] newPin) throws SmartcardException {
+    if (newPin.length > 8 || newPin.length < 4) {
+      throw new RuntimeException("PIN has wrong length. May only be between 4 and 8 characters");
+    }
+
+    authenticate();
+
+    APDUCommand changePINCommand = new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
+        AppletInstructions.INS_CHANGE_PIN, (byte) 0, (byte) 0, newPin);
+
+    APDUResponse response = smartCard.sendAPDU(changePINCommand);
+
+    if (!response.wasSuccessful()) {
+      throw new SmartcardRuntimeException(
+          "Error during changing PIN. Unknown statuscode: " + response.getStatusCode());
+    }
+  }
+
+  /**
+   * Unlocks the card if the PIN has been entered wrong too many times.
+   *
+   * @param puk The PUK from the setup feature
+   * @param newPin The new PIN
+   * @throws AuthenticationFailedExeption If the PUk is wrong
+   * @throws SmartcardException If communication with the smartcard failed
+   */
+  public void unlock(byte[] puk, byte[] newPin) throws SmartcardException {
+    if (puk.length != 8) {
+      throw new RuntimeException("PUK has wrong length! Has to be 8 characters");
+    }
+
+    if (newPin.length < 4 || newPin.length > 8) {
+      throw new RuntimeException("New PIN has wrong length! Has to be between 4 and 8 characters");
+    }
+
+    APDUCommand unlockCommand =
+        new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA, AppletInstructions.INS_UNLOCK,
+            (byte) puk.length, (byte) newPin.length, puk);
+
+    unlockCommand.appendData(newPin);
+
+    APDUResponse response = smartCard.sendAPDU(unlockCommand);
+
+    if (!response.wasSuccessful()) {
+      switch (response.getStatusCode()) {
+        case StatusCodes.AUTH_FAILED:
+          throw new AuthenticationFailedExeption();
+        default:
+          throw new SmartcardRuntimeException(
+              "Error during unlock. Unknown statuscode: " + response.getStatusCode());
+      }
+    }
+  }
+
+  /**
    * Gets the remaining free slots for private keys.
    *
    * @throws SmartcardException If communication with the smartcard failed.
@@ -277,6 +327,17 @@ public class SmartCardManager {
     byte[] data = response.getData();
 
     return (data[0] << 8) + data[1];
+  }
+
+  /**
+   * Validates the given Bitcoin address.
+   *
+   * @param address The Bitcoin address to validate.
+   */
+  private void validateBitcoinAddress(byte[] address) {
+    if (address.length < 26 || address.length > 35) {
+      throw new RuntimeException("Bitcoin address is faulty");
+    }
   }
 
   /**
