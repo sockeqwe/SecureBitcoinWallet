@@ -65,7 +65,7 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
    * @param postion the index / position of the list returne in {@link #getFabMenuItems()}
    * @param item the clicked item
    */
-  protected abstract void onFabMeuItemClicked(int postion, RFACLabelItem item);
+  protected abstract void onFabMenuItemClicked(int postion, RFACLabelItem item, View view);
 
   protected SwipeRefreshLayout getSwipeRefreshLayout() {
     return (SwipeRefreshLayout) contentView;
@@ -108,7 +108,7 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
   }
 
   @Override protected String getErrorMessage(Throwable throwable, boolean b) {
-    return errorMessageDeterminer.getString( throwable, b);
+    return errorMessageDeterminer.getString(throwable, b);
   }
 
   @Override public LceViewState<M, V> createViewState() {
@@ -197,14 +197,15 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
     getSwipeRefreshLayout().setRefreshing(false);
   }
 
-  @Override public void onRFACItemLabelClick(int position, RFACLabelItem item) {
-    fabHelper.toggleContent();
+  @Override public void onRFACItemLabelClick(int position, RFACLabelItem item, View view) {
+    onFabMenuItemClicked(position, item, view);
+    //fabHelper.toggleContent();
   }
 
-  @Override public void onRFACItemIconClick(int position, RFACLabelItem item) {
-    fabHelper.toggleContent();
+  @Override public void onRFACItemIconClick(int position, RFACLabelItem item, View view) {
+    onFabMenuItemClicked(position, item, view);
+    //fabHelper.toggleContent();
   }
-
 
   @Override protected void injectDependencies() {
     getObjectGraph().inject(this);

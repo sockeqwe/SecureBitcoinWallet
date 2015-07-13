@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="16dp"
+    android:paddingRight="32dp"
+    android:paddingBottom="72dp"
+    android:paddingLeft="72dp"
+    android:clipToPadding="false">
+
+
+  <com.rengwuxian.materialedittext.MaterialEditText
+      android:id="@+id/name"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="48dp"
+      android:hint="@string/create_address_name"
+      android:textSize="24sp"
+      android:textColor="@color/white"
+      android:textCursorDrawable="@drawable/text_cursor"
+      app:met_floatingLabel="highlight"
+      app:met_primaryColor="@color/accent"
+      app:met_baseColor="@color/white"
+      app:met_singleLineEllipsis="true"
+      />
+
+
+  <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textColor="@color/white"
+      android:textSize="16sp"
+      android:layout_below="@+id/name"
+      android:layout_above="@+id/next"
+      android:text="@string/create_address_description"
+      android:layout_marginTop="24dp"
+      />
+
+
+  <com.andexert.library.RippleView
+      android:id="@+id/next"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:rv_color="@color/accent"
+      app:rv_centered="true"
+      app:rv_rippleDuration="@integer/pin_ripple_duration"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentBottom="true"
+      >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/create_address_next_button"
+        android:textSize="18sp"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        />
+  </com.andexert.library.RippleView>
+
+
+</RelativeLayout>

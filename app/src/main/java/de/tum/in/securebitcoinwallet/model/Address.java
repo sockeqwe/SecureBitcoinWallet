@@ -14,12 +14,22 @@ import com.hannesdorfmann.sqlbrite.objectmapper.annotation.ObjectMappable;
   public static final String COL_TOTAL_SENT = "totalSent";
   public static final String COL_TOTAL_RECEIVED = "totalReceived";
   public static final String COL_NAME = "name";
+  public static final String COL_PUBLIC_KEY = "publicKey";
 
   @Column(COL_ADDRESS) String address;
+  @Column(COL_PUBLIC_KEY) byte[] publicKey;
   @Column(COL_AMOUNT) long amount;
   @Column(COL_TOTAL_SENT) long totalSent;
   @Column(COL_TOTAL_RECEIVED) long totalReceived;
   @Column(COL_NAME) String name;
+
+  public byte[] getPublicKey() {
+    return publicKey;
+  }
+
+  public void setPublicKey(byte[] publicKey) {
+    this.publicKey = publicKey;
+  }
 
   public String getAddress() {
     return address;

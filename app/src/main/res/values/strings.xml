@@ -12,6 +12,8 @@
   <string name="error_not_found">Oops, the thing you are looking for has not been found.</string>
 
 
+  <string name="activity_create_address">New Address</string>
+
   <string name="menu_address_import">Import</string>
   <string name="menu_address_new">Create new</string>
 
@@ -22,4 +24,12 @@
   <string name="pref_lock_summ">Secure the application with a pincode</string>
   <string name="pref_lock_timeout">Lock Timeout</string>
   <string name="pref_lock_timeout_summ">Time in seconds until the application gets locked</string>
+
+
+  <string name="create_address_name">Address name</string>
+  <string name="create_address_next_button">next</string>
+  <string name="create_address_description">Please enter a name for your new address. This name will
+    be displayed in the app to identify this address. A public and private key will be generated in
+    next step by entering the PIN for the secure SD card.
+  </string>
 </resources>

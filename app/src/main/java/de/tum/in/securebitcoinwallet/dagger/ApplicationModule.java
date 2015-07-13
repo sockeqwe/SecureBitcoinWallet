@@ -11,6 +11,7 @@ import de.tum.in.securebitcoinwallet.accounts.AccountListActivity;
 import de.tum.in.securebitcoinwallet.accounts.AccountListAdapter;
 import de.tum.in.securebitcoinwallet.accounts.AccountListFragment;
 import de.tum.in.securebitcoinwallet.accounts.AccountListPresenter;
+import de.tum.in.securebitcoinwallet.address.create.CreateAddressActivity;
 import de.tum.in.securebitcoinwallet.common.BaseActivity;
 import de.tum.in.securebitcoinwallet.common.ErrorMessageDeterminer;
 import de.tum.in.securebitcoinwallet.common.RecyclerViewFragment;
@@ -47,7 +48,7 @@ import retrofit.client.OkClient;
         LockFragment.class, LockPresenter.class, AccountListFragment.class,
         AccountListPresenter.class, AccountListAdapter.class, TransactionsPresenter.class,
         TransactionsFragment.class, TransactionsAdapter.class, TransactionsActivity.class,
-        BitcoinSync.class
+        BitcoinSync.class, CreateAddressActivity.class
     },
     library = true,
     complete = false // TODO remove this

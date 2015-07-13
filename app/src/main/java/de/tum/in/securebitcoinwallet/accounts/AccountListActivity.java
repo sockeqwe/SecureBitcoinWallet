@@ -12,6 +12,7 @@ public class AccountListActivity extends BaseActivity {
     setContentView(R.layout.activity_fragement_container);
   }
 
+
   @Override protected Fragment getContentFragment() {
     return new AccountListFragment();
   }

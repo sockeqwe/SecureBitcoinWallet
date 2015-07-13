@@ -22,12 +22,18 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
    * The {@link SmartCardManager} of this PrivateKeyManager. TODO has to be initialized with
    * context!
    */
-  @Inject private SmartCardManager smartCardManager;
+  private SmartCardManager smartCardManager;
 
   /**
    * The {@link Context} of this manager.
    */
   private Context context;
+
+  @Inject
+  public PrivateKeyManagerImpl(SmartCardManager smartCardManager) {
+    this.smartCardManager = smartCardManager;
+  }
+
 
   @Override public Observable<byte[]> getEncryptedPrivateKey(final String address) {
     return Observable.defer(new Func0<Observable<byte[]>>() {

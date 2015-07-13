@@ -34,7 +34,7 @@ public class TransactionsFragment
   @InjectView(R.id.swipeRefreshLayout) SwipeRefreshLayout refreshLayout;
   @InjectView(R.id.bitcoins) TextView bitcoins;
   @InjectView(R.id.toolbar) Toolbar toolbar;
-  @InjectView(R.id.collapsingToolbar)CollapsingToolbarLayout collapsingToolbar;
+  @InjectView(R.id.collapsingToolbar) CollapsingToolbarLayout collapsingToolbar;
 
   private TransactionList transactionList;
 
@@ -85,7 +85,7 @@ public class TransactionsFragment
     return items;
   }
 
-  @Override protected void onFabMeuItemClicked(int postion, RFACLabelItem item) {
+  @Override protected void onFabMenuItemClicked(int postion, RFACLabelItem item, View view) {
 
   }
 

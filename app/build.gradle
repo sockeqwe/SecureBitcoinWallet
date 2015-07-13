@@ -52,15 +52,21 @@ dependencies {
   apt 'com.hannesdorfmann.sqlbrite:object-mapper:'+sqlbriteDao
 
 
+  // bitcoinj library
+  // compile 'org.bitcoinj:bitcoinj-core:0.12.3'
+
+
 
   // UI libs
   compile 'com.github.castorflex.smoothprogressbar:library-circular:1.1.0'
   compile 'com.github.traex.rippleeffect:ripple:1.2.3.2-OG'
-  compile 'com.github.wangjiegulu:RapidFloatingActionButton:1.0.1'
+  compile 'com.github.sockeqwe:RapidFloatingActionButton:1.0.3-clicklistener'
   compile 'com.nineoldandroids:library:2.4.0'
   compile 'com.github.wangjiegulu:AndroidBucket:1.0.2'
   compile 'com.github.wangjiegulu:AndroidInject:1.0.2'
   compile 'com.github.wangjiegulu:ShadowViewHelper:1.0.1'
+  compile 'com.github.markushi:android-ui:1.2'
+  compile 'com.rengwuxian.materialedittext:library:2.1.4'
 
   // https://github.com/wangjiegulu/RapidFloatingActionButton
   // https://github.com/AlexKolpa/fab-toolbar

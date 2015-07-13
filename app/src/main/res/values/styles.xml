@@ -28,6 +28,20 @@
     <item name="cpbStyle">@style/CircularThemeProgressBar</item>
   </style>
 
+
+  <!-- Theme for activities that can reveal -->
+  <style name="RevealTheme" parent="AppTheme">
+    <item name="android:windowIsTranslucent">true</item>
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="android:backgroundDimEnabled">false</item>
+  </style>
+
+
+  <style name="CreateAddressTheme" parent="RevealTheme">
+    <item name="android:textColor">@color/white</item>
+  </style>
+
   <style name="CircularThemeProgressBar" parent="android:Widget.Holo.ProgressBar">
     <item name="cpb_colors">@array/loading_colors</item>
     <item name="cpb_stroke_width">@dimen/cpb_default_stroke_width</item>

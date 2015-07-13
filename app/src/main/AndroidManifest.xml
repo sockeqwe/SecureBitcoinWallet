@@ -28,9 +28,11 @@
     </activity>
 
 
-    <activity android:name=".transactions.TransactionsActivity" />
+    <activity android:name=".transactions.TransactionsActivity"/>
 
-    />
+
+    <activity android:name=".address.create.CreateAddressActivity"
+        android:theme="@style/CreateAddressTheme" />
 
   </application>
 

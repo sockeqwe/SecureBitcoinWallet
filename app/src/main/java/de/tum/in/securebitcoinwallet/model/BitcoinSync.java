@@ -5,6 +5,8 @@ import de.tum.in.securebitcoinwallet.model.database.TransactionDao;
 import javax.inject.Inject;
 
 /**
+ * This class is responsible to sync the local database with the backend.
+ *
  * @author Hannes Dorfmann
  */
 public class BitcoinSync {
@@ -19,8 +21,6 @@ public class BitcoinSync {
     this.addressDao = addressDao;
     this.transactionDao = transactionDao;
   }
-
-
 
 
 }

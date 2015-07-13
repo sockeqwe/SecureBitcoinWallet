@@ -27,7 +27,7 @@ public class AddressDao extends AbsDao {
 
     CREATE_TABLE(TABLE, COL_ADDRESS + " TEXT PRIMARY KEY NOT NULL", COL_NAME + " TEXT",
         COL_AMOUNT + " INTEGER DEFAULT 0", COL_TOTAL_RECEIVED + " INTEGER DEFAULT 0",
-        COL_TOTAL_SENT + " INTEGER DEFAULT 0").execute(sqLiteDatabase);
+        COL_TOTAL_SENT + " INTEGER DEFAULT 0", COL_NAME + " BLOB").execute(sqLiteDatabase);
   }
 
   @Override public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {

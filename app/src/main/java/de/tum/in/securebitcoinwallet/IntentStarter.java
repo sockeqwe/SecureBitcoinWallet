@@ -2,6 +2,7 @@ package de.tum.in.securebitcoinwallet;
 
 import android.content.Context;
 import android.content.Intent;
+import de.tum.in.securebitcoinwallet.address.create.CreateAddressActivity;
 import de.tum.in.securebitcoinwallet.transactions.TransactionsActivity;
 
 /**
@@ -20,6 +21,20 @@ public class IntentStarter {
   public void showTransactions(Context context, String address) {
     Intent i = new Intent(context, TransactionsActivity.class);
     i.putExtra(TransactionsActivity.KEY_ADDRESS, address);
+    context.startActivity(i);
+  }
+
+  /**
+   * Starts the activity to create a new address
+   *
+   * @param context the context
+   * @param revealX the revealX position
+   * @param revealY the revealY position
+   */
+  public void showCreateAddress(Context context, int revealX, int revealY) {
+    Intent i = new Intent(context, CreateAddressActivity.class);
+    i.putExtra(CreateAddressActivity.KEY_REVEAL_X, revealX);
+    i.putExtra(CreateAddressActivity.KEY_REVEAL_Y, revealY);
     context.startActivity(i);
   }
 }

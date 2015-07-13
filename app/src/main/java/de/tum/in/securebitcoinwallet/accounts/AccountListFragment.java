@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import butterknife.InjectView;
 import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RFACLabelItem;
+import de.tum.in.securebitcoinwallet.IntentStarter;
 import de.tum.in.securebitcoinwallet.R;
 import de.tum.in.securebitcoinwallet.common.ListAdapter;
 import de.tum.in.securebitcoinwallet.common.RecyclerViewFragment;
@@ -16,6 +17,7 @@ import de.tum.in.securebitcoinwallet.preferences.SettingsActivity;
 import de.tum.in.securebitcoinwallet.model.Address;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
  * @author Hannes Dorfmann
@@ -25,6 +27,10 @@ public class AccountListFragment
     implements AccountListView {
 
   @InjectView(R.id.toolbar) Toolbar toolbar;
+  @Inject IntentStarter intentStarter;
+
+  private RFACLabelItem fabNew;
+  private RFACLabelItem fabImport;
 
   @Override protected ListAdapter<List<Address>> createAdapter() {
     return new AccountListAdapter(getActivity(), getObjectGraph());
@@ -45,27 +51,37 @@ public class AccountListFragment
 
     List<RFACLabelItem> items = new ArrayList<>(3);
 
-    items.add(new RFACLabelItem<Integer>().setLabel(getString(R.string.menu_address_new))
+    fabNew = new RFACLabelItem<Integer>().setLabel(getString(R.string.menu_address_new))
         .setResId(R.drawable.ic_key)
         .setIconNormalColor(res.getColor(R.color.menu_icon2))
         .setIconPressedColor(res.getColor(R.color.menu_icon2_pressed))
         .setLabelColor(res.getColor(R.color.menu_label_text_color))
         .setLabelBackgroundDrawable(background)
-        .setWrapper(3));
+        .setWrapper(3);
 
-    items.add(new RFACLabelItem<Integer>().setLabel(getString(R.string.menu_address_import))
+    fabImport = new RFACLabelItem<Integer>().setLabel(getString(R.string.menu_address_import))
         .setResId(R.drawable.ic_cards)
         .setIconNormalColor(res.getColor(R.color.menu_icon1))
         .setIconPressedColor(res.getColor(R.color.menu_icon1_pressed))
         .setLabelColor(res.getColor(R.color.menu_label_text_color))
         .setLabelBackgroundDrawable(background)
-        .setWrapper(3));
+        .setWrapper(3);
+
+    items.add(fabNew);
+    items.add(fabImport);
 
     return items;
   }
 
-  @Override protected void onFabMeuItemClicked(int postion, RFACLabelItem item) {
+  @Override protected void onFabMenuItemClicked(int postion, RFACLabelItem item, View view) {
 
+    int location[] = new int[2];
+    view.getLocationInWindow(location);
+    if (item == fabNew) {
+      intentStarter.showCreateAddress(getActivity(), location[0], location[1]);
+    } else {
+      // it's an import
+    }
   }
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
