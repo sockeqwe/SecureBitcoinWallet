@@ -10,7 +10,10 @@ import de.tum.in.securebitcoinwallet.smartcard.exception.KeyStoreFullException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.SmartCardException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.SmartcardRuntimeException;
 import de.tum.in.securebitcoinwallet.util.BitcoinUtils;
+
+import java.security.InvalidKeyException;
 import java.security.KeyFactory;
+import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.interfaces.ECPrivateKey;
@@ -98,11 +101,16 @@ public class SmartCardManager {
   /**
    * Imports the given private key into the keystore on the smartcard.
    *
-   * @param privateKey The private key to import. Has to be 256 bits.
+   * @param keyPair The keypair containing the private key to import. Has to be 256 bits
    * @throws KeyStoreFullException If no more space is left on the smartcard
    * @throws SmartCardException If communication with the smartcard failed
    */
-  public void importKey(ECPrivateKey privateKey) throws SmartCardException {
+  public void importKey(KeyPair keyPair) throws SmartCardException {
+    ECPrivateKey privateKey;
+    if (!(keyPair.getPrivate() instanceof ECPrivateKey)) {
+        throw new RuntimeException("Not a key suitable for ECDSA/Bitcoin");
+    }
+        privateKey = (ECPrivateKey) keyPair.getPrivate();
 
     byte[] secret = privateKey.getS().toByteArray();
 
@@ -111,7 +119,7 @@ public class SmartCardManager {
     }
 
     byte[] bitcoinAddress =
-        BitcoinUtils.calculateBitcoinAddress(BitcoinUtils.getPublicKeyForPrivateKey(privateKey));
+        BitcoinUtils.calculateBitcoinAddress((ECPublicKey) keyPair.getPublic());
 
     authenticate();
 

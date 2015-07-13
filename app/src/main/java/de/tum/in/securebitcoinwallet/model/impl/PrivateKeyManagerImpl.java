@@ -1,12 +1,17 @@
 package de.tum.in.securebitcoinwallet.model.impl;
 
 import android.content.Context;
+
+import java.io.File;
+import java.security.KeyPair;
+import java.security.interfaces.ECPublicKey;
+
+import javax.inject.Inject;
+
 import de.tum.in.securebitcoinwallet.model.PrivateKeyManager;
 import de.tum.in.securebitcoinwallet.smartcard.SmartCardManager;
 import de.tum.in.securebitcoinwallet.smartcard.exception.SmartCardException;
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
-import javax.inject.Inject;
+import de.tum.in.securebitcoinwallet.util.BitcoinUtils;
 import rx.Observable;
 import rx.functions.Func0;
 
@@ -79,11 +84,13 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<Void> addPrivateKey(final ECPrivateKey privateKey) {
+  @Override public Observable<Void> addPrivateKey(final File keyFile) {
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
+        KeyPair keyPair = BitcoinUtils.getKeyPairOfFile(keyFile);
+
         try {
-          smartCardManager.importKey(privateKey);
+          smartCardManager.importKey(keyPair);
           return Observable.empty();
         } catch (SmartCardException e) {
           return Observable.error(e);

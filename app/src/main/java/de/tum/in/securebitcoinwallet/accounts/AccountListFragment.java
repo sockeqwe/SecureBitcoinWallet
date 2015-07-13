@@ -65,7 +65,14 @@ public class AccountListFragment
   }
 
   @Override protected void onFabMeuItemClicked(int postion, RFACLabelItem item) {
-
+    switch (postion) {
+        case 0:
+            // Create new
+            break;
+        case 1:
+            // Import
+            break;
+    }
   }
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {

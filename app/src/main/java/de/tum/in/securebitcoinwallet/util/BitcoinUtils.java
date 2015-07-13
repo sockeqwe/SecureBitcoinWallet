@@ -1,5 +1,8 @@
 package de.tum.in.securebitcoinwallet.util;
 
+import java.io.File;
+import java.security.KeyFactory;
+import java.security.KeyPair;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.ECPrivateKey;
@@ -60,22 +63,22 @@ public class BitcoinUtils {
       sha256 = MessageDigest.getInstance("SHA-256");
     } catch (NoSuchAlgorithmException e) {
       throw new RuntimeException(
-          "BitcoinUtils.calculateBitcoinAddress: RIPEMD-160 digest not found");
+          "RIPEMD-160 digest not found");
     }
 
     byte[] ripemdHash = ripemd160.digest(publicKey.getEncoded());
 
     // TODO implement
-    throw new RuntimeException("BitcoinUtils.calculateBitcoinAddress: Not Implemented!");
-  }
-
-  public static ECPublicKey getPublicKeyForPrivateKey(ECPrivateKey privateKey) {
-    // TODO implement
-    throw new RuntimeException("BitcoinUtils.getPublicKeyForPrivateKey: Not Implemented!");
+    throw new RuntimeException("Not Implemented!");
   }
 
   public static ECPublicKey getPublicKeyForBytes(byte[] data) {
     // TODO implement
-    throw new RuntimeException("BitcoinUtils.getPublicKeyForBytes: Not Implemented!");
+    throw new RuntimeException("Not Implemented!");
+  }
+
+  public static KeyPair getKeyPairOfFile(File keyFile) {
+    // TODO implement
+    throw new RuntimeException("Not Implemented!");
   }
 }

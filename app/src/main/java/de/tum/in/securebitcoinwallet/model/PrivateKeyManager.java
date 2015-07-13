@@ -1,5 +1,6 @@
 package de.tum.in.securebitcoinwallet.model;
 
+import java.io.File;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import rx.Observable;
@@ -48,11 +49,11 @@ public interface PrivateKeyManager {
   /**
    * Adds a raw private key to the secure storage.
    *
-   * @param privateKey the new private key
+   * @param keyFile Keyfile conatining the key pair to import
    * @return nothing, {@link Subscriber#onCompleted()} or {@link Subscriber#onError(Throwable)} will
    * be called
    */
-  public Observable<Void> addPrivateKey(ECPrivateKey privateKey);
+  public Observable<Void> addPrivateKey(File keyFile);
 
   /**
    * Generates a new key pair on the card. The private key is stored on the card, the public one is
