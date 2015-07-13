@@ -23,6 +23,7 @@ import de.tum.in.securebitcoinwallet.model.database.AddressDao;
 import de.tum.in.securebitcoinwallet.model.mock.MockPrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.mock.MockTransactionManager;
 import de.tum.in.securebitcoinwallet.model.mock.MockWalletManager;
+import de.tum.in.securebitcoinwallet.smartcard.SmartCardManager;
 import de.tum.in.securebitcoinwallet.transactions.TransactionsActivity;
 import de.tum.in.securebitcoinwallet.transactions.TransactionsAdapter;
 import de.tum.in.securebitcoinwallet.transactions.TransactionsFragment;
@@ -51,7 +52,7 @@ import javax.inject.Singleton;
 
   public ApplicationModule(Context context) {
     this.context = context;
-    privateKeyManager = new MockPrivateKeyManager();
+    privateKeyManager = new MockPrivateKeyManager(context);
     walletDao = new AddressDao();
     new DaoManager(context, "wallet.db", 1, walletDao);
   }
@@ -87,5 +88,9 @@ import javax.inject.Singleton;
   @Provides @Singleton AddressDao provideDao() {
 
     return walletDao;
+  }
+
+  @Singleton @Provides public SmartCardManager provideSmartCardManager() {
+    return new SmartCardManager(context);
   }
 }

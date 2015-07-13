@@ -5,5 +5,5 @@ package de.tum.in.securebitcoinwallet.smartcard.exception;
  *
  * @author Benedikt Schlagberger
  */
-public class KeyStoreFullException extends SmartcardException {
+public class KeyStoreFullException extends SmartCardException {
 }

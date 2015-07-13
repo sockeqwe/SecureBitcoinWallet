@@ -5,6 +5,6 @@ package de.tum.in.securebitcoinwallet.smartcard.exception;
  *
  * @author Benedikt Schlagberger
  */
-public class AppletAlreadyInitializedException extends SmartcardException {
+public class AppletAlreadyInitializedException extends SmartCardException {
 
 }

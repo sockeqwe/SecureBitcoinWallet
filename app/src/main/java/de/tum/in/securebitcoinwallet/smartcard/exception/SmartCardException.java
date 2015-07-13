@@ -5,19 +5,19 @@ package de.tum.in.securebitcoinwallet.smartcard.exception;
  *
  * @author Benedikt Schlagberger
  */
-public class SmartcardException extends Exception {
+public class SmartCardException extends Exception {
 
   /**
    * {@inheritDoc}
    */
-  public SmartcardException(String detailMessage) {
+  public SmartCardException(String detailMessage) {
     super(detailMessage);
   }
 
   /**
    * {@inheritDoc}
    */
-  public SmartcardException() {
+  public SmartCardException() {
 
   }
 }
