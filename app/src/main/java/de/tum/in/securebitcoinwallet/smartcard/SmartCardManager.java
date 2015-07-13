@@ -11,16 +11,9 @@ import de.tum.in.securebitcoinwallet.smartcard.exception.KeyStoreFullException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.SmartCardException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.SmartcardRuntimeException;
 import de.tum.in.securebitcoinwallet.util.BitcoinUtils;
-
-import java.security.InvalidKeyException;
-import java.security.KeyFactory;
 import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
+import org.bouncycastle.jce.interfaces.ECPrivateKey;
+import org.bouncycastle.jce.interfaces.ECPublicKey;
 
 /**
  * Manager providing functions for the communication with the smartcard.
@@ -82,7 +75,7 @@ public class SmartCardManager {
     }
 
     APDUCommand authenticateCommand = new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
-        AppletInstructions.INS_AUTHENTICATE, (byte) 0, (byte) 0, getPINFromUser());
+        AppletInstructions.INS_AUTHENTICATE, (byte) 0, (byte) 0, pin);
 
     APDUResponse response = smartCard.sendAPDU(authenticateCommand);
 
@@ -168,13 +161,14 @@ public class SmartCardManager {
     }
     privateKey = (ECPrivateKey) keyPair.getPrivate();
 
-    byte[] secret = privateKey.getS().toByteArray();
+    byte[] secret = privateKey.getEncoded();
 
     if (secret.length != 32) {
       throw new RuntimeException("Private key has wrong length!");
     }
-
-    byte[] bitcoinAddress = BitcoinUtils.calculateBitcoinAddress((ECPublicKey) keyPair.getPublic());
+    String bitcoinAddressString =
+        BitcoinUtils.calculateBitcoinAddress((ECPublicKey) keyPair.getPublic());
+    byte[] bitcoinAddress = bitcoinAddressString.getBytes();
 
     APDUCommand importKeyCommand = new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
         AppletInstructions.INS_IMPORT_PRIVATE_KEY, (byte) bitcoinAddress.length,
@@ -450,13 +444,5 @@ public class SmartCardManager {
    */
   private void closeSession() {
     smartCard.closeSession();
-  }
-
-  /**
-   * TODO
-   */
-  private byte[] getPINFromUser() {
-    // TODO implement
-    return new byte[0];
   }
 }
