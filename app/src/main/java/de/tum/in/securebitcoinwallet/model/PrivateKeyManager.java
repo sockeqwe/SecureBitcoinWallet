@@ -1,8 +1,7 @@
 package de.tum.in.securebitcoinwallet.model;
 
 import java.io.File;
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
+import org.bouncycastle.jce.interfaces.ECPublicKey;
 import rx.Observable;
 import rx.Subscriber;
 

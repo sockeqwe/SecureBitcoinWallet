@@ -1,16 +1,13 @@
 package de.tum.in.securebitcoinwallet.model.mock;
 
-import android.content.Context;
 import de.tum.in.securebitcoinwallet.model.PrivateKeyManager;
-import de.tum.in.securebitcoinwallet.model.exception.IncorrectPinException;
 import de.tum.in.securebitcoinwallet.model.exception.NotFoundException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.SmartCardException;
 import java.io.File;
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import org.bouncycastle.jce.interfaces.ECPublicKey;
 import rx.Observable;
 import rx.functions.Func0;
 
@@ -23,17 +20,13 @@ import rx.functions.Func0;
 @Deprecated public class MockPrivateKeyManager implements PrivateKeyManager {
   private final static int MAX_SLOTS = 15;
 
-  private final Context context;
-
   /**
    * Map from address to private key
    */
   private Map<String, byte[]> privateKeyMap = new HashMap<>();
   private int remainingSlots = MAX_SLOTS;
 
-  public MockPrivateKeyManager(Context context) {
-    this.context = context;
-
+  public MockPrivateKeyManager() {
     // generate sample data
     for (int i = 0; i < 10; i++) {
       privateKeyMap.put("address" + i, ("privateKey" + i).getBytes());

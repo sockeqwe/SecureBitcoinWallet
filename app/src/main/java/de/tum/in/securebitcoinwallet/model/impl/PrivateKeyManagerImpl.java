@@ -1,19 +1,13 @@
 package de.tum.in.securebitcoinwallet.model.impl;
 
-import android.content.Context;
-
-import de.tum.in.securebitcoinwallet.smartcard.exception.AuthenticationFailedExeption;
-import de.tum.in.securebitcoinwallet.smartcard.exception.CardLockedException;
-import java.io.File;
-import java.security.KeyPair;
-import java.security.interfaces.ECPublicKey;
-
-import javax.inject.Inject;
-
 import de.tum.in.securebitcoinwallet.model.PrivateKeyManager;
 import de.tum.in.securebitcoinwallet.smartcard.SmartCardManager;
 import de.tum.in.securebitcoinwallet.smartcard.exception.SmartCardException;
 import de.tum.in.securebitcoinwallet.util.BitcoinUtils;
+import java.io.File;
+import java.security.KeyPair;
+import javax.inject.Inject;
+import org.bouncycastle.jce.interfaces.ECPublicKey;
 import rx.Observable;
 import rx.functions.Func0;
 
@@ -26,15 +20,9 @@ import rx.functions.Func0;
 public class PrivateKeyManagerImpl implements PrivateKeyManager {
 
   /**
-   * The {@link SmartCardManager} of this PrivateKeyManager. TODO has to be initialized with
-   * context!
+   * The {@link SmartCardManager} of this PrivateKeyManager.
    */
   @Inject private SmartCardManager smartCardManager;
-
-  /**
-   * The {@link Context} of this manager.
-   */
-  private Context context;
 
   @Override public Observable<Boolean> isCardInitialized() {
     return Observable.defer(new Func0<Observable<Boolean>>() {
@@ -48,7 +36,7 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<byte[]> getEncryptedPrivateKey(byte[] pin, final String address) {
+  @Override public Observable<byte[]> getEncryptedPrivateKey(final byte[] pin, final String address) {
     return Observable.defer(new Func0<Observable<byte[]>>() {
       @Override public Observable<byte[]> call() {
         try {
@@ -61,7 +49,7 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<Integer> getRemainingSlots(byte[] pin) {
+  @Override public Observable<Integer> getRemainingSlots(final byte[] pin) {
     return Observable.defer(new Func0<Observable<Integer>>() {
       @Override public Observable<Integer> call() {
         try {
@@ -74,7 +62,7 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<Void> changePin(byte[] pin, final byte[] newPin) {
+  @Override public Observable<Void> changePin(final byte[] pin, final byte[] newPin) {
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
         try {
@@ -101,7 +89,7 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<Void> addPrivateKey(byte[] pin, final File keyFile) {
+  @Override public Observable<Void> addPrivateKey(final byte[] pin, final File keyFile) {
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
         KeyPair keyPair = BitcoinUtils.getKeyPairOfFile(keyFile);
@@ -116,7 +104,7 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<ECPublicKey> generateNewKey(byte[] pin) {
+  @Override public Observable<ECPublicKey> generateNewKey(final byte[] pin) {
     return Observable.defer(new Func0<Observable<ECPublicKey>>() {
       @Override public Observable<ECPublicKey> call() {
         try {
@@ -129,7 +117,7 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<Void> removePrivateKeyForAddress(byte[] pin, final String address) {
+  @Override public Observable<Void> removePrivateKeyForAddress(final byte[] pin, final String address) {
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
         try {
@@ -143,7 +131,7 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<byte[]> signSHA256Hash(byte[] pin, final String address,
+  @Override public Observable<byte[]> signSHA256Hash(final byte[] pin, final String address,
       final byte[] sha256hash) {
     return Observable.defer(new Func0<Observable<byte[]>>() {
       @Override public Observable<byte[]> call() {

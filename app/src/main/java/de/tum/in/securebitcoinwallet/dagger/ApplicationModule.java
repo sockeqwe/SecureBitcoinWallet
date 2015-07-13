@@ -52,7 +52,7 @@ import javax.inject.Singleton;
 
   public ApplicationModule(Context context) {
     this.context = context;
-    privateKeyManager = new MockPrivateKeyManager(context);
+    privateKeyManager = new MockPrivateKeyManager();
     walletDao = new AddressDao();
     new DaoManager(context, "wallet.db", 1, walletDao);
   }
