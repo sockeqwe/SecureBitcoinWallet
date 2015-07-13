@@ -46,12 +46,18 @@ public abstract class BaseActivity extends Dagger1MosbyActivity {
     }
   }
 
+  /**
+   * Checks whether the lockscreen should be shown.
+   * @return True, if the screen should be locked, false otherwise
+   */
   private boolean isLocked() {
-    if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_lock", true)) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    if (!prefs.getBoolean("pref_lock", true)) {
       return false;
     }
-    // TODO: Use shared preferences for timeout
-    long lockAfter = 60 * 1000;
+    // Using getString because getInteger throws parse error
+    long lockAfter = Integer.parseInt(prefs.getString("pref_lock_timeout", "60"));
+    lockAfter *= 1000;
     long diff = System.currentTimeMillis() - lastUnlock;
     return diff > lockAfter;
   }
