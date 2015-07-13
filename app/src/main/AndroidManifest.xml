@@ -32,7 +32,8 @@
 
 
     <activity android:name=".address.create.CreateAddressActivity"
-        android:theme="@style/CreateAddressTheme" />
+        android:theme="@style/CreateAddressTheme"
+        android:windowSoftInputMode="adjustResize"/>
 
   </application>
 

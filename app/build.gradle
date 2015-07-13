@@ -23,7 +23,7 @@ android {
 
 def annotatedAdapter = '1.1.0'
 def supportLib = '22.2.0'
-def mosby = '1.1.0'
+def mosby = '1.1.1'
 def sqlbriteDao ='0.2.1'
 
 dependencies {

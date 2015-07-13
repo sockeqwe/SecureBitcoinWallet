@@ -2,6 +2,7 @@ package de.tum.in.securebitcoinwallet.address.create;
 
 import android.os.Bundle;
 import de.tum.in.securebitcoinwallet.R;
+import de.tum.in.securebitcoinwallet.address.create.nameinput.NameInputFragment;
 import de.tum.in.securebitcoinwallet.common.CircleRevealActivity;
 
 /**

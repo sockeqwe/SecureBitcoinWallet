@@ -9,4 +9,7 @@
   <dimen name="list_transaction_space_name_value">8dp</dimen>
   <dimen name="list_transaction_value_width">80dp</dimen>
 
+
+  <dimen name="create_address_margin_top">48dp</dimen>
+
 </resources>
