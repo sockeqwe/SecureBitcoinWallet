@@ -21,22 +21,26 @@ public class SmartCard {
       0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x00 // AID itself
   };
 
-  private final SfcTerminal sfcTerminal;
+  /**
+   * The context with which the sfcTerminal should be opened
+   */
+  private final Context context;
+
+  /**
+   * The SfcTerminal of the current session.
+   */
+  private SfcTerminal sfcTerminal;
+
+  /**
+   * Whether currently a session is open, or the select aid command should be sent again.
+   */
+  private boolean sessionOpen = false;
 
   /**
    * Constructor. Initializes the communication with the smartcard.
    */
   public SmartCard(Context context) {
-    sfcTerminal = new SfcTerminal(context);
-  }
-
-  /**
-   * Checks, if communication with the smartcard is possible.
-   *
-   * @return True, when the smartcard is connected, false otherwise.
-   */
-  public boolean isSmartCardConnected() {
-    return sfcTerminal.isCardPresent();
+    this.context = context;
   }
 
   /**
@@ -50,19 +54,26 @@ public class SmartCard {
    */
   public APDUResponse sendAPDU(APDUCommand apdu) throws SmartCardException {
     try {
-      sfcTerminal.connect();
+      getSfcTerminal().connect();
     } catch (Exception e) {
+      closeSession();
       throw new SmartCardNotConnectedException(
           "Could not establish connection to smartcard: " + e.getMessage());
     }
 
     try {
-      APDUResponse response = new APDUResponse(sfcTerminal.transmit(SELECT_APPLET_INSTRUCTION));
-      if (!response.wasSuccessful()) {
-        throw new SmartCardException("Could not select applet: " + response.getStatusCode());
+      if (!sessionOpen) {
+        APDUResponse response =
+            new APDUResponse(getSfcTerminal().transmit(SELECT_APPLET_INSTRUCTION));
+        if (!response.wasSuccessful()) {
+          closeSession();
+          throw new SmartCardException("Could not select applet: " + response.getStatusCode());
+        }
+        sessionOpen = true;
       }
       return new APDUResponse(sfcTerminal.transmit(apdu.getBytes()));
     } catch (Exception e) {
+      closeSession();
       throw new SmartCardException("Error during command transmission: " + e.getMessage());
     }
   }
@@ -71,6 +82,21 @@ public class SmartCard {
    * Closes the connection to the smartcard.
    */
   public void closeSession() {
-    sfcTerminal.disconnect();
+    if (sfcTerminal != null) {
+      sfcTerminal.disconnect();
+      sessionOpen = false;
+      sfcTerminal = null;
+    }
+  }
+
+  /**
+   * Returns the current, or creates a new sfcTerminal instance.
+   */
+  private SfcTerminal getSfcTerminal() {
+    if (sfcTerminal == null) {
+      sessionOpen = false;
+      sfcTerminal = new SfcTerminal(context);
+    }
+    return sfcTerminal;
   }
 }

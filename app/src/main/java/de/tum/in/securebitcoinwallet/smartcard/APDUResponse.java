@@ -1,5 +1,7 @@
 package de.tum.in.securebitcoinwallet.smartcard;
 
+import de.tum.in.securebitcoinwallet.util.BitcoinUtils;
+import de.tum.in.securebitcoinwallet.util.HexUtils;
 import java.util.Arrays;
 
 /**
@@ -32,8 +34,8 @@ public class APDUResponse {
    */
   public boolean wasSuccessful() {
     return response.length >= 2
-        && response[response.length - 2] == 0x90
-        && response[response.length - 1] == 0x00;
+        && response[response.length - 2] == (byte) 0x90
+        && response[response.length - 1] == (byte) 0x00;
   }
 
   /**
@@ -58,5 +60,9 @@ public class APDUResponse {
     statusCode += response[response.length - 1];
 
     return statusCode;
+  }
+
+  @Override public String toString() {
+    return "APDUResponse: " + HexUtils.getHexString(response);
   }
 }

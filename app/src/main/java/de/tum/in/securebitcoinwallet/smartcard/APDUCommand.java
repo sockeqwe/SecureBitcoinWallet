@@ -1,5 +1,7 @@
 package de.tum.in.securebitcoinwallet.smartcard;
 
+import de.tum.in.securebitcoinwallet.util.HexUtils;
+
 /**
  * Representation of a APDU command. Used to communicate with the javacard applet.
  */
@@ -68,7 +70,6 @@ public class APDUCommand {
 
   /**
    * Creates a new APDU command with the provided byte array.
-   *
    */
   public APDUCommand(byte[] apdu) {
     if (apdu.length < 4) {
@@ -104,7 +105,13 @@ public class APDUCommand {
    */
   public byte[] getBytes() {
     byte[] header = { cla, ins, p1, p2 };
-    byte[] apdu = new byte[header.length + data.length];
+
+    if (data == null) {
+      // APDU has only header
+      return header;
+    }
+
+    byte[] apdu = new byte[header.length + 1 + data.length];
 
     // assemble apdu
     System.arraycopy(header, 0, apdu, 0, header.length);
@@ -116,5 +123,9 @@ public class APDUCommand {
     }
 
     return apdu;
+  }
+
+  @Override public String toString() {
+    return "APDUCommand: " + HexUtils.getHexString(getBytes());
   }
 }
