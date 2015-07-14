@@ -9,7 +9,6 @@ import de.tum.in.securebitcoinwallet.model.database.TransactionDao;
 import de.tum.in.securebitcoinwallet.transactions.create.TransactionWizardData;
 import de.tum.in.securebitcoinwallet.util.BitcoinUtils;
 import java.util.List;
-import org.bouncycastle.jce.interfaces.ECPublicKey;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -40,17 +39,15 @@ public class WalletManagerImpl implements WalletManager {
   }
 
   @Override public Observable<Address> generateAddress(final String name, String pin) {
-    return privateKeyManager.generateNewKey(pin.getBytes())
-        .flatMap(new Func1<ECPublicKey, Observable<Address>>() {
-          @Override public Observable<Address> call(ECPublicKey ecPublicKey) {
+    return privateKeyManager.generateNewKey(pin.getBytes()).flatMap(new Func1<byte[], Observable<Address>>() {
+      @Override public Observable<Address> call(byte[] bytes) {
+        Address a = new Address();
+        a.setAddress(BitcoinUtils.calculateBitcoinAddress(bytes));
+        a.setName(name);
 
-            Address a = new Address();
-            a.setAddress(BitcoinUtils.calculateBitcoinAddress(ecPublicKey));
-            a.setName(name);
-
-            return addressDao.insertOrUpdateAddress(a);
-          }
-        });
+        return addressDao.insertOrUpdateAddress(a);
+      }
+    });
   }
 
   @Override public Observable<Address> getAddress(String address) {
