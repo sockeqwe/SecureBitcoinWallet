@@ -1,6 +1,6 @@
 package de.tum.in.securebitcoinwallet.transactions;
 
-import com.hannesdorfmann.mosby.mvp.rx.lce.MvpLceRxPresenter;
+import de.tum.in.securebitcoinwallet.common.presenter.BitcoinMvpLcePresenter;
 import de.tum.in.securebitcoinwallet.model.Address;
 import de.tum.in.securebitcoinwallet.model.Transaction;
 import de.tum.in.securebitcoinwallet.model.WalletManager;
@@ -13,7 +13,8 @@ import rx.functions.Func2;
 /**
  * @author Hannes Dorfmann
  */
-public class TransactionsPresenter extends MvpLceRxPresenter<TransactionsView, TransactionList> {
+public class TransactionsPresenter extends
+    BitcoinMvpLcePresenter<TransactionsView, TransactionList> {
 
   private WalletManager walletManager;
 
@@ -21,7 +22,7 @@ public class TransactionsPresenter extends MvpLceRxPresenter<TransactionsView, T
     this.walletManager = walletManager;
   }
 
-  public void loadTransactions(String address, boolean pullToRefresh) {
+  public void loadTransactions(String address) {
 
     // Get address details and list of transactions and combine them to one TransactionList
     Observable<TransactionList> observable =
@@ -34,6 +35,6 @@ public class TransactionsPresenter extends MvpLceRxPresenter<TransactionsView, T
               }
             });
 
-    subscribe(observable, pullToRefresh);
+    subscribe(observable);
   }
 }

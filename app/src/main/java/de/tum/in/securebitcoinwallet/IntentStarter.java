@@ -23,6 +23,7 @@ public class IntentStarter {
     Intent i = new Intent(context, TransactionsActivity.class);
     i.putExtra(TransactionsActivity.KEY_ADDRESS, address);
     context.startActivity(i);
+    context.startActivity(i);
   }
 
   /**
@@ -53,6 +54,5 @@ public class IntentStarter {
     i.putExtra(CreateTransactionActivity.KEY_REVEAL_X, revealX);
     i.putExtra(CreateTransactionActivity.KEY_REVEAL_Y, revealY);
     i.putExtra(CreateTransactionActivity.KEY_SENDER_ADDRESS, senderAddress);
-    context.startActivity(i);
   }
 }

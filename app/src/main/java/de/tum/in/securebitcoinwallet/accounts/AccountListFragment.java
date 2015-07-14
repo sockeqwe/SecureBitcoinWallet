@@ -80,9 +80,7 @@ public class AccountListFragment
     if (item == fabNew) {
       intentStarter.showCreateAddress(getActivity(), location[0], location[1]);
     } else {
-      // TODO change to other
-      String senderAddress = "MockAddress1";
-      intentStarter.showCreateTransaction(getActivity(), senderAddress, location[0], location[1]);
+
     }
   }
 

@@ -20,4 +20,9 @@ public class TransactionsActivity extends BaseActivity {
   @Override protected Fragment getContentFragment() {
     return new TransactionsFragmentBuilder(getIntent().getStringExtra(KEY_ADDRESS)).build();
   }
+
+  @Override public void finish() {
+    super.finish();
+    overridePendingTransition(R.anim.swipeback_stack_to_front, R.anim.swipeback_stack_right_out);
+  }
 }
