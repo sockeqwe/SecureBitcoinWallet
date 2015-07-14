@@ -9,6 +9,10 @@
     <item name="android:textColorPrimary">@android:color/white</item>
     <item name="android:textColor">@color/primary_text</item>
 
+
+    <item name="windowActionModeOverlay">true</item>
+    <item name="actionModeBackground">@color/primary</item>
+
     <!-- ProgressBar -->
     <item name="cpbStyle">@style/CircularThemeProgressBar</item>
 
@@ -37,10 +41,6 @@
     <item name="android:backgroundDimEnabled">false</item>
   </style>
 
-
-  <style name="CreateAddressTheme" parent="RevealTheme">
-    <item name="android:textColor">@color/white</item>
-  </style>
 
   <style name="CircularThemeProgressBar" parent="android:Widget.Holo.ProgressBar">
     <item name="cpb_colors">@array/loading_colors</item>

@@ -2,12 +2,13 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
     >
 
-  <RelativeLayout
+  <LinearLayout
       android:orientation="vertical"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -15,17 +16,53 @@
       android:paddingRight="32dp"
       android:paddingBottom="16dp"
       android:paddingLeft="72dp"
-      android:clipToPadding="false">
+      android:clipToPadding="false"
+      tools:background="@color/primary"
+      >
 
 
     <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/name"
+        android:id="@+id/receiver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/create_address_margin_top"
-        android:hint="@string/create_address_name"
-        android:textSize="24sp"
+        android:hint="@string/create_transaction_receiver_address"
+        android:textSize="20sp"
         android:textColor="@color/white"
+        android:textCursorDrawable="@drawable/text_cursor"
+        app:met_floatingLabel="highlight"
+        app:met_primaryColor="@color/accent"
+        app:met_baseColor="@color/white"
+        />
+
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/create_transaction_margin_between"
+        android:hint="@string/create_tranasction_bitcoins"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:layout_below="@+id/receiver"
+        android:textCursorDrawable="@drawable/text_cursor"
+        android:inputType="number"
+        app:met_floatingLabel="highlight"
+        app:met_primaryColor="@color/accent"
+        app:met_baseColor="@color/white"
+        app:met_singleLineEllipsis="true"
+        />
+
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/reference"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/create_transaction_margin_between"
+        android:hint="@string/create_transaction_subject"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:layout_below="@+id/amount"
         android:textCursorDrawable="@drawable/text_cursor"
         app:met_floatingLabel="highlight"
         app:met_primaryColor="@color/accent"
@@ -34,16 +71,9 @@
         />
 
 
-    <TextView
-        android:id="@+id/hint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:layout_below="@+id/name"
-        android:layout_above="@+id/next"
-        android:text="@string/create_address_description"
-        android:layout_marginTop="24dp"
+    <Space android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         />
 
 
@@ -53,6 +83,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
+        android:layout_below="@+id/reference"
+        android:layout_gravity="right"
         android:layout_marginTop="24dp"
         app:rv_color="@color/accent"
         app:rv_centered="true"
@@ -69,5 +101,5 @@
 
     </com.andexert.library.RippleView>
 
-  </RelativeLayout>
+  </LinearLayout>
 </ScrollView>

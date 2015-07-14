@@ -2,7 +2,6 @@ package de.tum.in.securebitcoinwallet.address.create.nameinput;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -45,6 +44,7 @@ public class NameInputFragment extends Dagger1MvpFragment<NameInputView, NameInp
   private NameInputListner listener;
   private Snackbar snackbar;
   @InjectView(R.id.name) EditText nameEditText;
+  @InjectView(R.id.next) View nextButton;
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -71,13 +71,14 @@ public class NameInputFragment extends Dagger1MvpFragment<NameInputView, NameInp
       nameEditText.startAnimation(shake);
     } else {
 
+      nextButton.setClickable(false);
       KeyboardUtils.hideKeyboard(nameEditText);
-      // Woraround to ensure that keybooar is not visible
-      new Handler().postDelayed(new Runnable() {
+      nameEditText.postDelayed(new Runnable() {
         @Override public void run() {
+          nextButton.setClickable(true);
           presenter.checkAddressName(nameEditText.getText().toString());
         }
-      }, 200);
+      }, 100);
     }
   }
 

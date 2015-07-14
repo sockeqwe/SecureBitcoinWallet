@@ -34,6 +34,10 @@ import de.tum.in.securebitcoinwallet.transactions.TransactionsActivity;
 import de.tum.in.securebitcoinwallet.transactions.TransactionsAdapter;
 import de.tum.in.securebitcoinwallet.transactions.TransactionsFragment;
 import de.tum.in.securebitcoinwallet.transactions.TransactionsPresenter;
+import de.tum.in.securebitcoinwallet.transactions.create.CreateTransactionActivity;
+import de.tum.in.securebitcoinwallet.transactions.create.transactioninput.TransactionInputFragment;
+import de.tum.in.securebitcoinwallet.transactions.create.transactionpininput.TransactionPinInputFragment;
+import de.tum.in.securebitcoinwallet.transactions.create.transactionpininput.TransactionPinInputPresenter;
 import de.tum.in.securebitcoinwallet.util.LoganSquareConverter;
 import javax.inject.Singleton;
 import retrofit.RestAdapter;
@@ -46,10 +50,12 @@ import retrofit.client.OkClient;
 
     injects = {
         BaseActivity.class, RecyclerViewFragment.class, AccountListActivity.class,
-        LockFragment.class, AccountListFragment.class,
-        AccountListPresenter.class, AccountListAdapter.class, TransactionsPresenter.class,
-        TransactionsFragment.class, TransactionsAdapter.class, TransactionsActivity.class,
-        BitcoinSync.class, CreateAddressActivity.class, NameInputPresenter.class, PinInputPresenter.class
+        LockFragment.class, AccountListFragment.class, AccountListPresenter.class,
+        AccountListAdapter.class, TransactionsPresenter.class, TransactionsFragment.class,
+        TransactionsAdapter.class, TransactionsActivity.class, BitcoinSync.class,
+        CreateAddressActivity.class, NameInputPresenter.class, PinInputPresenter.class,
+        CreateTransactionActivity.class, TransactionInputFragment.class,
+        TransactionPinInputFragment.class, TransactionPinInputPresenter.class
     },
     library = true,
     complete = false // TODO remove this

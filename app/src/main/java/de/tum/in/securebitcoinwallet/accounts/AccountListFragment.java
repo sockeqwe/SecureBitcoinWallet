@@ -80,7 +80,8 @@ public class AccountListFragment
     if (item == fabNew) {
       intentStarter.showCreateAddress(getActivity(), location[0], location[1]);
     } else {
-
+      // TODO change to other
+      intentStarter.showCreateTransaction(getActivity(), location[0], location[1]);
     }
   }
 

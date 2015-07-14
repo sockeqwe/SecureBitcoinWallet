@@ -32,7 +32,11 @@
 
 
     <activity android:name=".address.create.CreateAddressActivity"
-        android:theme="@style/CreateAddressTheme"
+        android:theme="@style/RevealTheme"
+        android:windowSoftInputMode="adjustResize"/>
+
+    <activity android:name=".transactions.create.CreateTransactionActivity"
+        android:theme="@style/RevealTheme"
         android:windowSoftInputMode="adjustResize"/>
 
   </application>

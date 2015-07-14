@@ -43,6 +43,7 @@ public class CircleRevealActivity extends Dagger1MosbyActivity {
         finish();
       }
     });
+    setSupportActionBar(toolbar);
 
     overridePendingTransition(0, 0);
     setupEnterAnimation();

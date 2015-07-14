@@ -12,4 +12,6 @@
 
   <dimen name="create_address_margin_top">48dp</dimen>
 
+  <dimen name="create_transaction_margin_between">16dp</dimen>
+
 </resources>
