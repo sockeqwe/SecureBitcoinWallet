@@ -39,16 +39,17 @@ public class WalletManagerImpl implements WalletManager {
   }
 
   @Override public Observable<Address> generateAddress(final String name, String pin) {
-    return privateKeyManager.generateNewKey(pin.getBytes()).flatMap(new Func1<byte[], Observable<Address>>() {
-      @Override public Observable<Address> call(byte[] bytes) {
-        Address a = new Address();
-        a.setAddress(BitcoinUtils.calculateBitcoinAddress(bytes));
-        a.setName(name);
-        a.setPublicKey(bytes);
+    return privateKeyManager.generateNewKey(convertPinToBytes(pin)).flatMap(
+        new Func1<byte[], Observable<Address>>() {
+          @Override public Observable<Address> call(byte[] bytes) {
+            Address a = new Address();
+            a.setAddress(BitcoinUtils.calculateBitcoinAddress(bytes));
+            a.setName(name);
+            a.setPublicKey(bytes);
 
-        return addressDao.insertOrUpdateAddress(a);
-      }
-    });
+            return addressDao.insertOrUpdateAddress(a);
+          }
+        });
   }
 
   @Override public Observable<Address> getAddress(String address) {
@@ -58,16 +59,31 @@ public class WalletManagerImpl implements WalletManager {
   @Override
   public Observable<Transaction> sendTransaction(String pin, String address, TransactionWizardData data) {
     byte[] transactionData = {1,0,1}; // TODO implements
-    return privateKeyManager.signSHA256Hash(pin.getBytes(), address, transactionData).map(new Func1<byte[], Transaction>() {
-      @Override public Transaction call(byte[] bytes) {
-        return null;
-      }
-    });
+    return privateKeyManager.signSHA256Hash(convertPinToBytes(pin), address, transactionData).map(
+        new Func1<byte[], Transaction>() {
+          @Override public Transaction call(byte[] bytes) {
+            return null;
+          }
+        });
   }
 
   @Override public void importWallet() {
 
     // TODO to specify
 
+  }
+
+  /**
+   * Converts the given pin string to a byte array suitable for use with the PrivateKeyManager
+   *
+   * @param pin The pin as a String of numbers
+   * @return The pin as a byte array
+   */
+  private byte[] convertPinToBytes(String pin) {
+    byte[] convertedPin = new byte[pin.length()];
+    for (int i = 0; i < pin.length(); i++) {
+      convertedPin[i] = Byte.parseByte(pin.substring(i, i + 1));
+    }
+    return convertedPin;
   }
 }
