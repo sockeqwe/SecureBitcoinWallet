@@ -2,6 +2,7 @@ package de.tum.in.securebitcoinwallet.model.mock;
 
 import de.tum.in.securebitcoinwallet.model.PrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.exception.NotFoundException;
+import de.tum.in.securebitcoinwallet.smartcard.exception.AppletAlreadyInitializedException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.KeyStoreFullException;
 import de.tum.in.securebitcoinwallet.util.BitcoinUtils;
 import java.io.File;
@@ -19,6 +20,7 @@ import rx.functions.Func0;
  */
 @Deprecated public class MockPrivateKeyManager implements PrivateKeyManager {
   private final static int MAX_SLOTS = 15;
+  private final static boolean isInitialized = false;
 
   /**
    * Map from address to private key
@@ -38,10 +40,25 @@ import rx.functions.Func0;
     }
   }
 
+  @Override public Observable<byte[]> setup() {
+    return Observable.defer(new Func0<Observable<byte[]>>() {
+      @Override public Observable<byte[]> call() {
+        if (isInitialized) {
+          return Observable.error(new AppletAlreadyInitializedException());
+        }
+
+        byte[] puk = new byte[8];
+        new Random().nextBytes(puk);
+
+        return Observable.just(puk);
+      }
+    });
+  }
+
   @Override public Observable<Boolean> isCardInitialized() {
     return Observable.defer(new Func0<Observable<Boolean>>() {
       @Override public Observable<Boolean> call() {
-        return Observable.just(false);
+        return Observable.just(isInitialized);
       }
     });
   }

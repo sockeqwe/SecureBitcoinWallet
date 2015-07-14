@@ -26,6 +26,18 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     this.smartCardManager = smartCardManager;
   }
 
+  @Override public Observable<byte[]> setup() {
+    return Observable.defer(new Func0<Observable<byte[]>>() {
+      @Override public Observable<byte[]> call() {
+        try {
+          return Observable.just(smartCardManager.setup());
+        } catch (SmartCardException e) {
+          return Observable.error(e);
+        }
+      }
+    });
+  }
+
   @Override public Observable<Boolean> isCardInitialized() {
     return Observable.defer(new Func0<Observable<Boolean>>() {
       @Override public Observable<Boolean> call() {

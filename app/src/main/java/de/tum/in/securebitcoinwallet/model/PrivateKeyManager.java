@@ -13,6 +13,11 @@ import rx.Subscriber;
 public interface PrivateKeyManager {
 
   /**
+   * Runs the setup feature on the card and returns the generated PUK
+   */
+  public Observable<byte[]> setup();
+
+  /**
    * Checks whether the card has been initialized yet.
    */
   public Observable<Boolean> isCardInitialized();
