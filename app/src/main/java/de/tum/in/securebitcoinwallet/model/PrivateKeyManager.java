@@ -70,7 +70,7 @@ public interface PrivateKeyManager {
    * @param pin the card's PIN
    * @return The generated public key. The private key is stored on the card.
    */
-  public Observable<ECPublicKey> generateNewKey(byte[] pin);
+  public Observable<byte[]> generateNewKey(byte[] pin);
 
   /**
    * Removes an address

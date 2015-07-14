@@ -2,12 +2,12 @@ package de.tum.in.securebitcoinwallet.model.mock;
 
 import de.tum.in.securebitcoinwallet.model.PrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.exception.NotFoundException;
-import de.tum.in.securebitcoinwallet.smartcard.exception.SmartCardException;
+import de.tum.in.securebitcoinwallet.smartcard.exception.KeyStoreFullException;
+import de.tum.in.securebitcoinwallet.util.BitcoinUtils;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import org.bouncycastle.jce.interfaces.ECPublicKey;
 import rx.Observable;
 import rx.functions.Func0;
 
@@ -29,8 +29,12 @@ import rx.functions.Func0;
   public MockPrivateKeyManager() {
     // generate sample data
     for (int i = 0; i < 10; i++) {
-      privateKeyMap.put("address" + i, ("privateKey" + i).getBytes());
-      remainingSlots--;
+      try {
+        addRandomKey();
+      } catch (KeyStoreFullException e) {
+        // Store is full, stop generating new addresses
+        break;
+      }
     }
   }
 
@@ -77,16 +81,24 @@ import rx.functions.Func0;
   @Override public Observable<Void> addPrivateKey(byte[] pin, File keyFile) {
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
-
-        return Observable.empty();
+        try {
+          addRandomKey();
+          return Observable.empty();
+        } catch (KeyStoreFullException e) {
+          return Observable.error(e);
+        }
       }
     });
   }
 
-  @Override public Observable<ECPublicKey> generateNewKey(byte[] pin) {
-    return Observable.defer(new Func0<Observable<ECPublicKey>>() {
-      @Override public Observable<ECPublicKey> call() {
-        return Observable.error(new SmartCardException("Could not generate new key!"));
+  @Override public Observable<byte[]> generateNewKey(byte[] pin) {
+    return Observable.defer(new Func0<Observable<byte[]>>() {
+      @Override public Observable<byte[]> call() {
+        try {
+          return Observable.just(addRandomKey());
+        } catch (KeyStoreFullException e) {
+          return Observable.error(e);
+        }
       }
     });
   }
@@ -111,7 +123,6 @@ import rx.functions.Func0;
       @Override public Observable<byte[]> call() {
         if (privateKeyMap.containsKey(address)) {
           byte[] fakeSignature = new byte[70];
-
           new Random().nextBytes(fakeSignature);
 
           return Observable.just(fakeSignature);
@@ -120,5 +131,26 @@ import rx.functions.Func0;
         }
       }
     });
+  }
+
+  /**
+   * Adds a mocked private key to the privateKeyMap and returns a public key.
+   */
+  private byte[] addRandomKey() throws KeyStoreFullException {
+    if (remainingSlots == 0) {
+      throw new KeyStoreFullException();
+    }
+
+    byte[] publicKey = new byte[65];
+    new Random().nextBytes(publicKey);
+    publicKey[0] = 4;
+
+    byte[] privateKey = new byte[32];
+    new Random().nextBytes(privateKey);
+
+    privateKeyMap.put(BitcoinUtils.calculateBitcoinAddress(publicKey), privateKey);
+    remainingSlots--;
+
+    return publicKey;
   }
 }

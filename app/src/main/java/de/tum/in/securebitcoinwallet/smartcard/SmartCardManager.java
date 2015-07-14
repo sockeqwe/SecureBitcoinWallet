@@ -128,7 +128,7 @@ public class SmartCardManager {
    * @throws AppletNotInitializedException If the applet has not been initialized yet. This can be
    * done with {@link #setup()}.
    */
-  public ECPublicKey generateNewKey() throws SmartCardException {
+  public byte[] generateNewKey() throws SmartCardException {
     APDUCommand generateKeyCommand = new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
         AppletInstructions.INS_GENERATE_KEY, (byte) 0, (byte) 0);
 
@@ -139,12 +139,10 @@ public class SmartCardManager {
           "Error during key generation. Unknown statuscode: " + response.getStatusCode());
     }
 
-    ECPublicKey publicKey = BitcoinUtils.getPublicKeyForBytes(response.getData());
-
     // Lock the card.
     closeSession();
 
-    return publicKey;
+    return response.getData();
   }
 
   /**

@@ -6,7 +6,6 @@ import de.tum.in.securebitcoinwallet.smartcard.exception.SmartCardException;
 import de.tum.in.securebitcoinwallet.util.BitcoinUtils;
 import java.io.File;
 import java.security.KeyPair;
-import org.bouncycastle.jce.interfaces.ECPublicKey;
 import rx.Observable;
 import rx.functions.Func0;
 
@@ -108,9 +107,9 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<ECPublicKey> generateNewKey(final byte[] pin) {
-    return Observable.defer(new Func0<Observable<ECPublicKey>>() {
-      @Override public Observable<ECPublicKey> call() {
+  @Override public Observable<byte[]> generateNewKey(final byte[] pin) {
+    return Observable.defer(new Func0<Observable<byte[]>>() {
+      @Override public Observable<byte[]> call() {
         try {
           smartCardManager.authenticate(pin);
           return Observable.just(smartCardManager.generateNewKey());
