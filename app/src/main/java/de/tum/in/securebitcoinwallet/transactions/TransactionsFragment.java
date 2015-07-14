@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
@@ -34,7 +34,7 @@ public class TransactionsFragment
   @Inject CurrencyManager currencyManager;
   @Inject IntentStarter intentStarter;
 
-  @InjectView(R.id.swipeRefreshLayout) SwipeRefreshLayout refreshLayout;
+  @InjectView(R.id.recyclerView) RecyclerView recyclerView;
   @InjectView(R.id.bitcoins) TextView bitcoins;
   @InjectView(R.id.toolbar) Toolbar toolbar;
   @InjectView(R.id.collapsingToolbar) CollapsingToolbarLayout collapsingToolbar;
@@ -47,8 +47,8 @@ public class TransactionsFragment
     return R.layout.fragment_transactions;
   }
 
-  @Override protected SwipeRefreshLayout getSwipeRefreshLayout() {
-    return refreshLayout;
+  @Override protected RecyclerView getRecyclerView() {
+    return recyclerView;
   }
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -105,7 +105,8 @@ public class TransactionsFragment
       sendIntent.setAction(Intent.ACTION_SEND);
       sendIntent.putExtra(Intent.EXTRA_TEXT, address);
       sendIntent.setType("text/plain");
-      startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share_address)));
+      startActivity(
+          Intent.createChooser(sendIntent, getResources().getText(R.string.share_address)));
     }
   }
 

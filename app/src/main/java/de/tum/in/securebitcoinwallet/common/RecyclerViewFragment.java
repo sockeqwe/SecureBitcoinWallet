@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -32,10 +31,8 @@ import javax.inject.Inject;
  */
 public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends MvpPresenter<V>>
     extends Dagger1MvpLceViewStateFragment<View, M, V, P>
-    implements SwipeRefreshLayout.OnRefreshListener,
-    RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener {
+    implements RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener {
 
-  @InjectView(R.id.recyclerView) RecyclerView recyclerView;
   @InjectView(R.id.emptyView) View emptyView;
   @InjectView(R.id.fab) RapidFloatingActionButton fab;
   @InjectView(R.id.fabMenuLayout) RapidFloatingActionLayout fabMenuLayout;
@@ -44,6 +41,14 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
   protected RapidFloatingActionHelper fabHelper;
 
   protected ListAdapter adapter;
+
+  /**
+   * Get the reference to the recyclerview
+   * @return
+   */
+  protected RecyclerView getRecyclerView(){
+    return  (RecyclerView) contentView;
+  }
 
   /**
    * The adapter used to display the items (RecyclerView)
@@ -67,22 +72,15 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
    */
   protected abstract void onFabMenuItemClicked(int postion, RFACLabelItem item, View view);
 
-  protected SwipeRefreshLayout getSwipeRefreshLayout() {
-    return (SwipeRefreshLayout) contentView;
-  }
-
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     // RecyclerView
+    RecyclerView recyclerView = getRecyclerView();
     adapter = createAdapter();
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setAdapter(adapter);
 
     // SwipeRefresh
-    int[] colors = getActivity().getResources().getIntArray(R.array.loading_colors);
-    SwipeRefreshLayout refreshLayout = getSwipeRefreshLayout();
-    refreshLayout.setColorSchemeColors(colors);
-    refreshLayout.setOnRefreshListener(this);
 
     // Fab
     RecyclerViewScrollDetector scrollDetector = new RecyclerViewScrollDetector(fab);
@@ -103,10 +101,6 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
     return R.layout.fragment_recyclerview;
   }
 
-  @Override public void onRefresh() {
-    loadData(true);
-  }
-
   @Override protected String getErrorMessage(Throwable throwable, boolean b) {
     return errorMessageDeterminer.getString(throwable, b);
   }
@@ -125,8 +119,6 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
   }
 
   @Override public void showContent() {
-
-    getSwipeRefreshLayout().setRefreshing(false);
 
     // Empty View
     if (adapter.getItemCount() == 0) {
@@ -176,16 +168,6 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
       emptyView.setVisibility(View.GONE);
       fab.setVisibility(View.GONE);
     }
-    final SwipeRefreshLayout refreshLayout = getSwipeRefreshLayout();
-
-    if (pullToRefresh && !refreshLayout.isRefreshing()) {
-      // Workaround for measure bug: https://code.google.com/p/android/issues/detail?id=77712
-      refreshLayout.post(new Runnable() {
-        @Override public void run() {
-          refreshLayout.setRefreshing(true);
-        }
-      });
-    }
   }
 
   @Override public void showError(Throwable e, boolean pullToRefresh) {
@@ -194,7 +176,6 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
       emptyView.setVisibility(View.GONE);
       fab.setVisibility(View.GONE);
     }
-    getSwipeRefreshLayout().setRefreshing(false);
   }
 
   @Override public void onRFACItemLabelClick(int position, RFACLabelItem item, View view) {
@@ -210,5 +191,4 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
   @Override protected void injectDependencies() {
     getObjectGraph().inject(this);
   }
-
 }
