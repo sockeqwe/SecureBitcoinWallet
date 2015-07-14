@@ -58,17 +58,22 @@ public interface AppletInstructions {
 	byte INS_IMPORT_PRIVATE_KEY = (byte) 0x22;
 
 	/**
+	 * Put encrypted private key instruction.
+	 */
+	byte INS_IMPORT_ENCRYPTED_PRIVATE_KEY = (byte) 0x24;
+
+	/**
 	 * Get private key instruction.
 	 */
-	byte INS_GET_PRIVATE_KEY = (byte) 0x24;
+	byte INS_GET_PRIVATE_KEY = (byte) 0x26;
 
 	/**
 	 * Delete private key instruction.
 	 */
-	byte INS_DELETE_PRIVATE_KEY = (byte) 0x26;
+	byte INS_DELETE_PRIVATE_KEY = (byte) 0x28;
 
 	/**
 	 * Get remaining memory instruction.
 	 */
-	byte INS_GET_REMAINING_MEMORY = (byte) 0x28;
+	byte INS_GET_REMAINING_MEMORY = (byte) 0x40;
 }
