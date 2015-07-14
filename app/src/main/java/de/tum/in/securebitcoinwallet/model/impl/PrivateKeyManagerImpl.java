@@ -119,6 +119,22 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
+  @Override
+  public Observable<Void> importEncryptedPrivateKey(final byte[] pin, final String bitcoinAddress,
+      final byte[] encryptedPrivateKey) {
+    return Observable.defer(new Func0<Observable<Void>>() {
+      @Override public Observable<Void> call() {
+        try {
+          smartCardManager.authenticate(pin);
+          smartCardManager.importEncryptedKey(bitcoinAddress, encryptedPrivateKey);
+        } catch (SmartCardException e) {
+          return Observable.error(e);
+        }
+        return Observable.empty();
+      }
+    });
+  }
+
   @Override public Observable<byte[]> generateNewKey(final byte[] pin) {
     return Observable.defer(new Func0<Observable<byte[]>>() {
       @Override public Observable<byte[]> call() {
