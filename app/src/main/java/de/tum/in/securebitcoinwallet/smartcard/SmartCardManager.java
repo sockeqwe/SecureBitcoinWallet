@@ -6,6 +6,7 @@ import de.tum.in.securebitcoinwallet.smartcard.exception.AppletNotInitializedExc
 import de.tum.in.securebitcoinwallet.smartcard.exception.AuthenticationFailedExeption;
 import de.tum.in.securebitcoinwallet.smartcard.exception.CardLockedException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.InvalidBitcoinAddressException;
+import de.tum.in.securebitcoinwallet.smartcard.exception.KeyAlreadyInStoreException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.KeyNotFoundException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.KeyStoreFullException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.SmartCardException;
@@ -150,6 +151,7 @@ public class SmartCardManager {
    *
    * @param keyPair The keypair containing the private key to import. Has to be 256 bits
    * @throws KeyStoreFullException If no more space is left on the smartcard
+   * @throws KeyAlreadyInStoreException If the key is already in the store
    * @throws SmartCardException If communication with the smartcard failed
    */
   public void importKey(KeyPair keyPair) throws SmartCardException {
@@ -179,6 +181,46 @@ public class SmartCardManager {
       switch (response.getStatusCode()) {
         case StatusCodes.KEYSTORE_FULL:
           throw new KeyStoreFullException();
+        case StatusCodes.KEY_ALREADY_IN_STORE:
+          throw new KeyAlreadyInStoreException();
+        default:
+          throw new SmartcardRuntimeException(
+              "Error during import. Unknown statuscode: " + response.getStatusCode());
+      }
+    }
+
+    // Lock the card.
+    closeSession();
+  }
+
+  /**
+   * Imports the given encrypted private key into the keystore on the smartcard.
+   *
+   * @param bitcoinAddress The Bitcoinaddress of the encrypted private key
+   * @param encryptedPrivateKey The encrypted private key to import. Has to be 256 bits
+   * @throws KeyStoreFullException If no more space is left on the smartcard
+   * @throws KeyAlreadyInStoreException If the key is already in the store
+   * @throws SmartCardException If communication with the smartcard failed
+   */
+  public void importEncryptedKey(String bitcoinAddress, byte[] encryptedPrivateKey) throws SmartCardException {
+    if (encryptedPrivateKey.length != 32) {
+      throw new RuntimeException("Encrypted private key has wrong length!");
+    }
+    byte[] address = bitcoinAddress.getBytes();
+
+    APDUCommand importKeyCommand = new APDUCommand(AppletInstructions.SECURE_BITCOIN_WALLET_CLA,
+        AppletInstructions.INS_IMPORT_PRIVATE_KEY, (byte) address.length,
+        (byte) encryptedPrivateKey.length, address);
+    importKeyCommand.appendData(encryptedPrivateKey);
+
+    APDUResponse response = smartCard.sendAPDU(importKeyCommand);
+
+    if (!response.wasSuccessful()) {
+      switch (response.getStatusCode()) {
+        case StatusCodes.KEYSTORE_FULL:
+          throw new KeyStoreFullException();
+        case StatusCodes.KEY_ALREADY_IN_STORE:
+          throw new KeyAlreadyInStoreException();
         default:
           throw new SmartcardRuntimeException(
               "Error during import. Unknown statuscode: " + response.getStatusCode());

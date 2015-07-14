@@ -3,9 +3,14 @@ package de.tum.in.securebitcoinwallet.model.mock;
 import de.tum.in.securebitcoinwallet.model.PrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.exception.NotFoundException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.AppletAlreadyInitializedException;
+import de.tum.in.securebitcoinwallet.smartcard.exception.AuthenticationFailedExeption;
+import de.tum.in.securebitcoinwallet.smartcard.exception.CardLockedException;
+import de.tum.in.securebitcoinwallet.smartcard.exception.KeyAlreadyInStoreException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.KeyStoreFullException;
+import de.tum.in.securebitcoinwallet.smartcard.exception.SmartCardException;
 import de.tum.in.securebitcoinwallet.util.BitcoinUtils;
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -16,12 +21,16 @@ import rx.functions.Func0;
  * Simple mock implementation of {@link PrivateKeyManager}
  *
  * @author Hannes Dorfmann
- * @deprecated Implementation is missing functionality.
  */
-@Deprecated public class MockPrivateKeyManager implements PrivateKeyManager {
+public class MockPrivateKeyManager implements PrivateKeyManager {
   private final static int MAX_SLOTS = 15;
+  private final static int MAX_PIN_RETRIES = 3;
 
+  private int remainingRetries = MAX_PIN_RETRIES;
   private boolean isInitialized = false;
+
+  private byte[] puk;
+  private byte[] pin = { 1, 2, 3, 4 };
 
   /**
    * Map from address to private key
@@ -64,42 +73,81 @@ import rx.functions.Func0;
     });
   }
 
-  @Override public Observable<byte[]> getEncryptedPrivateKey(byte[] pin, final String address) {
+  @Override
+  public Observable<byte[]> getEncryptedPrivateKey(final byte[] pin, final String address) {
     return Observable.defer(new Func0<Observable<byte[]>>() {
       @Override public Observable<byte[]> call() {
+        try {
+          checkPIN(pin);
+        } catch (SmartCardException e) {
+          return Observable.error(e);
+        }
         return Observable.just(privateKeyMap.get(address));
       }
     });
   }
 
-  @Override public Observable<Integer> getRemainingSlots(byte[] pin) {
+  @Override public Observable<Integer> getRemainingSlots(final byte[] pin) {
     return Observable.defer(new Func0<Observable<Integer>>() {
       @Override public Observable<Integer> call() {
+        try {
+          checkPIN(pin);
+        } catch (SmartCardException e) {
+          return Observable.error(e);
+        }
         return Observable.just(remainingSlots);
       }
     });
   }
 
-  @Override public Observable<Void> changePin(byte[] pin, byte[] newPin) {
-    return Observable.defer(new Func0<Observable<Void>>() {
-      @Override public Observable<Void> call() {
-        return Observable.empty();
-      }
-    });
-  }
-
-  @Override public Observable<Void> unlockSmartcard(byte[] puk, byte[] newPin) {
-    return Observable.defer(new Func0<Observable<Void>>() {
-      @Override public Observable<Void> call() {
-        return Observable.empty();
-      }
-    });
-  }
-
-  @Override public Observable<Void> addPrivateKey(byte[] pin, File keyFile) {
+  @Override public Observable<Void> changePin(final byte[] pin, final byte[] newPin) {
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
         try {
+          checkPIN(pin);
+        } catch (SmartCardException e) {
+          return Observable.error(e);
+        }
+
+        if (pin.length < 4 || pin.length > 8) {
+          return Observable.error(
+              new RuntimeException("PIN has wrong length. May only be between 4 and 8 characters"));
+        }
+        MockPrivateKeyManager.this.pin = pin;
+        return Observable.empty();
+      }
+    });
+  }
+
+  @Override public Observable<Void> unlockSmartcard(final byte[] puk, final byte[] newPin) {
+    return Observable.defer(new Func0<Observable<Void>>() {
+      @Override public Observable<Void> call() {
+        if (!Arrays.equals(puk, MockPrivateKeyManager.this.puk)) {
+          return Observable.error(new AuthenticationFailedExeption());
+        }
+
+        if (newPin.length < 4 || newPin.length > 8) {
+          return Observable.error(
+              new RuntimeException("PIN has wrong length. May only be between 4 and 8 characters"));
+        }
+
+        MockPrivateKeyManager.this.pin = newPin;
+        remainingRetries = MAX_PIN_RETRIES;
+
+        return Observable.empty();
+      }
+    });
+  }
+
+  @Override public Observable<Void> addPrivateKey(final byte[] pin, File keyFile) {
+    return Observable.defer(new Func0<Observable<Void>>() {
+      @Override public Observable<Void> call() {
+        try {
+          try {
+            checkPIN(pin);
+          } catch (SmartCardException e) {
+            return Observable.error(e);
+          }
           addRandomKey();
           return Observable.empty();
         } catch (KeyStoreFullException e) {
@@ -109,19 +157,49 @@ import rx.functions.Func0;
     });
   }
 
-  @Override public Observable<byte[]> generateNewKey(byte[] pin) {
+  @Override
+  public Observable<Void> importEncryptedPrivateKey(final byte[] pin, final String bitcoinAddress,
+      final byte[] encryptedPrivateKey) {
+    return Observable.defer(new Func0<Observable<Void>>() {
+      @Override public Observable<Void> call() {
+        try {
+          checkPIN(pin);
+        } catch (SmartCardException e) {
+          return Observable.error(e);
+        }
+        if (remainingSlots == 0) {
+          return Observable.error(new KeyStoreFullException());
+        }
+
+        if (privateKeyMap.containsKey(bitcoinAddress)) {
+          return Observable.error(new KeyAlreadyInStoreException());
+        }
+
+        if (encryptedPrivateKey.length != 32) {
+          return Observable.error(new RuntimeException("Private key has wrong length!"));
+        }
+
+        privateKeyMap.put(bitcoinAddress, encryptedPrivateKey);
+        return Observable.empty();
+      }
+    });
+  }
+
+  @Override public Observable<byte[]> generateNewKey(final byte[] pin) {
     return Observable.defer(new Func0<Observable<byte[]>>() {
       @Override public Observable<byte[]> call() {
         try {
+          checkPIN(pin);
           return Observable.just(addRandomKey());
-        } catch (KeyStoreFullException e) {
+        } catch (SmartCardException e) {
           return Observable.error(e);
         }
       }
     });
   }
 
-  @Override public Observable<Void> removePrivateKeyForAddress(byte[] pin, final String address) {
+  @Override
+  public Observable<Void> removePrivateKeyForAddress(final byte[] pin, final String address) {
     return Observable.defer(new Func0<Observable<Void>>() {
       @Override public Observable<Void> call() {
         if (privateKeyMap.containsKey(address)) {
@@ -135,8 +213,8 @@ import rx.functions.Func0;
     });
   }
 
-  @Override
-  public Observable<byte[]> signSHA256Hash(byte[] pin, final String address, byte[] sha256hash) {
+  @Override public Observable<byte[]> signSHA256Hash(final byte[] pin, final String address,
+      byte[] sha256hash) {
     return Observable.defer(new Func0<Observable<byte[]>>() {
       @Override public Observable<byte[]> call() {
         if (privateKeyMap.containsKey(address)) {
@@ -170,5 +248,19 @@ import rx.functions.Func0;
     remainingSlots--;
 
     return publicKey;
+  }
+
+  /**
+   * Checks the given PIN
+   */
+  private void checkPIN(byte[] pin) throws SmartCardException {
+    if (remainingRetries == 0) {
+      throw new CardLockedException();
+    }
+    if (!Arrays.equals(pin, this.pin)) {
+      remainingRetries--;
+      throw new AuthenticationFailedExeption();
+    }
+    remainingRetries = MAX_PIN_RETRIES;
   }
 }

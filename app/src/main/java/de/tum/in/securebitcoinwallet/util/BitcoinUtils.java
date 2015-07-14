@@ -87,19 +87,23 @@ public class BitcoinUtils {
       throw new RuntimeException(e);
     }
 
-    byte[] ripemdHash = new byte[ripemd160.getDigestSize()];
-    ripemd160.update(publicKey, 0, publicKey.length);
-    ripemd160.doFinal(ripemdHash, 0);
+    byte[] sha256Hash = sha256.digest(publicKey);
 
-    byte[] sha256Hash = sha256.digest(ripemdHash);
-    sha256Hash = sha256.digest(sha256Hash);
-
-    byte[] addressBytes = new byte[ripemdHash.length + 5];
+    byte[] ripemdHash = new byte[ripemd160.getDigestSize() + 1];
+    ripemd160.update(sha256Hash, 0, sha256Hash.length);
+    ripemd160.doFinal(ripemdHash, 1);
 
     // Set version byte
-    addressBytes[0] = 0;
-    System.arraycopy(ripemdHash, 0, addressBytes, 1, ripemdHash.length);
-    System.arraycopy(sha256Hash, 0, addressBytes, (ripemdHash.length + 1), 4);
+    ripemdHash[0] = 0;
+
+    sha256Hash = sha256.digest(ripemdHash);
+    sha256Hash = sha256.digest(sha256Hash);
+
+    byte[] addressBytes = new byte[ripemdHash.length + 4];
+
+    System.arraycopy(ripemdHash, 0, addressBytes, 0, ripemdHash.length);
+    System.arraycopy(sha256Hash, 0, addressBytes, (ripemdHash.length),
+        4);
 
     return Base58.encode(addressBytes);
   }
