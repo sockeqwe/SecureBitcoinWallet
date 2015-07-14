@@ -11,6 +11,7 @@ import android.widget.TextView;
 import butterknife.InjectView;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RFACLabelItem;
+import de.tum.in.securebitcoinwallet.IntentStarter;
 import de.tum.in.securebitcoinwallet.R;
 import de.tum.in.securebitcoinwallet.common.ListAdapter;
 import de.tum.in.securebitcoinwallet.common.RecyclerViewFragment;
@@ -30,6 +31,7 @@ public class TransactionsFragment
   @Arg String address;
 
   @Inject CurrencyManager currencyManager;
+  @Inject IntentStarter intentStarter;
 
   @InjectView(R.id.swipeRefreshLayout) SwipeRefreshLayout refreshLayout;
   @InjectView(R.id.bitcoins) TextView bitcoins;
@@ -37,6 +39,8 @@ public class TransactionsFragment
   @InjectView(R.id.collapsingToolbar) CollapsingToolbarLayout collapsingToolbar;
 
   private TransactionList transactionList;
+  private RFACLabelItem fabSend;
+  private RFACLabelItem fabReceive;
 
   @Override protected int getLayoutRes() {
     return R.layout.fragment_transactions;
@@ -66,27 +70,36 @@ public class TransactionsFragment
 
     List<RFACLabelItem> items = new ArrayList<>(2);
 
-    items.add(new RFACLabelItem<Integer>().setLabel(getString(R.string.menu_transaction_send))
+    fabSend = new RFACLabelItem<Integer>().setLabel(getString(R.string.menu_transaction_send))
         .setResId(R.drawable.ic_arrow_out)
         .setIconNormalColor(res.getColor(R.color.menu_icon2))
         .setIconPressedColor(res.getColor(R.color.menu_icon2_pressed))
         .setLabelColor(res.getColor(R.color.menu_label_text_color))
         .setLabelBackgroundDrawable(background)
-        .setWrapper(3));
+        .setWrapper(3);
+    items.add(fabSend);
 
-    items.add(new RFACLabelItem<Integer>().setLabel(getString(R.string.menu_transaction_receive))
+    fabReceive = new RFACLabelItem<Integer>().setLabel(getString(R.string.menu_transaction_receive))
         .setResId(R.drawable.ic_arrow_in)
         .setIconNormalColor(res.getColor(R.color.menu_icon1))
         .setIconPressedColor(res.getColor(R.color.menu_icon1_pressed))
         .setLabelColor(res.getColor(R.color.menu_label_text_color))
         .setLabelBackgroundDrawable(background)
-        .setWrapper(3));
+        .setWrapper(3);
+
+    items.add(fabReceive);
 
     return items;
   }
 
   @Override protected void onFabMenuItemClicked(int postion, RFACLabelItem item, View view) {
-
+    int[] location = new int[2];
+    if (item == fabSend) {
+      view.getLocationInWindow(location);
+      intentStarter.showCreateTransaction(getActivity(), address, location[0], location[1]);
+    } else {
+      // start share intent
+    }
   }
 
   @Override public TransactionsPresenter createPresenter() {
@@ -112,6 +125,10 @@ public class TransactionsFragment
   }
 
   @Override public void loadData(boolean pullToRefresh) {
-    presenter.loadTransactions(address, pullToRefresh);
+    presenter.loadTransactions(address);
+  }
+
+  @Override public boolean isChangingConfigurations() {
+    return getActivity() != null && getActivity().isChangingConfigurations();
   }
 }

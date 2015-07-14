@@ -1,6 +1,6 @@
 package de.tum.in.securebitcoinwallet.transactions;
 
-import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
+import de.tum.in.securebitcoinwallet.common.view.BitcoinMvpLceView;
 import de.tum.in.securebitcoinwallet.model.presentation.TransactionList;
 
 /**
@@ -8,5 +8,5 @@ import de.tum.in.securebitcoinwallet.model.presentation.TransactionList;
  *
  * @author Hannes Dorfmann
  */
-public interface TransactionsView extends MvpLceView<TransactionList> {
+public interface TransactionsView extends BitcoinMvpLceView<TransactionList> {
 }

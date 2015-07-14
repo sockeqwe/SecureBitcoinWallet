@@ -1,5 +1,6 @@
 package de.tum.in.securebitcoinwallet;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import de.tum.in.securebitcoinwallet.address.create.CreateAddressActivity;
@@ -47,12 +48,14 @@ public class IntentStarter {
    * @param revealX the revealX position
    * @param revealY ther revealY position
    */
-  public void showCreateTransaction(Context context, String senderAddress, int revealX,
+  public void showCreateTransaction(Activity context, String senderAddress, int revealX,
       int revealY) {
     Intent i = new Intent(context, CreateTransactionActivity.class);
     i.putExtra(CreateTransactionActivity.KEY_REVEAL_X, revealX);
     i.putExtra(CreateTransactionActivity.KEY_REVEAL_Y, revealY);
     i.putExtra(CreateTransactionActivity.KEY_SENDER_ADDRESS, senderAddress);
     context.startActivity(i);
+    context.overridePendingTransition(R.anim.swipeback_stack_right_in,
+        R.anim.swipeback_stack_to_back);
   }
 }
