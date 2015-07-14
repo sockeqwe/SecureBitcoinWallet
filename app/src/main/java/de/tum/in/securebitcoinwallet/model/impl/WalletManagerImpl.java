@@ -44,6 +44,7 @@ public class WalletManagerImpl implements WalletManager {
         Address a = new Address();
         a.setAddress(BitcoinUtils.calculateBitcoinAddress(bytes));
         a.setName(name);
+        a.setPublicKey(bytes);
 
         return addressDao.insertOrUpdateAddress(a);
       }
