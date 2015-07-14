@@ -16,14 +16,25 @@ import java.lang.annotation.RetentionPolicy;
   public static final String TABLE_NAME = "BitcoinTransaction";
   public static final String COL_HASH_ID = "hashId";
   public static final String COL_NAME = "name";
-  public static final String COL_TX_INDEX = "txIndex";
   public static final String COL_AMOUNT = "amount";
   public static final String COL_TIMESTAMP = "timest";
   public static final String COL_ADDRESS = "address";
   public static final String COL_SYNC_STATE = "syncState";
 
+  /**
+   * States that a transaction has been sent to the bitcoin network has not been proved or
+   * acknowledged by the network yet
+   */
   public static final int SYNC_WAITING_FOR_COMMITMENT = 2;
+
+  /**
+   * A new Transcaction that has not been sent yet to the bitcoin network
+   */
   public static final int SYNC_NOT_SUBMITTED = 0;
+
+  /**
+   * It's a valid transcation. Money has been spent or received.
+   */
   public static final int SYNC_OK = 1;
 
   /**
@@ -36,7 +47,6 @@ import java.lang.annotation.RetentionPolicy;
   }
 
   @Column(COL_HASH_ID) String id;
-  @Column(COL_TX_INDEX) String txIndex;
   @Column(COL_NAME) String name;
   @Column(COL_TIMESTAMP) long timestamp;
   @Column(COL_ADDRESS) String address;
@@ -83,16 +93,7 @@ import java.lang.annotation.RetentionPolicy;
     this.timestamp = timestamp;
   }
 
-  public String getTxIndex() {
-    return txIndex;
-  }
-
-  public void setTxIndex(String txIndex) {
-    this.txIndex = txIndex;
-  }
-
-  @SyncState
-  public int getSyncState() {
+  @SyncState public int getSyncState() {
     return syncState;
   }
 

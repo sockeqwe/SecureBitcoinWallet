@@ -21,8 +21,8 @@ public class TransactionDao extends AbsDao {
 
     // Create Table
     CREATE_TABLE(Transaction.TABLE_NAME, Transaction.COL_HASH_ID + " TEXT PRIMARY KEY NOT NULL",
-        Transaction.COL_TX_INDEX + " TEXT NOT NULL", Transaction.COL_ADDRESS + " TEXT NOT NULL",
-        Transaction.COL_NAME + " TEXT", Transaction.COL_AMOUNT + " INTEGER NOT NULL",
+        Transaction.COL_ADDRESS + " TEXT NOT NULL", Transaction.COL_NAME + " TEXT",
+        Transaction.COL_AMOUNT + " INTEGER NOT NULL",
         Transaction.COL_SYNC_STATE + " INTEGER NOT NULL",
         Transaction.COL_TIMESTAMP + " INTEGER NOT NULL").execute(sqLiteDatabase);
 

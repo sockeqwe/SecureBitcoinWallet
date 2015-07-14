@@ -72,7 +72,8 @@ public class BitcoinUtils {
   }
 
   /**
-   * Calculates the bitcoinaddress for the given byte array containing the public key and returns it
+   * Calculates the bitcoinaddress for the given byte array containing the public key and returns
+   * it
    * as a String.
    *
    * @param publicKey A byte array containing the public key to calulcate the address for
@@ -102,8 +103,7 @@ public class BitcoinUtils {
     byte[] addressBytes = new byte[ripemdHash.length + 4];
 
     System.arraycopy(ripemdHash, 0, addressBytes, 0, ripemdHash.length);
-    System.arraycopy(sha256Hash, 0, addressBytes, (ripemdHash.length),
-        4);
+    System.arraycopy(sha256Hash, 0, addressBytes, (ripemdHash.length), 4);
 
     return Base58.encode(addressBytes);
   }
@@ -136,5 +136,42 @@ public class BitcoinUtils {
   public static KeyPair getKeyPairOfFile(File keyFile) {
     // TODO implement
     throw new RuntimeException("Not Implemented!");
+  }
+
+  /**
+   * Get the hash of a signed transactoin
+   *
+   * @param signedTransaction the signed transaction as byte array
+   * @return the hash as String (Base58 encoded)
+   */
+  public static String getHashFromSignedTransaction(byte[] signedTransaction) {
+
+    // TODO implemnt it correctly
+    RIPEMD160Digest ripemd160 = new RIPEMD160Digest();
+    MessageDigest sha256;
+    try {
+      sha256 = MessageDigest.getInstance("SHA-256");
+    } catch (NoSuchAlgorithmException e) {
+      throw new RuntimeException(e);
+    }
+
+    byte[] sha256Hash = sha256.digest(signedTransaction);
+
+    byte[] ripemdHash = new byte[ripemd160.getDigestSize() + 1];
+    ripemd160.update(sha256Hash, 0, sha256Hash.length);
+    ripemd160.doFinal(ripemdHash, 1);
+
+    // Set version byte
+    ripemdHash[0] = 0;
+
+    sha256Hash = sha256.digest(ripemdHash);
+    sha256Hash = sha256.digest(sha256Hash);
+
+    byte[] addressBytes = new byte[ripemdHash.length + 4];
+
+    System.arraycopy(ripemdHash, 0, addressBytes, 0, ripemdHash.length);
+    System.arraycopy(sha256Hash, 0, addressBytes, (ripemdHash.length), 4);
+
+    return Base58.encode(addressBytes);
   }
 }

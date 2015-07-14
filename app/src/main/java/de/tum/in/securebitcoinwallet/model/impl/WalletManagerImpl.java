@@ -39,8 +39,8 @@ public class WalletManagerImpl implements WalletManager {
   }
 
   @Override public Observable<Address> generateAddress(final String name, String pin) {
-    return privateKeyManager.generateNewKey(convertPinToBytes(pin)).flatMap(
-        new Func1<byte[], Observable<Address>>() {
+    return privateKeyManager.generateNewKey(convertPinToBytes(pin))
+        .flatMap(new Func1<byte[], Observable<Address>>() {
           @Override public Observable<Address> call(byte[] bytes) {
             Address a = new Address();
             a.setAddress(BitcoinUtils.calculateBitcoinAddress(bytes));
@@ -56,13 +56,21 @@ public class WalletManagerImpl implements WalletManager {
     return addressDao.getAddress(address, false);
   }
 
-  @Override
-  public Observable<Transaction> sendTransaction(String pin, String address, TransactionWizardData data) {
-    byte[] transactionData = {1,0,1}; // TODO implements
-    return privateKeyManager.signSHA256Hash(convertPinToBytes(pin), address, transactionData).map(
-        new Func1<byte[], Transaction>() {
-          @Override public Transaction call(byte[] bytes) {
-            return null;
+  @Override public Observable<Transaction> sendTransaction(String pin, final String address,
+      final TransactionWizardData data) {
+    byte[] transactionData = { 1, 0, 1 }; // TODO implement
+    return privateKeyManager.signSHA256Hash(convertPinToBytes(pin), address, transactionData)
+        .flatMap(new Func1<byte[], Observable<Transaction>>() {
+          @Override public Observable<Transaction> call(byte[] signedTransaction) {
+            Transaction t = new Transaction();
+            t.setAmount(data.getSatoshi());
+            t.setName(data.getReference());
+            t.setSyncState(Transaction.SYNC_NOT_SUBMITTED);
+            t.setAddress(address);
+            t.setId(BitcoinUtils.getHashFromSignedTransaction(signedTransaction));
+            t.setTimestamp(System.currentTimeMillis());
+
+            return transactionDao.insertOrUpdate(t);
           }
         });
   }

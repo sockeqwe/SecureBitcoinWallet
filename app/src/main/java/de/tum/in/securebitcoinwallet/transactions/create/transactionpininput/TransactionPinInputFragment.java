@@ -28,7 +28,7 @@ public class TransactionPinInputFragment
   }
 
   @Override public void showCreatingTransactionSuccessful(Transaction transaction) {
-    Toast.makeText(getActivity(), R.string.create_address_successful, Toast.LENGTH_LONG).show();
+    Toast.makeText(getActivity(), R.string.create_transaction_successful, Toast.LENGTH_LONG).show();
     getActivity().finish();
   }
 }
