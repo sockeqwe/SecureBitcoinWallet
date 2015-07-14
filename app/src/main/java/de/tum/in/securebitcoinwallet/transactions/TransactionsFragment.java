@@ -1,5 +1,6 @@
 package de.tum.in.securebitcoinwallet.transactions;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -99,6 +100,12 @@ public class TransactionsFragment
       intentStarter.showCreateTransaction(getActivity(), address, location[0], location[1]);
     } else {
       // start share intent
+
+      Intent sendIntent = new Intent();
+      sendIntent.setAction(Intent.ACTION_SEND);
+      sendIntent.putExtra(Intent.EXTRA_TEXT, address);
+      sendIntent.setType("text/plain");
+      startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share_address)));
     }
   }
 
