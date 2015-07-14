@@ -61,4 +61,10 @@
   </style>
 
 
+  <style name="WizardButton" parent="TextAppearance.AppCompat.Button">
+    <item name="android:textSize">20sp</item>
+    <item name="android:padding">16dp</item>
+  </style>
+
+
 </resources>

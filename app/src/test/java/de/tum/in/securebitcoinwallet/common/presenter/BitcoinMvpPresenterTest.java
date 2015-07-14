@@ -1,5 +1,7 @@
-package de.tum.in.securebitcoinwallet.common;
+package de.tum.in.securebitcoinwallet.common.presenter;
 
+import de.tum.in.securebitcoinwallet.common.UnitTestSchedulerTransformer;
+import de.tum.in.securebitcoinwallet.common.view.BitcoinMvpView;
 import junit.framework.Assert;
 import org.junit.Test;
 import rx.Observable;

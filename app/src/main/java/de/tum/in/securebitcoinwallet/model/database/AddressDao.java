@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 import de.tum.in.securebitcoinwallet.model.Address;
 import de.tum.in.securebitcoinwallet.model.AddressMapper;
+import de.tum.in.securebitcoinwallet.model.exception.AddressNameAlreadyInUseException;
 import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
@@ -12,6 +13,7 @@ import rx.functions.Func1;
 import static de.tum.in.securebitcoinwallet.model.Address.COL_ADDRESS;
 import static de.tum.in.securebitcoinwallet.model.Address.COL_AMOUNT;
 import static de.tum.in.securebitcoinwallet.model.Address.COL_NAME;
+import static de.tum.in.securebitcoinwallet.model.Address.COL_PUBLIC_KEY;
 import static de.tum.in.securebitcoinwallet.model.Address.COL_TOTAL_RECEIVED;
 import static de.tum.in.securebitcoinwallet.model.Address.COL_TOTAL_SENT;
 import static de.tum.in.securebitcoinwallet.model.Address.TABLE;
@@ -27,7 +29,7 @@ public class AddressDao extends AbsDao {
 
     CREATE_TABLE(TABLE, COL_ADDRESS + " TEXT PRIMARY KEY NOT NULL", COL_NAME + " TEXT",
         COL_AMOUNT + " INTEGER DEFAULT 0", COL_TOTAL_RECEIVED + " INTEGER DEFAULT 0",
-        COL_TOTAL_SENT + " INTEGER DEFAULT 0", COL_NAME + " BLOB").execute(sqLiteDatabase);
+        COL_TOTAL_SENT + " INTEGER DEFAULT 0", COL_PUBLIC_KEY + " BLOB").execute(sqLiteDatabase);
   }
 
   @Override public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
@@ -40,9 +42,8 @@ public class AddressDao extends AbsDao {
    * @return list of all addresses
    */
   public Observable<List<Address>> getAddresses() {
-    return defer(query(
-        SELECT(COL_ADDRESS, COL_NAME, COL_AMOUNT, COL_TOTAL_RECEIVED, COL_TOTAL_SENT).FROM(
-            TABLE)).map(new Func1<SqlBrite.Query, List<Address>>() {
+    return defer(query(SELECT(COL_ADDRESS, COL_NAME, COL_AMOUNT, COL_TOTAL_RECEIVED, COL_TOTAL_SENT,
+            COL_PUBLIC_KEY).FROM(TABLE)).map(new Func1<SqlBrite.Query, List<Address>>() {
       @Override public List<Address> call(SqlBrite.Query query) {
         return AddressMapper.list(query.run());
       }
@@ -61,7 +62,8 @@ public class AddressDao extends AbsDao {
         .address(a.getAddress())
         .amount(a.getAmount())
         .totalReceived(a.getTotalReceived())
-        .totalSent(a.getTotalSent());
+        .totalSent(a.getTotalSent())
+        .publicKey(a.getPublicKey());
 
     if (a.getName() == null) {
       builder.nameAsNull();
@@ -86,5 +88,27 @@ public class AddressDao extends AbsDao {
    */
   public Observable<Integer> delete(final Address address) {
     return defer(delete(TABLE, COL_ADDRESS + " = ?", address.getAddress()));
+  }
+
+  /**
+   * Checks if a given address name can be used or if it's already in use
+   *
+   * @param name the desired address name
+   * @return true, or an {@link AddressNameAlreadyInUseException} if not name available
+   */
+  public Observable<Boolean> isAddressNameAvailable(final String name) {
+
+    return defer(query(SELECT("*").FROM(TABLE).WHERE(COL_NAME + " = ?"), false, name)).flatMap(
+        new Func1<SqlBrite.Query, Observable<Boolean>>() {
+          @Override public Observable<Boolean> call(SqlBrite.Query query) {
+            boolean available = AddressMapper.single(query.run()) == null;
+            if (!available) {
+              return Observable.error(
+                  new AddressNameAlreadyInUseException(name + " is already in use"));
+            }
+
+            return Observable.just(true);
+          }
+        });
   }
 }

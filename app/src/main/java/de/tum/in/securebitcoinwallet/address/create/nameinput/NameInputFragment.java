@@ -1,7 +1,6 @@
 package de.tum.in.securebitcoinwallet.address.create.nameinput;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
@@ -35,11 +34,4 @@ public class NameInputFragment extends MosbyFragment {
     }
   }
 
-  @Override public void onDestroyView() {
-    super.onDestroyView();
-    Log.d("Test", "isChanging()"
-        + getActivity().isChangingConfigurations()
-        + " "
-        + getActivity().isFinishing());
-  }
 }

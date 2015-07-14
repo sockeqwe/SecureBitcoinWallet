@@ -1,9 +1,10 @@
-package de.tum.in.securebitcoinwallet.common;
+package de.tum.in.securebitcoinwallet.common.presenter;
 
 import android.support.annotation.VisibleForTesting;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby.mvp.rx.scheduler.AndroidSchedulerTransformer;
 import com.hannesdorfmann.mosby.mvp.rx.scheduler.SchedulerTransformer;
+import de.tum.in.securebitcoinwallet.common.view.BitcoinMvpView;
 import rx.Observable;
 import rx.Scheduler;
 import rx.Subscriber;

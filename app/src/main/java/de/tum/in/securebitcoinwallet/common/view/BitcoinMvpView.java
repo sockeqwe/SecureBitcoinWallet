@@ -1,4 +1,4 @@
-package de.tum.in.securebitcoinwallet.common;
+package de.tum.in.securebitcoinwallet.common.view;
 
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
