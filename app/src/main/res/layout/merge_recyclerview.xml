@@ -16,23 +16,16 @@
 
 
     <!-- Content View -->
-    <android.support.v4.widget.SwipeRefreshLayout
+
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-
-      <android.support.v7.widget.RecyclerView
-          android:id="@+id/recyclerView"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:paddingTop="@dimen/list_item_padding_top_bottom"
-          android:paddingBottom="@dimen/list_item_padding_top_bottom"
-          android:clipToPadding="false"
-          app:layout_behavior="@string/appbar_scrolling_view_behavior"
-          />
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:paddingTop="@dimen/list_item_padding_top_bottom"
+        android:paddingBottom="@dimen/list_item_padding_top_bottom"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
 
 
     <include layout="@layout/view_error"/>
