@@ -1,6 +1,6 @@
 package de.tum.in.securebitcoinwallet.accounts;
 
-import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
+import de.tum.in.securebitcoinwallet.common.view.BitcoinMvpLceView;
 import de.tum.in.securebitcoinwallet.model.Address;
 import java.util.List;
 
@@ -10,5 +10,5 @@ import java.util.List;
  *
  * @author Hannes Dorfmann
  */
-public interface AccountListView extends MvpLceView<List<Address>> {
+public interface AccountListView extends BitcoinMvpLceView<List<Address>> {
 }

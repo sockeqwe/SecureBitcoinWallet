@@ -19,6 +19,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.Optional;
 import com.hannesdorfmann.mosby.dagger1.viewstate.Dagger1MvpViewStateFragment;
+import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import de.tum.in.securebitcoinwallet.common.ErrorMessageDeterminer;
 import de.tum.in.securebitcoinwallet.R;
@@ -27,10 +28,12 @@ import de.tum.in.securebitcoinwallet.view.pin.PinView;
 import javax.inject.Inject;
 
 /**
+ * Abstract implementation of a fragment that dispalys a view to insert a PIN
+ *
  * @author Hannes Dorfmann
  */
-public class LockFragment extends Dagger1MvpViewStateFragment<LockView, LockPresenter>
-    implements LockView {
+public abstract class LockFragment<V extends LockView, P extends MvpPresenter<V>>
+    extends Dagger1MvpViewStateFragment<V, P> implements LockView {
 
   @Inject ErrorMessageDeterminer messageDeterminer;
 
@@ -71,7 +74,8 @@ public class LockFragment extends Dagger1MvpViewStateFragment<LockView, LockPres
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    pin = new StringBuffer();;
+    pin = new StringBuffer();
+    ;
 
     if (Build.VERSION.SDK_INT >= 16) {
       int startDelay = 0;
@@ -89,10 +93,6 @@ public class LockFragment extends Dagger1MvpViewStateFragment<LockView, LockPres
 
   @Override public ViewState createViewState() {
     return new LockViewState();
-  }
-
-  @Override public LockPresenter createPresenter() {
-    return getObjectGraph().get(LockPresenter.class);
   }
 
   @Override public void onNewViewStateInstance() {
@@ -201,10 +201,17 @@ public class LockFragment extends Dagger1MvpViewStateFragment<LockView, LockPres
       pin3.showFull();
     } else if (length == 4) {
       pin4.showFull();
-      presenter.checkPin(pin.toString());
+      onPinInserted(pin.toString());
       pin = new StringBuffer();
     }
   }
+
+  /**
+   * Called once the pin has been entered
+   *
+   * @param pin The pin
+   */
+  protected abstract void onPinInserted(String pin);
 
   @OnClick(R.id.button0) public void onButton0() {
     pin.append('0');
@@ -275,9 +282,10 @@ public class LockFragment extends Dagger1MvpViewStateFragment<LockView, LockPres
 
   /**
    * Enables or disables the number buttons
+   *
    * @param enabled true to enable
    */
-  private void setNumbersEnabled(boolean enabled){
+  private void setNumbersEnabled(boolean enabled) {
     button0.setEnabled(enabled);
     button1.setEnabled(enabled);
     button2.setEnabled(enabled);
@@ -289,5 +297,9 @@ public class LockFragment extends Dagger1MvpViewStateFragment<LockView, LockPres
     button8.setEnabled(enabled);
     button9.setEnabled(enabled);
     deleteButton.setEnabled(enabled);
+  }
+
+  @Override public boolean isChangingConfigurations() {
+    return getActivity() != null && getActivity().isChangingConfigurations();
   }
 }

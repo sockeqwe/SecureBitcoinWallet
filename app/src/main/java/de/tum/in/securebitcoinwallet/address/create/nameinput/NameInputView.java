@@ -1,21 +1,21 @@
 package de.tum.in.securebitcoinwallet.address.create.nameinput;
 
-import com.hannesdorfmann.mosby.mvp.MvpView;
+import de.tum.in.securebitcoinwallet.common.view.BitcoinMvpView;
 
 /**
- * The view interface for inserting an address name
+ * The view interface for inserting an address nameEditText
  *
  * @author Hannes Dorfmann
  */
-public interface NameInputView extends MvpView {
+public interface NameInputView extends BitcoinMvpView {
 
   /**
-   * Shows the info that the name is ok and valid
+   * Shows the info that the nameEditText is ok and valid
    */
   public void showAddressNameValid();
 
   /**
-   * Shows an info that the address name is already in use
+   * Shows an info that the address nameEditText is already in use
    */
   public void showAddressNameAlreadyInUse();
 }

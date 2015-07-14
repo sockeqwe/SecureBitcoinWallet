@@ -28,8 +28,13 @@
 
   <string name="create_address_name">Address name</string>
   <string name="create_address_next_button">next</string>
+  <string name="create_address_previous_button">back</string>
+  <string name="create_address_successful">Address created successfully</string>
   <string name="create_address_description">Please enter a name for your new address. This name will
     be displayed in the app to identify this address. A public and private key will be generated in
     next step by entering the PIN for the secure SD card.
+  </string>
+  <string name="error_create_address_name_already_in_use">The desired address name is already
+    used.
   </string>
 </resources>

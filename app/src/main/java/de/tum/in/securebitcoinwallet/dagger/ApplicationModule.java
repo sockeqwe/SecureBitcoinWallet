@@ -12,11 +12,12 @@ import de.tum.in.securebitcoinwallet.accounts.AccountListAdapter;
 import de.tum.in.securebitcoinwallet.accounts.AccountListFragment;
 import de.tum.in.securebitcoinwallet.accounts.AccountListPresenter;
 import de.tum.in.securebitcoinwallet.address.create.CreateAddressActivity;
+import de.tum.in.securebitcoinwallet.address.create.nameinput.NameInputPresenter;
+import de.tum.in.securebitcoinwallet.address.create.pininput.PinInputPresenter;
 import de.tum.in.securebitcoinwallet.common.BaseActivity;
 import de.tum.in.securebitcoinwallet.common.ErrorMessageDeterminer;
 import de.tum.in.securebitcoinwallet.common.RecyclerViewFragment;
 import de.tum.in.securebitcoinwallet.lock.LockFragment;
-import de.tum.in.securebitcoinwallet.lock.LockPresenter;
 import de.tum.in.securebitcoinwallet.model.BackendApi;
 import de.tum.in.securebitcoinwallet.model.BitcoinSync;
 import de.tum.in.securebitcoinwallet.model.CurrencyManager;
@@ -25,9 +26,9 @@ import de.tum.in.securebitcoinwallet.model.TransactionManager;
 import de.tum.in.securebitcoinwallet.model.WalletManager;
 import de.tum.in.securebitcoinwallet.model.database.AddressDao;
 import de.tum.in.securebitcoinwallet.model.database.TransactionDao;
+import de.tum.in.securebitcoinwallet.model.impl.WalletManagerImpl;
 import de.tum.in.securebitcoinwallet.model.mock.MockPrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.mock.MockTransactionManager;
-import de.tum.in.securebitcoinwallet.model.mock.MockWalletManager;
 import de.tum.in.securebitcoinwallet.smartcard.SmartCardManager;
 import de.tum.in.securebitcoinwallet.transactions.TransactionsActivity;
 import de.tum.in.securebitcoinwallet.transactions.TransactionsAdapter;
@@ -45,10 +46,10 @@ import retrofit.client.OkClient;
 
     injects = {
         BaseActivity.class, RecyclerViewFragment.class, AccountListActivity.class,
-        LockFragment.class, LockPresenter.class, AccountListFragment.class,
+        LockFragment.class, AccountListFragment.class,
         AccountListPresenter.class, AccountListAdapter.class, TransactionsPresenter.class,
         TransactionsFragment.class, TransactionsAdapter.class, TransactionsActivity.class,
-        BitcoinSync.class, CreateAddressActivity.class
+        BitcoinSync.class, CreateAddressActivity.class, NameInputPresenter.class, PinInputPresenter.class
     },
     library = true,
     complete = false // TODO remove this
@@ -56,29 +57,29 @@ import retrofit.client.OkClient;
 ) public class ApplicationModule {
 
   private Context context;
-  private PrivateKeyManager privateKeyManager;
   private AddressDao addressDao;
   private TransactionDao transactionDao;
 
   public ApplicationModule(Context context) {
     this.context = context;
 
-    privateKeyManager = new MockPrivateKeyManager();
     addressDao = new AddressDao();
     transactionDao = new TransactionDao();
     new DaoManager(context, "wallet.db", 1, addressDao, transactionDao);
   }
 
   @Provides @Singleton public PrivateKeyManager providesPrivateKeyManager() {
-    return privateKeyManager;
+    return new MockPrivateKeyManager();
   }
 
   @Provides @Singleton public TransactionManager provideTransactionManager() {
     return new MockTransactionManager();
   }
 
-  @Provides @Singleton public WalletManager provideWalletManager(PrivateKeyManager keyManager) {
-    return new MockWalletManager(keyManager);
+  @Provides @Singleton
+  public WalletManager provideWalletManager(PrivateKeyManager keyManager, AddressDao addressDao,
+      TransactionDao transactionDao) {
+    return new WalletManagerImpl(keyManager, addressDao, transactionDao);
   }
 
   @Provides @Singleton public EventBus provideEventBus() {

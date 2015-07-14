@@ -22,4 +22,5 @@
   </array>
 
   <integer name="pin_ripple_duration">100</integer>
+  <integer name="stack_duration">300</integer>
 </resources>

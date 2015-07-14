@@ -1,15 +1,17 @@
 package de.tum.in.securebitcoinwallet.lock;
 
-import com.hannesdorfmann.mosby.mvp.MvpView;
+import de.tum.in.securebitcoinwallet.common.view.BitcoinMvpView;
 
 /**
  * The View interface used with {@link LockPresenter}
+ *
  * @author Hannes Dorfmann
  */
-public interface LockView extends MvpView {
+public interface LockView extends BitcoinMvpView {
 
   /**
    * Shows an error in the UI
+   *
    * @param t The error cause
    */
   public void showError(Throwable t);
@@ -23,5 +25,4 @@ public interface LockView extends MvpView {
    * Shows loading
    */
   public void showLoading();
-
 }

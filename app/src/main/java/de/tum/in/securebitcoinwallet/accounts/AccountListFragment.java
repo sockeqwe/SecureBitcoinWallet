@@ -41,7 +41,7 @@ public class AccountListFragment
   }
 
   @Override public void loadData(boolean pullToRefresh) {
-    presenter.loadList(pullToRefresh);
+    presenter.loadList();
   }
 
   @Override protected List<RFACLabelItem> getFabMenuItems() {
@@ -98,5 +98,9 @@ public class AccountListFragment
         return false;
       }
     });
+  }
+
+  @Override public boolean isChangingConfigurations() {
+    return getActivity() != null && getActivity().isChangingConfigurations();
   }
 }

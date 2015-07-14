@@ -43,7 +43,7 @@ public class MockWalletManager implements WalletManager {
     });
   }
 
-  @Override public Observable<Address> generateAddress(String name) {
+  @Override public Observable<Address> generateAddress(String name, String pin) {
 
     final Address a = new Address();
     a.setAmount(0);

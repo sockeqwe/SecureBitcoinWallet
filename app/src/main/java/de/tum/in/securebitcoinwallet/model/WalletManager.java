@@ -5,7 +5,8 @@ import java.util.List;
 import rx.Observable;
 
 /**
- * This class is responsible to manage addresses and transactions
+ * This class is responsible to manage addresses and transactions. It's a Facade to prived a single
+ * class as etnry point to the business logic
  *
  * @author Hannes Dorfmann
  */
@@ -29,9 +30,12 @@ public interface WalletManager {
   /**
    * Generates and stores a new {@link Address}
    *
+   * @param name the name of the address used to display instead of the public key hash
+   * @param pin the pin of the secure sd card
+   *
    * @return the new generated Address
    */
-  public Observable<Address> generateAddress(String name);
+  public Observable<Address> generateAddress(String name, String pin);
 
   /**
    * Get the Address details by it's unique address

@@ -43,9 +43,25 @@ public class AddressDao extends AbsDao {
    */
   public Observable<List<Address>> getAddresses() {
     return defer(query(SELECT(COL_ADDRESS, COL_NAME, COL_AMOUNT, COL_TOTAL_RECEIVED, COL_TOTAL_SENT,
-            COL_PUBLIC_KEY).FROM(TABLE)).map(new Func1<SqlBrite.Query, List<Address>>() {
+        COL_PUBLIC_KEY).FROM(TABLE)).map(new Func1<SqlBrite.Query, List<Address>>() {
       @Override public List<Address> call(SqlBrite.Query query) {
         return AddressMapper.list(query.run());
+      }
+    }));
+  }
+
+  /**
+   * Get details for a certain Address
+   *
+   * @param address The address
+   * @param subscribeForUpdates true, if you want to be notified about changes?
+   * @return Address or null if not found
+   */
+  public Observable<Address> getAddress(String address, boolean subscribeForUpdates) {
+    return defer(query(SELECT("*").FROM(TABLE).WHERE(COL_ADDRESS + " = ?"), subscribeForUpdates,
+        address).map(new Func1<SqlBrite.Query, Address>() {
+      @Override public Address call(SqlBrite.Query query) {
+        return AddressMapper.single(query.run());
       }
     }));
   }
