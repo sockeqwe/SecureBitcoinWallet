@@ -1,6 +1,7 @@
 package de.tum.in.securebitcoinwallet.model;
 
 import de.tum.in.securebitcoinwallet.model.exception.NotFoundException;
+import de.tum.in.securebitcoinwallet.transactions.create.TransactionWizardData;
 import java.util.List;
 import rx.Observable;
 
@@ -32,7 +33,6 @@ public interface WalletManager {
    *
    * @param name the name of the address used to display instead of the public key hash
    * @param pin the pin of the secure sd card
-   *
    * @return the new generated Address
    */
   public Observable<Address> generateAddress(String name, String pin);
@@ -44,6 +44,15 @@ public interface WalletManager {
    * @return the address object containing details about this address or a {@link NotFoundException}
    */
   public Observable<Address> getAddress(String address);
+
+  /**
+   * Create a Transaction and mark the transaction to be ready to sync
+   *
+   * @param address The sender address
+   * @param data The data about the transaction
+   * @return Transaction or exception will be thrown
+   */
+  public Observable<Transaction> sendTransaction(String pin, String address, TransactionWizardData data);
 
   public void importWallet();
 }

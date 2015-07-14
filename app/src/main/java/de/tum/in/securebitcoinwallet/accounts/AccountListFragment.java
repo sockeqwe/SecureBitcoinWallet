@@ -81,7 +81,8 @@ public class AccountListFragment
       intentStarter.showCreateAddress(getActivity(), location[0], location[1]);
     } else {
       // TODO change to other
-      intentStarter.showCreateTransaction(getActivity(), location[0], location[1]);
+      String senderAddress = "MockAddress1";
+      intentStarter.showCreateTransaction(getActivity(), senderAddress, location[0], location[1]);
     }
   }
 

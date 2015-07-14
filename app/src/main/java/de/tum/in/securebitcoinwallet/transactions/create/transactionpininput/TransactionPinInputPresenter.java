@@ -11,7 +11,8 @@ import javax.inject.Inject;
  *
  * @author Hannes Dorfmann
  */
-public class TransactionPinInputPresenter extends BitcoinMvpPresenter<TransactionPinInputView, Transaction> {
+public class TransactionPinInputPresenter
+    extends BitcoinMvpPresenter<TransactionPinInputView, Transaction> {
 
   private WalletManager walletManager;
 
@@ -19,19 +20,22 @@ public class TransactionPinInputPresenter extends BitcoinMvpPresenter<Transactio
     this.walletManager = walletManager;
   }
 
-  public void createAddress(TransactionWizardData data) {
-    // TODO implement
+  public void createTransaction(String pin, String address, TransactionWizardData data) {
+    if (isViewAttached()) {
+      getView().showLoading();
+      subscribe(walletManager.sendTransaction(pin, address, data));
+    }
   }
 
   @Override protected void onError(Throwable e) {
-    if (isViewAttached()){
+    if (isViewAttached()) {
       getView().showError(e);
     }
   }
 
   @Override protected void onNext(Transaction address) {
-    if (isViewAttached()){
-      getView().showCreatingAddressSuccessful(address);
+    if (isViewAttached()) {
+      getView().showCreatingTransactionSuccessful(address);
     }
   }
 }

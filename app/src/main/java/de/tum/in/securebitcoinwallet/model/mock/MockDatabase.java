@@ -87,4 +87,14 @@ public class MockDatabase {
   public String nextAddressId() {
     return "MockAddress" + (++addressCounter);
   }
+
+  public void addTransaction(String address, Transaction transaction){
+    Address a = addressMap.get(address);
+    List<Transaction> transactions = transactionMap.get(a);
+    if (transaction == null){
+      transactions = new ArrayList<>();
+      transactionMap.put(a, transactions);
+    }
+    transactions.add(transaction);
+  }
 }

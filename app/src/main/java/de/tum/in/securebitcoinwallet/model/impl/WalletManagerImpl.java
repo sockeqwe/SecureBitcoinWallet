@@ -6,6 +6,7 @@ import de.tum.in.securebitcoinwallet.model.Transaction;
 import de.tum.in.securebitcoinwallet.model.WalletManager;
 import de.tum.in.securebitcoinwallet.model.database.AddressDao;
 import de.tum.in.securebitcoinwallet.model.database.TransactionDao;
+import de.tum.in.securebitcoinwallet.transactions.create.TransactionWizardData;
 import de.tum.in.securebitcoinwallet.util.BitcoinUtils;
 import java.util.List;
 import org.bouncycastle.jce.interfaces.ECPublicKey;
@@ -54,6 +55,16 @@ public class WalletManagerImpl implements WalletManager {
 
   @Override public Observable<Address> getAddress(String address) {
     return addressDao.getAddress(address, false);
+  }
+
+  @Override
+  public Observable<Transaction> sendTransaction(String pin, String address, TransactionWizardData data) {
+    byte[] transactionData = {1,0,1}; // TODO implements
+    return privateKeyManager.signSHA256Hash(pin.getBytes(), address, transactionData).map(new Func1<byte[], Transaction>() {
+      @Override public Transaction call(byte[] bytes) {
+        return null;
+      }
+    });
   }
 
   @Override public void importWallet() {

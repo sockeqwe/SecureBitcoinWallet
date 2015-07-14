@@ -103,7 +103,9 @@ public abstract class LockFragment<V extends LockView, P extends MvpPresenter<V>
     ((LockViewState) viewState).setShowingError(t);
     //errorView.setText(messageDeterminer.getString(t, false));
     errorView.setVisibility(View.VISIBLE);
-    loadingAnimator.cancel();
+    if (loadingAnimator != null) {
+      loadingAnimator.cancel();
+    }
     setNumbersEnabled(true);
 
     if (!isRestoringViewState()) {

@@ -43,4 +43,5 @@
   <string name="create_tranasction_bitcoins">Bitcoins (Satoshi)</string>
   <string name="create_transaction_subject">Reference</string>
   <string name="create_transaction_successful">Transaction successfully created</string>
+  <string name="error_create_transaction_sender_no_address">An error has occurred. No Address specified!</string>
 </resources>

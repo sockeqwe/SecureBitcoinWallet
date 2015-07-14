@@ -43,13 +43,16 @@ public class IntentStarter {
    * Stats the activity to create a new Transcation (send Bitcoins)
    *
    * @param context The context
+   * @param senderAddress The address from which the bicoins will be sends
    * @param revealX the revealX position
    * @param revealY ther revealY position
    */
-  public void showCreateTransaction(Context context, int revealX, int revealY) {
+  public void showCreateTransaction(Context context, String senderAddress, int revealX,
+      int revealY) {
     Intent i = new Intent(context, CreateTransactionActivity.class);
     i.putExtra(CreateTransactionActivity.KEY_REVEAL_X, revealX);
     i.putExtra(CreateTransactionActivity.KEY_REVEAL_Y, revealY);
+    i.putExtra(CreateTransactionActivity.KEY_SENDER_ADDRESS, senderAddress);
     context.startActivity(i);
   }
 }

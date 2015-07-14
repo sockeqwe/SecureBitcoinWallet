@@ -22,13 +22,11 @@ import de.tum.in.securebitcoinwallet.model.BackendApi;
 import de.tum.in.securebitcoinwallet.model.BitcoinSync;
 import de.tum.in.securebitcoinwallet.model.CurrencyManager;
 import de.tum.in.securebitcoinwallet.model.PrivateKeyManager;
-import de.tum.in.securebitcoinwallet.model.TransactionManager;
 import de.tum.in.securebitcoinwallet.model.WalletManager;
 import de.tum.in.securebitcoinwallet.model.database.AddressDao;
 import de.tum.in.securebitcoinwallet.model.database.TransactionDao;
 import de.tum.in.securebitcoinwallet.model.impl.WalletManagerImpl;
 import de.tum.in.securebitcoinwallet.model.mock.MockPrivateKeyManager;
-import de.tum.in.securebitcoinwallet.model.mock.MockTransactionManager;
 import de.tum.in.securebitcoinwallet.smartcard.SmartCardManager;
 import de.tum.in.securebitcoinwallet.transactions.TransactionsActivity;
 import de.tum.in.securebitcoinwallet.transactions.TransactionsAdapter;
@@ -74,13 +72,10 @@ import retrofit.client.OkClient;
     new DaoManager(context, "wallet.db", 1, addressDao, transactionDao);
   }
 
-  @Provides @Singleton public PrivateKeyManager providesPrivateKeyManager() {
-    return new MockPrivateKeyManager();
+  @Provides @Singleton public PrivateKeyManager providesPrivateKeyManager(SmartCardManager manager) {
+    return new MockPrivateKeyManager(); // TODO replace with right one
   }
 
-  @Provides @Singleton public TransactionManager provideTransactionManager() {
-    return new MockTransactionManager();
-  }
 
   @Provides @Singleton
   public WalletManager provideWalletManager(PrivateKeyManager keyManager, AddressDao addressDao,

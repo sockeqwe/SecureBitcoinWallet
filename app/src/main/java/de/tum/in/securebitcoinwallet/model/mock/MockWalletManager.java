@@ -5,6 +5,7 @@ import de.tum.in.securebitcoinwallet.model.PrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.Transaction;
 import de.tum.in.securebitcoinwallet.model.WalletManager;
 import de.tum.in.securebitcoinwallet.model.exception.NotFoundException;
+import de.tum.in.securebitcoinwallet.transactions.create.TransactionWizardData;
 import java.util.List;
 import rx.Observable;
 import rx.functions.Func0;
@@ -72,6 +73,24 @@ public class MockWalletManager implements WalletManager {
         }
 
         return Observable.just(a);
+      }
+    });
+  }
+
+  @Override public Observable<Transaction> sendTransaction(String pin, final String address,
+      final TransactionWizardData data) {
+
+    return Observable.defer(new Func0<Observable<Transaction>>() {
+      @Override public Observable<Transaction> call() {
+
+        Transaction t = new Transaction();
+        t.setSyncState(Transaction.SYNC_NOT_SUBMITTED);
+        t.setAddress(address);
+        t.setName(data.getReference());
+        t.setAmount(-data.getSatoshi());
+
+        database.addTransaction(address, t);
+        return Observable.just(t);
       }
     });
   }

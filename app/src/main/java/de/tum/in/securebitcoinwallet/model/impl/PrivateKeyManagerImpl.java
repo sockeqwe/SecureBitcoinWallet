@@ -23,6 +23,10 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
    */
   private SmartCardManager smartCardManager;
 
+  public PrivateKeyManagerImpl(SmartCardManager smartCardManager) {
+    this.smartCardManager = smartCardManager;
+  }
+
   @Override public Observable<Boolean> isCardInitialized() {
     return Observable.defer(new Func0<Observable<Boolean>>() {
       @Override public Observable<Boolean> call() {

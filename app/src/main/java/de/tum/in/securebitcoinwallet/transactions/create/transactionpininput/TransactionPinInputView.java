@@ -14,5 +14,5 @@ public interface TransactionPinInputView extends LockView {
   /**
    * Called when Tranasction has been created successfully
    */
-  public void showCreatingAddressSuccessful(Transaction transaction);
+  public void showCreatingTransactionSuccessful(Transaction transaction);
 }

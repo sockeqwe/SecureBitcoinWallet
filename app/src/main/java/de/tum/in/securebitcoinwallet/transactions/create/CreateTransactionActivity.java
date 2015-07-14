@@ -3,6 +3,8 @@ package de.tum.in.securebitcoinwallet.transactions.create;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
+import android.widget.Toast;
 import de.tum.in.securebitcoinwallet.R;
 import de.tum.in.securebitcoinwallet.common.CircleRevealActivity;
 import de.tum.in.securebitcoinwallet.transactions.create.transactioninput.TransactionInputFragment;
@@ -19,14 +21,26 @@ import icepick.Icicle;
 public class CreateTransactionActivity extends CircleRevealActivity
     implements TransactionInputFragment.TransactionInputListner {
 
-  private final String FRAGMENT_TAG = "de.tum.in.securebitcoinwallet.address.create.FRAGMENT";
+  public static final String KEY_SENDER_ADDRESS =
+      "de.tum.in.securebitcoinwallet.transaction.create.SENDER_ADDRESS";
+
+  private final String FRAGMENT_TAG = "de.tum.in.securebitcoinwallet.transaction.create.FRAGMENT";
 
   private Fragment currentFragment;
 
   @Icicle TransactionWizardData transactionWizardData = null;
+  private String senderAddress;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    senderAddress = getIntent().getStringExtra(KEY_SENDER_ADDRESS);
+    if (TextUtils.isEmpty(senderAddress)) {
+      Toast.makeText(this, R.string.error_create_transaction_sender_no_address, Toast.LENGTH_SHORT)
+          .show();
+      finish();
+      return;
+    }
 
     toolbar.setTitle(R.string.activity_create_transaction);
 
@@ -61,7 +75,8 @@ public class CreateTransactionActivity extends CircleRevealActivity
     if (transactionWizardData == null) {
       showTransactionInput(false); // Unexpected error, should never be the case
     } else {
-      currentFragment = new TransactionPinInputFragmentBuilder(transactionWizardData).build();
+      currentFragment =
+          new TransactionPinInputFragmentBuilder(senderAddress, transactionWizardData).build();
       getSupportFragmentManager().beginTransaction()
           .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
           .replace(R.id.fragmentContainer, currentFragment, FRAGMENT_TAG)

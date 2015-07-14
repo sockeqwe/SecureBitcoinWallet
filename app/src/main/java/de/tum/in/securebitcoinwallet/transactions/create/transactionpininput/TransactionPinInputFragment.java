@@ -17,16 +17,17 @@ public class TransactionPinInputFragment
     implements TransactionPinInputView {
 
   @Arg TransactionWizardData wizardData;
+  @Arg String senderAddress;
 
   @Override protected void onPinInserted(String pin) {
-    presenter.createAddress(wizardData);
+    presenter.createTransaction(pin, senderAddress, wizardData);
   }
 
   @Override public TransactionPinInputPresenter createPresenter() {
     return getObjectGraph().get(TransactionPinInputPresenter.class);
   }
 
-  @Override public void showCreatingAddressSuccessful(Transaction transaction) {
+  @Override public void showCreatingTransactionSuccessful(Transaction transaction) {
     Toast.makeText(getActivity(), R.string.create_address_successful, Toast.LENGTH_LONG).show();
     getActivity().finish();
   }
