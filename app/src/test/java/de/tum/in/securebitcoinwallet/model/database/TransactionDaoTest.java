@@ -30,7 +30,6 @@ import rx.observers.TestSubscriber;
     for (int i = 0; i < tests; i++) {
       String id = "id" + i;
       String name = "name" + i;
-      String txIndex = "txIndex" + i;
 
       Transaction t = new Transaction();
       t.setId(id);
@@ -39,7 +38,6 @@ import rx.observers.TestSubscriber;
       t.setAddress(address);
       t.setSyncState(Transaction.SYNC_NOT_SUBMITTED);
       t.setTimestamp(i);
-      t.setTxIndex(txIndex);
 
       TestSubscriber<Transaction> subscriber = new TestSubscriber<>();
       dao.insertOrUpdate(t).subscribe(subscriber);
@@ -58,15 +56,6 @@ import rx.observers.TestSubscriber;
       subscriber.assertNoErrors();
       Assert.assertEquals(1, subscriber.getOnNextEvents().size());
       Transaction queried = subscriber.getOnNextEvents().get(0);
-      checkTransactionEquals(t, queried);
-      subscriber.unsubscribe();
-
-      // query by transaction index
-      subscriber = new TestSubscriber<>();
-      dao.getTransactionByTxIndex(txIndex).subscribe(subscriber);
-      subscriber.assertNoErrors();
-      Assert.assertEquals(1, subscriber.getOnNextEvents().size());
-      queried = subscriber.getOnNextEvents().get(0);
       checkTransactionEquals(t, queried);
       subscriber.unsubscribe();
 
@@ -123,6 +112,5 @@ import rx.observers.TestSubscriber;
     Assert.assertEquals(a.getName(), b.getName());
     Assert.assertEquals(a.getSyncState(), b.getSyncState());
     Assert.assertEquals(a.getTimestamp(), b.getTimestamp());
-    Assert.assertEquals(a.getTxIndex(), b.getTxIndex());
   }
 }

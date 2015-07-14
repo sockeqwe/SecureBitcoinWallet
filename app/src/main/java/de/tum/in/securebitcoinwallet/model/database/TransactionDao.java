@@ -76,7 +76,7 @@ public class TransactionDao extends AbsDao {
    *
    * @param txIndex The tranasction index
    * @return queried transaction or null if no transaction has been found
-   */
+
   public Observable<Transaction> getTransactionByTxIndex(@NonNull String txIndex) {
     return defer(
         query(SELECT("*").FROM(Transaction.TABLE_NAME).WHERE(Transaction.COL_TX_INDEX + " = ?"),
@@ -86,7 +86,7 @@ public class TransactionDao extends AbsDao {
           }
         }));
   }
-
+ */
   /**
    * Insert or update an existing transaction
    *
@@ -102,7 +102,6 @@ public class TransactionDao extends AbsDao {
         .name(t.getName())
         .syncState(t.getSyncState())
         .timestamp(t.getTimestamp())
-        .txIndex(t.getTxIndex())
         .build();
 
     return defer(insert(Transaction.TABLE_NAME, cv, SQLiteDatabase.CONFLICT_REPLACE).map(
