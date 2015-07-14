@@ -189,8 +189,9 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
     return Observable.defer(new Func0<Observable<byte[]>>() {
       @Override public Observable<byte[]> call() {
         try {
+          checkPIN(pin);
           return Observable.just(addRandomKey());
-        } catch (KeyStoreFullException e) {
+        } catch (SmartCardException e) {
           return Observable.error(e);
         }
       }
