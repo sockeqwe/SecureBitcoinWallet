@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
+import org.bouncycastle.crypto.digests.RIPEMD160Digest;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.interfaces.ECPublicKey;
 import org.bouncycastle.jce.spec.ECParameterSpec;
@@ -78,16 +79,18 @@ public class BitcoinUtils {
    * @return The Bitcoin address as a Base58 encoded string
    */
   public static String calculateBitcoinAddress(byte[] publicKey) {
-    MessageDigest ripemd160;
+    RIPEMD160Digest ripemd160 = new RIPEMD160Digest();
     MessageDigest sha256;
     try {
-      ripemd160 = MessageDigest.getInstance("RIPEMD-160");
       sha256 = MessageDigest.getInstance("SHA-256");
     } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException("RIPEMD-160 digest not found");
+      throw new RuntimeException(e);
     }
 
-    byte[] ripemdHash = ripemd160.digest(publicKey);
+    byte[] ripemdHash = new byte[ripemd160.getDigestSize()];
+    ripemd160.update(publicKey, 0, publicKey.length);
+    ripemd160.doFinal(ripemdHash, 0);
+
     byte[] sha256Hash = sha256.digest(ripemdHash);
     sha256Hash = sha256.digest(sha256Hash);
 
@@ -98,13 +101,7 @@ public class BitcoinUtils {
     System.arraycopy(ripemdHash, 0, addressBytes, 1, ripemdHash.length);
     System.arraycopy(sha256Hash, 0, addressBytes, (ripemdHash.length + 1), 4);
 
-    String bitcoinAddress = Base58.encode(addressBytes);
-
-    if (!validateBitcoinAddress(bitcoinAddress)) {
-      throw new RuntimeException("Calulation of Bitcoin address failed!");
-    }
-
-    return bitcoinAddress;
+    return Base58.encode(addressBytes);
   }
 
   /**
