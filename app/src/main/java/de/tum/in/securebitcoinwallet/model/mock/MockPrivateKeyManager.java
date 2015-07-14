@@ -20,7 +20,8 @@ import rx.functions.Func0;
  */
 @Deprecated public class MockPrivateKeyManager implements PrivateKeyManager {
   private final static int MAX_SLOTS = 15;
-  private final static boolean isInitialized = false;
+
+  private boolean isInitialized = false;
 
   /**
    * Map from address to private key
@@ -49,7 +50,7 @@ import rx.functions.Func0;
 
         byte[] puk = new byte[8];
         new Random().nextBytes(puk);
-
+        isInitialized = true;
         return Observable.just(puk);
       }
     });
