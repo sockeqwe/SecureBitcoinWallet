@@ -180,12 +180,12 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
 
   @Override public void onRFACItemLabelClick(int position, RFACLabelItem item, View view) {
     onFabMenuItemClicked(position, item, view);
-    //fabHelper.toggleContent();
+    fabHelper.toggleContent();
   }
 
   @Override public void onRFACItemIconClick(int position, RFACLabelItem item, View view) {
     onFabMenuItemClicked(position, item, view);
-    //fabHelper.toggleContent();
+    fabHelper.toggleContent();
   }
 
   @Override protected void injectDependencies() {
