@@ -58,7 +58,7 @@ public class WalletManagerImpl implements WalletManager {
 
   @Override public Observable<Transaction> sendTransaction(String pin, final String address,
       final TransactionWizardData data) {
-    byte[] transactionData = { 1, 0, 1 }; // TODO implement
+    byte[] transactionData = new byte[32]; // TODO implement
     return privateKeyManager.signSHA256Hash(convertPinToBytes(pin), address, transactionData)
         .flatMap(new Func1<byte[], Observable<Transaction>>() {
           @Override public Observable<Transaction> call(byte[] signedTransaction) {

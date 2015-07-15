@@ -6,6 +6,7 @@ import de.tum.in.securebitcoinwallet.smartcard.exception.AppletAlreadyInitialize
 import de.tum.in.securebitcoinwallet.smartcard.exception.AuthenticationFailedExeption;
 import de.tum.in.securebitcoinwallet.smartcard.exception.CardLockedException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.KeyAlreadyInStoreException;
+import de.tum.in.securebitcoinwallet.smartcard.exception.KeyNotFoundException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.KeyStoreFullException;
 import de.tum.in.securebitcoinwallet.smartcard.exception.SmartCardException;
 import de.tum.in.securebitcoinwallet.util.BitcoinUtils;
@@ -202,18 +203,25 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
   public Observable<Boolean> removePrivateKeyForAddress(final byte[] pin, final String address) {
     return Observable.defer(new Func0<Observable<Boolean>>() {
       @Override public Observable<Boolean> call() {
-        privateKeyMap.remove(address);
-        remainingSlots--;
-        return Observable.just(true);
+        if (privateKeyMap.containsKey(address)) {
+          privateKeyMap.remove(address);
+          remainingSlots--;
+          return Observable.just(true);
+        } else {
+          return Observable.error(new KeyNotFoundException());
+        }
       }
     });
   }
 
   @Override public Observable<byte[]> signSHA256Hash(final byte[] pin, final String address,
-      byte[] sha256hash) {
+      final byte[] sha256hash) {
     return Observable.defer(new Func0<Observable<byte[]>>() {
       @Override public Observable<byte[]> call() {
         if (privateKeyMap.containsKey(address)) {
+          if (sha256hash.length != 32) {
+            return Observable.error(new RuntimeException("Incorrect hash length"));
+          }
           byte[] fakeSignature = new byte[70];
           new Random().nextBytes(fakeSignature);
 
