@@ -52,4 +52,14 @@
   </string>
 
   <string name="share_address">Share Bitcoin Address</string>
+
+  <string name="actionmode_delete">Delete</string>
+  <string name="actionmode_edit">Edit</string>
+
+
+  <string name="actionmode_delete_address_title">Delete Address?</string>
+  <string name="actionmode_delete_address_message">Are you sure that you want to delete this Address? All unspent Bitcoins will be deleted unrecoverable!</string>
+
+  <string name="yes">Yes</string>
+  <string name="no">No</string>
 </resources>

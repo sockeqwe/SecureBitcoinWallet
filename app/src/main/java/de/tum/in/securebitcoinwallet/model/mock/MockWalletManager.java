@@ -9,6 +9,7 @@ import de.tum.in.securebitcoinwallet.transactions.create.TransactionWizardData;
 import java.util.List;
 import rx.Observable;
 import rx.functions.Func0;
+import rx.functions.Func1;
 
 /**
  * @author Hannes Dorfmann
@@ -97,5 +98,14 @@ public class MockWalletManager implements WalletManager {
 
   @Override public void importWallet() {
 
+  }
+
+  @Override public Observable<Boolean> deleteAddress(final Address address) {
+    return privateKeyManager.deleteAddress(address.getAddress()).map(new Func1<Boolean, Boolean>() {
+      @Override public Boolean call(Boolean aBoolean) {
+        database.deleteAddressAndTranscations(address);
+        return aBoolean;
+      }
+    });
   }
 }

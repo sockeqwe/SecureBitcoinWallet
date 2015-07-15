@@ -11,4 +11,18 @@ import java.util.List;
  * @author Hannes Dorfmann
  */
 public interface AddressListView extends BitcoinMvpLceView<List<Address>> {
+
+  /**
+   * Shows an error message that the selected address could not be deleted
+   *
+   * @param address The address to delete
+   */
+  public void showErrorDeleteingAddress(Throwable t, Address address);
+
+  /**
+   * Show s an error message that editing and address has failed
+   *
+   * @param address The address
+   */
+  public void showErrorEditingAddress(Throwable t, Address address);
 }

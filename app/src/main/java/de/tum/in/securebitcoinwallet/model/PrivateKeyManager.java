@@ -1,7 +1,6 @@
 package de.tum.in.securebitcoinwallet.model;
 
 import java.io.File;
-import org.bouncycastle.jce.interfaces.ECPublicKey;
 import rx.Observable;
 import rx.Subscriber;
 
@@ -70,6 +69,7 @@ public interface PrivateKeyManager {
 
   /**
    * Iimportd the previously exported encrypted private key.
+   *
    * @param pin The card's PIN
    * @param bitcoinAddress The Bitcoin address of the encrypted private key
    * @param encryptedPrivateKey The encrypted private key.
@@ -107,4 +107,12 @@ public interface PrivateKeyManager {
    * @return The signature as a byte array.
    */
   public Observable<byte[]> signSHA256Hash(byte[] pin, String address, byte[] sha256hash);
+
+  /**
+   * Deletes a address
+   *
+   * @param address The address to delte
+   * @return boolean if successful, otherwise exception will be thrown
+   */
+  public Observable<Boolean> deleteAddress(String address);
 }

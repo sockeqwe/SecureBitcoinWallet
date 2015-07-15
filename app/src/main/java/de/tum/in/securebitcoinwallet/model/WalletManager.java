@@ -54,5 +54,12 @@ public interface WalletManager {
    */
   public Observable<Transaction> sendTransaction(String pin, String address, TransactionWizardData data);
 
+  /**
+   * Delete an Address
+   * @param address The address to delete
+   * @return true if deleted successfully, otherwise exception will be thrown
+   */
+  public Observable<Boolean>  deleteAddress(Address address);
+
   public void importWallet();
 }

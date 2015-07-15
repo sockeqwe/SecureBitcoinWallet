@@ -33,6 +33,9 @@ public abstract class RecyclerViewFragment<M, V extends MvpLceView<M>, P extends
     extends Dagger1MvpLceViewStateFragment<View, M, V, P>
     implements RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener {
 
+
+
+
   @InjectView(R.id.emptyView) View emptyView;
   @InjectView(R.id.fab) RapidFloatingActionButton fab;
   @InjectView(R.id.fabMenuLayout) RapidFloatingActionLayout fabMenuLayout;

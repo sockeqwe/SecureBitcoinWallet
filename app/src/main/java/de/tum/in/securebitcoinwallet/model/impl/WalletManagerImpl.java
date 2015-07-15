@@ -94,4 +94,24 @@ public class WalletManagerImpl implements WalletManager {
     }
     return convertedPin;
   }
+
+  @Override public Observable<Boolean> deleteAddress(final Address address) {
+
+    return privateKeyManager.deleteAddress(address.getAddress())
+        .flatMap(new Func1<Boolean, Observable<Integer>>() {
+          @Override public Observable<Integer> call(Boolean aBoolean) {
+            return addressDao.delete(address);
+          }
+        })
+        .flatMap(new Func1<Integer, Observable<Integer>>() {
+          @Override public Observable<Integer> call(Integer integer) {
+            return transactionDao.deleteTransactionForAddress(address.getAddress());
+          }
+        })
+        .map(new Func1<Integer, Boolean>() {
+          @Override public Boolean call(Integer integer) {
+            return true;
+          }
+        });
+  }
 }

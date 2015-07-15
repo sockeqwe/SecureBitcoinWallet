@@ -78,15 +78,15 @@ public class TransactionDao extends AbsDao {
    * @return queried transaction or null if no transaction has been found
 
   public Observable<Transaction> getTransactionByTxIndex(@NonNull String txIndex) {
-    return defer(
-        query(SELECT("*").FROM(Transaction.TABLE_NAME).WHERE(Transaction.COL_TX_INDEX + " = ?"),
-            txIndex).map(new Func1<SqlBrite.Query, Transaction>() {
-          @Override public Transaction call(SqlBrite.Query query) {
-            return TransactionMapper.single(query.run());
-          }
-        }));
+  return defer(
+  query(SELECT("*").FROM(Transaction.TABLE_NAME).WHERE(Transaction.COL_TX_INDEX + " = ?"),
+  txIndex).map(new Func1<SqlBrite.Query, Transaction>() {
+  @Override public Transaction call(SqlBrite.Query query) {
+  return TransactionMapper.single(query.run());
   }
- */
+  }));
+  }
+   */
   /**
    * Insert or update an existing transaction
    *
@@ -120,5 +120,15 @@ public class TransactionDao extends AbsDao {
    */
   public Observable<Integer> deleteTransactionById(@NonNull String hashId) {
     return defer(delete(Transaction.TABLE_NAME, Transaction.COL_HASH_ID + " = ?", hashId));
+  }
+
+  /**
+   * Deletes all transactions that belong to a certain address
+   *
+   * @param address the address
+   * @return the number of deleted transactions
+   */
+  public Observable<Integer> deleteTransactionForAddress(String address) {
+    return defer(delete(Transaction.TABLE_NAME, Transaction.COL_ADDRESS + " = ?", address));
   }
 }

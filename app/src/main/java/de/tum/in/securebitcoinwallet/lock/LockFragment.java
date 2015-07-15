@@ -308,4 +308,5 @@ public abstract class LockFragment<V extends LockView, P extends MvpPresenter<V>
   @Override protected void injectDependencies() {
     getObjectGraph().inject(this);
   }
+
 }

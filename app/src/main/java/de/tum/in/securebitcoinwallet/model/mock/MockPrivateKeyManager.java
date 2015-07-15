@@ -263,4 +263,14 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
     }
     remainingRetries = MAX_PIN_RETRIES;
   }
+
+  @Override public Observable<Boolean> deleteAddress(final String address) {
+    return Observable.defer(new Func0<Observable<Boolean>>() {
+      @Override public Observable<Boolean> call() {
+        privateKeyMap.remove(address);
+        remainingSlots++;
+        return Observable.just(true);
+      }
+    });
+  }
 }

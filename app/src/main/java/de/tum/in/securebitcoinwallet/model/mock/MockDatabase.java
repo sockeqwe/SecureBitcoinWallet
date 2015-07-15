@@ -88,13 +88,18 @@ public class MockDatabase {
     return "MockAddress" + (++addressCounter);
   }
 
-  public void addTransaction(String address, Transaction transaction){
+  public void addTransaction(String address, Transaction transaction) {
     Address a = addressMap.get(address);
     List<Transaction> transactions = transactionMap.get(a);
-    if (transaction == null){
+    if (transaction == null) {
       transactions = new ArrayList<>();
       transactionMap.put(a, transactions);
     }
     transactions.add(transaction);
+  }
+
+  public void deleteAddressAndTranscations(Address address) {
+    transactionMap.remove(address);
+    addressMap.remove(address.getAddress());
   }
 }

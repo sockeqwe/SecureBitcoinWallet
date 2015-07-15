@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+  <item
+      android:id="@+id/actionModeEdit"
+      android:icon="@drawable/ic_edit"
+      android:title="@string/actionmode_edit"
+      />
+
+  <item
+      android:id="@+id/actionModeDelete"
+      android:icon="@drawable/ic_delete"
+      android:title="@string/actionmode_delete"
+      />
+
+
+</menu>

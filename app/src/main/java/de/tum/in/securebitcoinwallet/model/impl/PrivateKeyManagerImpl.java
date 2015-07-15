@@ -176,4 +176,17 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
       }
     });
   }
+
+  @Override public Observable<Boolean> deleteAddress(final String address) {
+    return Observable.defer(new Func0<Observable<Boolean>>() {
+      @Override public Observable<Boolean> call() {
+        try {
+          smartCardManager.deleteKey(address);
+          return Observable.just(true);
+        } catch (Exception e) {
+          return Observable.error(e);
+        }
+      }
+    });
+  }
 }

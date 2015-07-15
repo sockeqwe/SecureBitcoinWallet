@@ -22,7 +22,7 @@ public class BitcoinMvpPresenter<V extends BitcoinMvpView, M> extends MvpBasePre
    */
   private Subscriber<M> subscriber;
 
-  private SchedulerTransformer<M> schedulerTransformer = new AndroidSchedulerTransformer<>();
+  protected SchedulerTransformer<M> schedulerTransformer = new AndroidSchedulerTransformer<>();
 
   /**
    * Default construcotr
