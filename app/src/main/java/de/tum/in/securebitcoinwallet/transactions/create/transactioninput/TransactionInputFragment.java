@@ -14,6 +14,7 @@ import com.hannesdorfmann.mosby.dagger1.Dagger1MosbyFragment;
 import de.tum.in.securebitcoinwallet.R;
 import de.tum.in.securebitcoinwallet.addresses.create.CreateAddressActivity;
 import de.tum.in.securebitcoinwallet.transactions.create.TransactionWizardData;
+import de.tum.in.securebitcoinwallet.util.BitcoinUtils;
 import de.tum.in.securebitcoinwallet.util.KeyboardUtils;
 
 /**
@@ -82,52 +83,53 @@ public class TransactionInputFragment extends Dagger1MosbyFragment {
     referenceEditText.clearAnimation();
 
     // receiver check
-    if (TextUtils.isEmpty(receiverEditText.getText().toString())) {
+    String address = receiverEditText.getText().toString();
+    if (TextUtils.isEmpty(address) || !BitcoinUtils.validateBitcoinAddress(
+        receiverEditText.getText().toString())) {
       Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
       receiverEditText.startAnimation(shake);
       return;
     }
 
-    // amount satoshi check
-    long satoshi = 0;
-    try {
-      satoshi = Long.parseLong(amountBitcoins.getText().toString());
-    } catch (Throwable e) {
-      Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
-      amountBitcoins.startAnimation(shake);
-      return;
-    }
-
-    // Reference check
-    if (TextUtils.isEmpty(referenceEditText.getText().toString())) {
-      Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
-      referenceEditText.startAnimation(shake);
-      return;
-    }
-
-    final TransactionWizardData wizardData = new TransactionWizardData();
-    wizardData.setReceiverAddress(receiverEditText.getEditableText().toString());
-    wizardData.setSatoshi(satoshi);
-    wizardData.setReference(referenceEditText.getText().toString());
-
-
-    nextButton.setClickable(false);
-    KeyboardUtils.hideKeyboard(receiverEditText);
-    receiverEditText.postDelayed(new Runnable() {
-      @Override public void run() {
-        nextButton.setClickable(true);
-        listener.onTransactionWizardFilled(wizardData);
+      // amount satoshi check
+      long satoshi = 0;
+      try {
+        satoshi = Long.parseLong(amountBitcoins.getText().toString());
+      } catch (Throwable e) {
+        Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
+        amountBitcoins.startAnimation(shake);
+        return;
       }
-    }, 100);
-  }
 
-  @Override public void onAttach(Activity activity) {
-    super.onAttach(activity);
-    if (!(activity instanceof TransactionInputListner)) {
-      throw new IllegalArgumentException(
-          "Activity must implement " + TransactionInputListner.class.getSimpleName());
+      // Reference check
+      if (TextUtils.isEmpty(referenceEditText.getText().toString())) {
+        Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
+        referenceEditText.startAnimation(shake);
+        return;
+      }
+
+      final TransactionWizardData wizardData = new TransactionWizardData();
+      wizardData.setReceiverAddress(receiverEditText.getEditableText().toString());
+      wizardData.setSatoshi(satoshi);
+      wizardData.setReference(referenceEditText.getText().toString());
+
+      nextButton.setClickable(false);
+      KeyboardUtils.hideKeyboard(receiverEditText);
+      receiverEditText.postDelayed(new Runnable() {
+        @Override public void run() {
+          nextButton.setClickable(true);
+          listener.onTransactionWizardFilled(wizardData);
+        }
+      }, 100);
     }
 
-    listener = (TransactionInputListner) activity;
+    @Override public void onAttach (Activity activity){
+      super.onAttach(activity);
+      if (!(activity instanceof TransactionInputListner)) {
+        throw new IllegalArgumentException(
+            "Activity must implement " + TransactionInputListner.class.getSimpleName());
+      }
+
+      listener = (TransactionInputListner) activity;
+    }
   }
-}
