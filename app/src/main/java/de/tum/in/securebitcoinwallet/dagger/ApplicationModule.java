@@ -13,6 +13,7 @@ import de.tum.in.securebitcoinwallet.addresses.AddressListFragment;
 import de.tum.in.securebitcoinwallet.addresses.AddressListPresenter;
 import de.tum.in.securebitcoinwallet.addresses.create.CreateAddressActivity;
 import de.tum.in.securebitcoinwallet.addresses.create.nameinput.NameInputPresenter;
+import de.tum.in.securebitcoinwallet.addresses.create.pininput.PinInputFragment;
 import de.tum.in.securebitcoinwallet.addresses.create.pininput.PinInputPresenter;
 import de.tum.in.securebitcoinwallet.common.BaseActivity;
 import de.tum.in.securebitcoinwallet.common.ErrorMessageDeterminer;
@@ -52,8 +53,8 @@ import retrofit.client.OkClient;
         AddressListAdapter.class, TransactionsPresenter.class, TransactionsFragment.class,
         TransactionsAdapter.class, TransactionsActivity.class, BitcoinSync.class,
         CreateAddressActivity.class, NameInputPresenter.class, PinInputPresenter.class,
-        CreateTransactionActivity.class, TransactionInputFragment.class,
-        TransactionPinInputFragment.class, TransactionPinInputPresenter.class
+        PinInputFragment.class, CreateTransactionActivity.class, TransactionInputFragment.class,
+        TransactionPinInputFragment.class, TransactionPinInputPresenter.class,
     },
     library = true,
     complete = false // TODO remove this
@@ -72,10 +73,10 @@ import retrofit.client.OkClient;
     new DaoManager(context, "wallet.db", 1, addressDao, transactionDao);
   }
 
-  @Provides @Singleton public PrivateKeyManager providesPrivateKeyManager(SmartCardManager manager) {
+  @Provides @Singleton
+  public PrivateKeyManager providesPrivateKeyManager(SmartCardManager manager) {
     return new MockPrivateKeyManager(); // TODO replace with right one
   }
-
 
   @Provides @Singleton
   public WalletManager provideWalletManager(PrivateKeyManager keyManager, AddressDao addressDao,

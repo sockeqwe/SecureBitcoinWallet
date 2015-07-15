@@ -304,4 +304,8 @@ public abstract class LockFragment<V extends LockView, P extends MvpPresenter<V>
   @Override public boolean isChangingConfigurations() {
     return getActivity() != null && getActivity().isChangingConfigurations();
   }
+
+  @Override protected void injectDependencies() {
+    getObjectGraph().inject(this);
+  }
 }
