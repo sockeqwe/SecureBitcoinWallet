@@ -58,7 +58,7 @@
 
 
   <string name="actionmode_delete_address_title">Delete address?</string>
-  <string name="actionmode_delete_address_message">Are you sure that you want to delete this Address? All unspent Bitcoins will be deleted unrecoverable! Please enter your PIN to proceed.</string>
+  <string name="actionmode_delete_address_message">Are you sure that you want to delete this Address? All unspent Bitcoins will be deleted unrecoverable!\n\nPlease enter your PIN to proceed.</string>
 
   <string name="yes">Yes</string>
   <string name="no">No</string>

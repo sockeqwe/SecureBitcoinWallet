@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -130,7 +129,7 @@ public class AddressListFragment
     if (item == fabNew) {
       intentStarter.showCreateAddress(getActivity(), location[0], location[1]);
     } else {
-
+      // TODO implement
     }
   }
 
@@ -184,9 +183,8 @@ public class AddressListFragment
    */
   private void deleteAddress() {
 
-    View rootView = getActivity().getLayoutInflater().inflate(R.layout.view_textinput, null);
+    View rootView = getActivity().getLayoutInflater().inflate(R.layout.view_passwordinput, null);
     final EditText pinEditText = (EditText) rootView.findViewById(R.id.editText);
-    pinEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
     pinEditText.requestFocus();
 
     new AlertDialog.Builder(getActivity()).setTitle(R.string.actionmode_delete_address_title)
@@ -241,6 +239,7 @@ public class AddressListFragment
 
   @Override public void showErrorDeleteingAddress(Throwable t, Address address) {
     showSnackbar(errorMessageDeterminer.getString(t, false));
+    t.printStackTrace();
   }
 
   @Override public void showErrorEditingAddress(Throwable t, Address address) {
