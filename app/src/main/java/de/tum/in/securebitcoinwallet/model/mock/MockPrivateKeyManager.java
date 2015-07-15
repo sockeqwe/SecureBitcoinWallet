@@ -202,13 +202,9 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
   public Observable<Boolean> removePrivateKeyForAddress(final byte[] pin, final String address) {
     return Observable.defer(new Func0<Observable<Boolean>>() {
       @Override public Observable<Boolean> call() {
-        if (privateKeyMap.containsKey(address)) {
-          privateKeyMap.remove(address);
-          remainingSlots--;
-          return Observable.just(true);
-        } else {
-          return Observable.error(new NotFoundException());
-        }
+        privateKeyMap.remove(address);
+        remainingSlots--;
+        return Observable.just(true);
       }
     });
   }
