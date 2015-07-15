@@ -3,16 +3,20 @@ package de.tum.in.securebitcoinwallet.addresses;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import butterknife.InjectView;
 import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RFACLabelItem;
 import de.tum.in.securebitcoinwallet.IntentStarter;
@@ -20,8 +24,8 @@ import de.tum.in.securebitcoinwallet.R;
 import de.tum.in.securebitcoinwallet.common.ErrorMessageDeterminer;
 import de.tum.in.securebitcoinwallet.common.ListAdapter;
 import de.tum.in.securebitcoinwallet.common.RecyclerViewFragment;
-import de.tum.in.securebitcoinwallet.preferences.SettingsActivity;
 import de.tum.in.securebitcoinwallet.model.Address;
+import de.tum.in.securebitcoinwallet.preferences.SettingsActivity;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -62,6 +66,7 @@ public class AddressListFragment
 
     @Override public void onDestroyActionMode(ActionMode mode) {
       actionMode = null;
+      longClickedAddress = null;
       ((AddressListAdapter) adapter).setSelectedItem(null);
       adapter.notifyDataSetChanged();
     }
@@ -173,13 +178,15 @@ public class AddressListFragment
     adapter.notifyDataSetChanged();
   }
 
+  /**
+   * Displays an dialog to delete an address
+   */
   private void deleteAddress() {
     new AlertDialog.Builder(getActivity()).setTitle(R.string.actionmode_delete_address_title)
         .setMessage(R.string.actionmode_delete_address_message)
         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
           @Override public void onClick(DialogInterface dialog, int which) {
             presenter.deleteAddress(longClickedAddress);
-            longClickedAddress = null;
             actionMode.finish();
           }
         })
@@ -187,17 +194,49 @@ public class AddressListFragment
         .show();
   }
 
+  /**
+   * Displays an Dialog to edit the address name
+   */
   private void editAddress() {
+
+    final EditText nameEditText = new EditText(getActivity());
+    nameEditText.setTextColor(getActivity().getResources().getColor(R.color.primary_text));
+    nameEditText.setText(longClickedAddress.getName());
+
+    new AlertDialog.Builder(getActivity()).setTitle(R.string.actionmode_edit_address_title)
+        .setView(nameEditText)
+        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int whichButton) {
+            String newName = nameEditText.getText().toString();
+            if (TextUtils.isEmpty(newName)) {
+              showSnackbar(getResources().getString(R.string.actionmode_edit_address_empty_name));
+            } else {
+              presenter.renameAddress(longClickedAddress, newName);
+              actionMode.finish();
+            }
+          }
+        })
+        .show();
+  }
+
+  /**
+   * Shows a snackbar dispalying an error message
+   */
+  private void showSnackbar(String msg) {
+    Snackbar snackbar = Snackbar.make(getView(), msg, Snackbar.LENGTH_LONG);
+    TextView tv =
+        (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+    tv.setTextColor(Color.WHITE);
+
+    snackbar.show();
   }
 
   @Override public void showErrorDeleteingAddress(Throwable t, Address address) {
-    Snackbar.make(getView(), errorMessageDeterminer.getString(t, false), Snackbar.LENGTH_LONG)
-        .show();
+    showSnackbar(errorMessageDeterminer.getString(t, false));
   }
 
   @Override public void showErrorEditingAddress(Throwable t, Address address) {
-    Snackbar.make(getView(), errorMessageDeterminer.getString(t, false), Snackbar.LENGTH_LONG)
-        .show();
+    showSnackbar(errorMessageDeterminer.getString(t, false));
   }
 
   @Override public void onDestroyView() {

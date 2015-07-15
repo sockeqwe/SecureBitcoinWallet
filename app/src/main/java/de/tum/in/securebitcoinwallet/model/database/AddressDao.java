@@ -127,4 +127,21 @@ public class AddressDao extends AbsDao {
           }
         });
   }
+
+  /**
+   * Rename an address name
+   *
+   * @param address the address to rename
+   * @param newName the new name of the address
+   * @return true if renamed
+   */
+  public Observable<Boolean> rename(String address, String newName) {
+    ContentValues cv = AddressMapper.contentValues().name(newName).build();
+    return defer(update(TABLE, cv, COL_ADDRESS + " = ?", address)).map(
+        new Func1<Integer, Boolean>() {
+          @Override public Boolean call(Integer integer) {
+            return integer > 0;
+          }
+        });
+  }
 }

@@ -52,14 +52,25 @@ public interface WalletManager {
    * @param data The data about the transaction
    * @return Transaction or exception will be thrown
    */
-  public Observable<Transaction> sendTransaction(String pin, String address, TransactionWizardData data);
+  public Observable<Transaction> sendTransaction(String pin, String address,
+      TransactionWizardData data);
 
   /**
    * Delete an Address
+   *
    * @param address The address to delete
    * @return true if deleted successfully, otherwise exception will be thrown
    */
-  public Observable<Boolean>  deleteAddress(Address address);
+  public Observable<Boolean> deleteAddress(Address address);
+
+  /**
+   * Renames an address
+   *
+   * @param address The address to rename
+   * @param newName The new name
+   * @return true if successfull, otherwise exception
+   */
+  public Observable<Boolean> renameAddress(Address address, String newName);
 
   public void importWallet();
 }

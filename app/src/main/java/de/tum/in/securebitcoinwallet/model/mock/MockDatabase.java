@@ -102,4 +102,11 @@ public class MockDatabase {
     transactionMap.remove(address);
     addressMap.remove(address.getAddress());
   }
+
+  public void rename(String address, String newName) {
+    Address a = addressMap.get(address);
+    if (a != null) {
+      a.setName(newName);
+    }
+  }
 }

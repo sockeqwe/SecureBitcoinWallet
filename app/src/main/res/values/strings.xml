@@ -57,9 +57,14 @@
   <string name="actionmode_edit">Edit</string>
 
 
-  <string name="actionmode_delete_address_title">Delete Address?</string>
+  <string name="actionmode_delete_address_title">Delete address?</string>
   <string name="actionmode_delete_address_message">Are you sure that you want to delete this Address? All unspent Bitcoins will be deleted unrecoverable!</string>
 
   <string name="yes">Yes</string>
   <string name="no">No</string>
+  <string name="ok">Ok</string>
+
+  <string name="actionmode_edit_address_title">Address name</string>
+  <string name="actionmode_edit_address_empty_name">The name can not be empty!</string>
+
 </resources>

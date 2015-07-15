@@ -114,4 +114,8 @@ public class WalletManagerImpl implements WalletManager {
           }
         });
   }
+
+  @Override public Observable<Boolean> renameAddress(Address address, String newName) {
+    return addressDao.rename(address.getAddress(), newName);
+  }
 }

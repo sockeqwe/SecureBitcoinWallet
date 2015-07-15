@@ -25,6 +25,11 @@ public class AddressListPresenter extends BitcoinMvpLcePresenter<AddressListView
     subscribe(walletManager.getMyAddresses());
   }
 
+  /**
+   * Deletes an address
+   *
+   * @param address The address to rename
+   */
   public void deleteAddress(final Address address) {
 
     walletManager.deleteAddress(address)
@@ -47,7 +52,29 @@ public class AddressListPresenter extends BitcoinMvpLcePresenter<AddressListView
         });
   }
 
-  public void renameAddress(Address address, String newName) {
-    // TODO implement
+  /**
+   * Renames an address
+   *
+   * @param address The address to rename
+   * @param newName the new name
+   */
+  public void renameAddress(final Address address, String newName) {
+    walletManager.renameAddress(address, newName)
+        .compose(new AndroidSchedulerTransformer<Boolean>())
+        .subscribe(new Subscriber<Boolean>() {
+          @Override public void onCompleted() {
+            // Nothing to do
+          }
+
+          @Override public void onError(Throwable e) {
+            if (isViewAttached()) {
+              getView().showErrorEditingAddress(e, address);
+            }
+          }
+
+          @Override public void onNext(Boolean aBoolean) {
+            // nothing to do
+          }
+        });
   }
 }

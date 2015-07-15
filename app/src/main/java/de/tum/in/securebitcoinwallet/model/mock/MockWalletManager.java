@@ -108,4 +108,13 @@ public class MockWalletManager implements WalletManager {
       }
     });
   }
+
+  @Override public Observable<Boolean> renameAddress(final Address address, final String newName) {
+    return Observable.defer(new Func0<Observable<Boolean>>() {
+      @Override public Observable<Boolean> call() {
+        database.rename(address.getName(), newName);
+        return Observable.just(true);
+      }
+    });
+  }
 }
