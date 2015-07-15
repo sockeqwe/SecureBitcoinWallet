@@ -239,7 +239,6 @@ public class AddressListFragment
 
   @Override public void showErrorDeleteingAddress(Throwable t, Address address) {
     showSnackbar(errorMessageDeterminer.getString(t, false));
-    t.printStackTrace();
   }
 
   @Override public void showErrorEditingAddress(Throwable t, Address address) {
