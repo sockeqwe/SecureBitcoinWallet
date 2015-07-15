@@ -12,7 +12,7 @@ import butterknife.OnClick;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.mosby.dagger1.Dagger1MosbyFragment;
 import de.tum.in.securebitcoinwallet.R;
-import de.tum.in.securebitcoinwallet.address.create.CreateAddressActivity;
+import de.tum.in.securebitcoinwallet.addresses.create.CreateAddressActivity;
 import de.tum.in.securebitcoinwallet.transactions.create.TransactionWizardData;
 import de.tum.in.securebitcoinwallet.util.KeyboardUtils;
 

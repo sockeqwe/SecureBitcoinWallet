@@ -11,7 +11,7 @@
       android:theme="@style/AppTheme"
       >
     <activity
-        android:name=".accounts.AccountListActivity"
+        android:name=".addresses.AddressListActivity"
         android:label="@string/app_name"
         >
       <intent-filter>
@@ -31,7 +31,7 @@
     <activity android:name=".transactions.TransactionsActivity"/>
 
 
-    <activity android:name=".address.create.CreateAddressActivity"
+    <activity android:name=".addresses.create.CreateAddressActivity"
         android:theme="@style/RevealTheme"
         android:windowSoftInputMode="adjustResize"/>
 

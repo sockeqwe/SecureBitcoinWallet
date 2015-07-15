@@ -1,4 +1,4 @@
-package de.tum.in.securebitcoinwallet.accounts;
+package de.tum.in.securebitcoinwallet.addresses;
 
 import android.content.Context;
 import android.view.View;
@@ -21,8 +21,8 @@ import javax.inject.Inject;
  *
  * @author Hannes Dorfmann
  */
-public class AccountListAdapter extends ListAdapter<List<Address>>
-    implements AccountListAdapterBinder {
+public class AddressListAdapter extends ListAdapter<List<Address>>
+    implements AddressListAdapterBinder {
 
   /**
    * Click listener for account items
@@ -59,20 +59,20 @@ public class AccountListAdapter extends ListAdapter<List<Address>>
 
   @Inject IntentStarter intentStarter;
 
-  public AccountListAdapter(Context context, ObjectGraph objectGraph) {
+  public AddressListAdapter(Context context, ObjectGraph objectGraph) {
     super(context);
     this.context = context;
     objectGraph.inject(this);
   }
 
-  @Override public void initViewHolder(AccountListAdapterHolders.AddressViewHolder vh, View view,
+  @Override public void initViewHolder(AddressListAdapterHolders.AddressViewHolder vh, View view,
       ViewGroup parent) {
     vh.clickListener = new AccountClickListener(context, intentStarter);
     vh.itemView.setOnClickListener(vh.clickListener);
   }
 
   @Override
-  public void bindViewHolder(AccountListAdapterHolders.AddressViewHolder vh, int position) {
+  public void bindViewHolder(AddressListAdapterHolders.AddressViewHolder vh, int position) {
     final Address address = items.get(position);
     vh.name.setText(address.getName());
     vh.address.setText(address.getAddress());

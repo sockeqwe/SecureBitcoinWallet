@@ -1,4 +1,4 @@
-package de.tum.in.securebitcoinwallet.accounts;
+package de.tum.in.securebitcoinwallet.addresses;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import de.tum.in.securebitcoinwallet.R;
 import de.tum.in.securebitcoinwallet.common.BaseActivity;
 
-public class AccountListActivity extends BaseActivity {
+public class AddressListActivity extends BaseActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -15,7 +15,7 @@ public class AccountListActivity extends BaseActivity {
 
 
   @Override protected Fragment getContentFragment() {
-    return new AccountListFragment();
+    return new AddressListFragment();
   }
 
   @Override public void startActivity(Intent intent) {

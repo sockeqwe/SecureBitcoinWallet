@@ -1,4 +1,4 @@
-package de.tum.in.securebitcoinwallet.accounts;
+package de.tum.in.securebitcoinwallet.addresses;
 
 import de.tum.in.securebitcoinwallet.common.presenter.BitcoinMvpLcePresenter;
 import de.tum.in.securebitcoinwallet.model.Address;
@@ -7,15 +7,15 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * The presenter responsible to coordinate the {@link AccountListView}
+ * The presenter responsible to coordinate the {@link AddressListView}
  *
  * @author Hannes Dorfmann
  */
-public class AccountListPresenter extends BitcoinMvpLcePresenter<AccountListView, List<Address>> {
+public class AddressListPresenter extends BitcoinMvpLcePresenter<AddressListView, List<Address>> {
 
   private WalletManager walletManager;
 
-  @Inject public AccountListPresenter(WalletManager walletManager) {
+  @Inject public AddressListPresenter(WalletManager walletManager) {
     this.walletManager = walletManager;
   }
 

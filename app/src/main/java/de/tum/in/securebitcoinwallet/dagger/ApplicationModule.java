@@ -7,13 +7,13 @@ import dagger.Provides;
 import de.greenrobot.event.EventBus;
 import de.tum.in.securebitcoinwallet.BuildConfig;
 import de.tum.in.securebitcoinwallet.IntentStarter;
-import de.tum.in.securebitcoinwallet.accounts.AccountListActivity;
-import de.tum.in.securebitcoinwallet.accounts.AccountListAdapter;
-import de.tum.in.securebitcoinwallet.accounts.AccountListFragment;
-import de.tum.in.securebitcoinwallet.accounts.AccountListPresenter;
-import de.tum.in.securebitcoinwallet.address.create.CreateAddressActivity;
-import de.tum.in.securebitcoinwallet.address.create.nameinput.NameInputPresenter;
-import de.tum.in.securebitcoinwallet.address.create.pininput.PinInputPresenter;
+import de.tum.in.securebitcoinwallet.addresses.AddressListActivity;
+import de.tum.in.securebitcoinwallet.addresses.AddressListAdapter;
+import de.tum.in.securebitcoinwallet.addresses.AddressListFragment;
+import de.tum.in.securebitcoinwallet.addresses.AddressListPresenter;
+import de.tum.in.securebitcoinwallet.addresses.create.CreateAddressActivity;
+import de.tum.in.securebitcoinwallet.addresses.create.nameinput.NameInputPresenter;
+import de.tum.in.securebitcoinwallet.addresses.create.pininput.PinInputPresenter;
 import de.tum.in.securebitcoinwallet.common.BaseActivity;
 import de.tum.in.securebitcoinwallet.common.ErrorMessageDeterminer;
 import de.tum.in.securebitcoinwallet.common.RecyclerViewFragment;
@@ -47,9 +47,9 @@ import retrofit.client.OkClient;
 @Module(
 
     injects = {
-        BaseActivity.class, RecyclerViewFragment.class, AccountListActivity.class,
-        LockFragment.class, AccountListFragment.class, AccountListPresenter.class,
-        AccountListAdapter.class, TransactionsPresenter.class, TransactionsFragment.class,
+        BaseActivity.class, RecyclerViewFragment.class, AddressListActivity.class,
+        LockFragment.class, AddressListFragment.class, AddressListPresenter.class,
+        AddressListAdapter.class, TransactionsPresenter.class, TransactionsFragment.class,
         TransactionsAdapter.class, TransactionsActivity.class, BitcoinSync.class,
         CreateAddressActivity.class, NameInputPresenter.class, PinInputPresenter.class,
         CreateTransactionActivity.class, TransactionInputFragment.class,

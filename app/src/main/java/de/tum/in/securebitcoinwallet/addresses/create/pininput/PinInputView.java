@@ -1,4 +1,4 @@
-package de.tum.in.securebitcoinwallet.address.create.pininput;
+package de.tum.in.securebitcoinwallet.addresses.create.pininput;
 
 import de.tum.in.securebitcoinwallet.lock.LockView;
 import de.tum.in.securebitcoinwallet.model.Address;

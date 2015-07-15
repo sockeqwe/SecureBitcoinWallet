@@ -1,4 +1,4 @@
-package de.tum.in.securebitcoinwallet.address.create.pininput;
+package de.tum.in.securebitcoinwallet.addresses.create.pininput;
 
 import android.widget.Toast;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;

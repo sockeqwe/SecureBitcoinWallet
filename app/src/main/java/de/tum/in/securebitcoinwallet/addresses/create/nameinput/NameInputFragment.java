@@ -1,4 +1,4 @@
-package de.tum.in.securebitcoinwallet.address.create.nameinput;
+package de.tum.in.securebitcoinwallet.addresses.create.nameinput;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import butterknife.OnClick;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.mosby.dagger1.mvp.Dagger1MvpFragment;
 import de.tum.in.securebitcoinwallet.R;
-import de.tum.in.securebitcoinwallet.address.create.CreateAddressActivity;
+import de.tum.in.securebitcoinwallet.addresses.create.CreateAddressActivity;
 import de.tum.in.securebitcoinwallet.util.KeyboardUtils;
 
 /**

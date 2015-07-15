@@ -1,13 +1,13 @@
-package de.tum.in.securebitcoinwallet.address.create;
+package de.tum.in.securebitcoinwallet.addresses.create;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import de.tum.in.securebitcoinwallet.R;
-import de.tum.in.securebitcoinwallet.address.create.nameinput.NameInputFragment;
-import de.tum.in.securebitcoinwallet.address.create.nameinput.NameInputFragmentBuilder;
-import de.tum.in.securebitcoinwallet.address.create.pininput.PinInputFragment;
-import de.tum.in.securebitcoinwallet.address.create.pininput.PinInputFragmentBuilder;
+import de.tum.in.securebitcoinwallet.addresses.create.nameinput.NameInputFragment;
+import de.tum.in.securebitcoinwallet.addresses.create.nameinput.NameInputFragmentBuilder;
+import de.tum.in.securebitcoinwallet.addresses.create.pininput.PinInputFragment;
+import de.tum.in.securebitcoinwallet.addresses.create.pininput.PinInputFragmentBuilder;
 import de.tum.in.securebitcoinwallet.common.CircleRevealActivity;
 import icepick.Icicle;
 

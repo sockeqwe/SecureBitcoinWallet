@@ -1,4 +1,4 @@
-package de.tum.in.securebitcoinwallet.accounts;
+package de.tum.in.securebitcoinwallet.addresses;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -22,9 +22,9 @@ import javax.inject.Inject;
 /**
  * @author Hannes Dorfmann
  */
-public class AccountListFragment
-    extends RecyclerViewFragment<List<Address>, AccountListView, AccountListPresenter>
-    implements AccountListView {
+public class AddressListFragment
+    extends RecyclerViewFragment<List<Address>, AddressListView, AddressListPresenter>
+    implements AddressListView {
 
   @InjectView(R.id.toolbar) Toolbar toolbar;
   @Inject IntentStarter intentStarter;
@@ -33,11 +33,11 @@ public class AccountListFragment
   private RFACLabelItem fabImport;
 
   @Override protected ListAdapter<List<Address>> createAdapter() {
-    return new AccountListAdapter(getActivity(), getObjectGraph());
+    return new AddressListAdapter(getActivity(), getObjectGraph());
   }
 
-  @Override public AccountListPresenter createPresenter() {
-    return getObjectGraph().get(AccountListPresenter.class);
+  @Override public AddressListPresenter createPresenter() {
+    return getObjectGraph().get(AddressListPresenter.class);
   }
 
   @Override public void loadData(boolean pullToRefresh) {

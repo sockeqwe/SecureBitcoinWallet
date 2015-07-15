@@ -1,4 +1,4 @@
-package de.tum.in.securebitcoinwallet.address.create.nameinput;
+package de.tum.in.securebitcoinwallet.addresses.create.nameinput;
 
 import de.tum.in.securebitcoinwallet.common.presenter.BitcoinMvpPresenter;
 import de.tum.in.securebitcoinwallet.model.database.AddressDao;

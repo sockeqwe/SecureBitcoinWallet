@@ -2,7 +2,7 @@ package de.tum.in.securebitcoinwallet;
 
 import android.content.Context;
 import android.content.Intent;
-import de.tum.in.securebitcoinwallet.address.create.CreateAddressActivity;
+import de.tum.in.securebitcoinwallet.addresses.create.CreateAddressActivity;
 import de.tum.in.securebitcoinwallet.transactions.TransactionsActivity;
 import de.tum.in.securebitcoinwallet.transactions.create.CreateTransactionActivity;
 
