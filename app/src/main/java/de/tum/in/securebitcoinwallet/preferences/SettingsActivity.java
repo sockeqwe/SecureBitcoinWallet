@@ -4,6 +4,8 @@ import android.os.Bundle;
 import de.tum.in.securebitcoinwallet.R;
 
 /**
+ * Activity used to show the app preferences.
+ *
  * @author Benedikt Schlagberger
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
