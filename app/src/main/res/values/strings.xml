@@ -10,6 +10,10 @@
   <string name="error_pin_incorrect">Pin is incorrect</string>
   <string name="error_unknown">An unknown error has occrred</string>
   <string name="error_not_found">Oops, the thing you are looking for has not been found.</string>
+  <string name="error_card_locked">The smartcard is locked. Please unlock it by using the PUK</string>
+  <string name="error_applet_not_initialized">The applet has not been initialized yet.</string>
+  <string name="error_keystore_full">The smartcard can\'t hold any more addresses. Free some space by exporting or deleting an address</string>
+  <string name="error_smartcard_not_connected">Smartcard is not connected</string>
 
 
   <string name="menu_address_import">Import</string>

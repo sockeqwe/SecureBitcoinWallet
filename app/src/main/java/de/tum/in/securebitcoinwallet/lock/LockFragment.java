@@ -101,7 +101,7 @@ public abstract class LockFragment<V extends LockView, P extends MvpPresenter<V>
 
   @Override public void showError(Throwable t) {
     ((LockViewState) viewState).setShowingError(t);
-    //errorView.setText(messageDeterminer.getString(t, false));
+    errorView.setText(messageDeterminer.getString(t, false));
     errorView.setVisibility(View.VISIBLE);
     if (loadingAnimator != null) {
       loadingAnimator.cancel();
