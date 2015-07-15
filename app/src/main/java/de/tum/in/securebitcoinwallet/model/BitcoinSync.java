@@ -23,4 +23,8 @@ public class BitcoinSync {
   }
 
 
+  public void statSync(){
+
+  }
+
 }

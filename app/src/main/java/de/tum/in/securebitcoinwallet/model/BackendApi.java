@@ -34,4 +34,11 @@ public interface BackendApi {
    */
   @GET("/rawtx/{txHash}") public Observable<TransactionDto> getTranasction(
       @Path("txHash") String txHash);
+
+  /**
+   * Posts a transaction to the bitcoin network
+   *
+   * @param t the transaction
+   */
+  public void postTransaction(TransactionDto t);
 }

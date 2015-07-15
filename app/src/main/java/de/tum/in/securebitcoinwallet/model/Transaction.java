@@ -25,7 +25,7 @@ import java.lang.annotation.RetentionPolicy;
    * States that a transaction has been sent to the bitcoin network has not been proved or
    * acknowledged by the network yet
    */
-  public static final int SYNC_WAITING_FOR_COMMITMENT = 2;
+  public static final int SYNC_WAITING_CONFIRM = 2;
 
   /**
    * A new Transcaction that has not been sent yet to the bitcoin network
@@ -42,7 +42,7 @@ import java.lang.annotation.RetentionPolicy;
    *
    * @author Hannes Dorfmann
    */
-  @IntDef({ SYNC_WAITING_FOR_COMMITMENT, SYNC_NOT_SUBMITTED, SYNC_OK })
+  @IntDef({ SYNC_WAITING_CONFIRM, SYNC_NOT_SUBMITTED, SYNC_OK })
   @Retention(RetentionPolicy.SOURCE) public @interface SyncState {
   }
 
