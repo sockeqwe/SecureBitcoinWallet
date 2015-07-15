@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 import de.tum.in.securebitcoinwallet.model.Address;
 import de.tum.in.securebitcoinwallet.model.AddressMapper;
+import de.tum.in.securebitcoinwallet.model.dto.AddressDto;
 import de.tum.in.securebitcoinwallet.model.exception.AddressNameAlreadyInUseException;
 import java.util.List;
 import rx.Observable;
@@ -143,5 +144,23 @@ public class AddressDao extends AbsDao {
             return integer > 0;
           }
         });
+  }
+
+  /**
+   * Updates the balance for a given address
+   *
+   * @param dto The address dto
+   * @return the number of updated addresses
+   */
+  public Observable<Integer> updateBalance(AddressDto dto) {
+
+    ContentValues cv = AddressMapper.contentValues()
+        .amount(dto.getAmount())
+        .totalReceived(dto.getTotalReceived())
+        .totalSent(dto.getTotalSent())
+        .build();
+
+    return update(TABLE, cv, SQLiteDatabase.CONFLICT_IGNORE, COL_ADDRESS + " = ?",
+        dto.getAddress());
   }
 }

@@ -131,4 +131,20 @@ public class TransactionDao extends AbsDao {
   public Observable<Integer> deleteTransactionForAddress(String address) {
     return defer(delete(Transaction.TABLE_NAME, Transaction.COL_ADDRESS + " = ?", address));
   }
+
+  /**
+   * Get a list of all not submitted transaction
+   *
+   * @return a list of transaction that have not been submitted to bitcoin network yet
+   */
+  public Observable<List<Transaction>> getNotSubmittedTransactions() {
+    return defer(
+        query(SELECT("*").FROM(Transaction.TABLE_NAME).WHERE(Transaction.COL_SYNC_STATE + " = ?"),
+            false, Integer.toString(Transaction.SYNC_NOT_SUBMITTED))).map(
+        new Func1<SqlBrite.Query, List<Transaction>>() {
+          @Override public List<Transaction> call(SqlBrite.Query query) {
+            return TransactionMapper.list(query.run());
+          }
+        });
+  }
 }

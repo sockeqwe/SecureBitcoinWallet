@@ -1,6 +1,7 @@
 package de.tum.in.securebitcoinwallet.transactions;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,7 +23,7 @@ public class TransactionsAdapter extends ListAdapter<List<Transaction>>
 
   @ViewType(layout = R.layout.listelement_transaction,
       views = {
-          @ViewField(id = R.id.cardContainer, type= View.class, name="card"),
+          @ViewField(id = R.id.cardContainer, type = View.class, name = "card"),
           @ViewField(id = R.id.indicator, type = ImageView.class, name = "indicator"),
           @ViewField(id = R.id.name, type = TextView.class, name = "name"),
           @ViewField(id = R.id.recipient, type = TextView.class, name = "recipient"),
@@ -45,22 +46,18 @@ public class TransactionsAdapter extends ListAdapter<List<Transaction>>
     vh.bitcoins.setText(currencyManager.satoshiToBitcoin(transaction.getAmount()));
     vh.bitcoinsCurency.setText(currencyManager.toCustomCurrency(transaction.getAmount()));
     vh.recipient.setText(transaction.getAddress());
-    vh.card.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        // TODO implement? Open details?
-      }
-    });
 
-    // TODO impleement
-    if (position % 3 == 0){
+    if (transaction.getSyncState() == Transaction.SYNC_NOT_SUBMITTED
+        || transaction.getSyncState() == Transaction.SYNC_WAITING_CONFIRM) {
       vh.indicator.setImageResource(R.drawable.transaction_state_waiting);
+    } else if (transaction.getSyncState() == Transaction.SYNC_OK) {
+      vh.indicator.setImageResource(R.drawable.transaction_state_in);
+    }
+
+    if (transaction.getAmount() <= 0) {
+      vh.bitcoins.setTextColor(Color.RED);
     } else {
-      if (transaction.getAmount() < 0 ){
-        vh.indicator.setImageResource(R.drawable.transaction_state_out);
-      } else {
-        vh.indicator.setImageResource(R.drawable.transaction_state_in);
-      }
+      vh.bitcoins.setTextColor(Color.GREEN);
     }
   }
-
 }

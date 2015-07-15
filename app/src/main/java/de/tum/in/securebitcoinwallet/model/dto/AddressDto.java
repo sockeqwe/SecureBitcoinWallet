@@ -47,4 +47,6 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
   @Override public int hashCode() {
     return address.hashCode();
   }
+
+
 }
