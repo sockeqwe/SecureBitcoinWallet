@@ -199,12 +199,12 @@ public class AddressListFragment
    */
   private void editAddress() {
 
-    final EditText nameEditText = new EditText(getActivity());
-    nameEditText.setTextColor(getActivity().getResources().getColor(R.color.primary_text));
+    View rootView = getActivity().getLayoutInflater().inflate(R.layout.view_textinput, null);
+    final EditText nameEditText = (EditText) rootView.findViewById(R.id.editText);
     nameEditText.setText(longClickedAddress.getName());
 
     new AlertDialog.Builder(getActivity()).setTitle(R.string.actionmode_edit_address_title)
-        .setView(nameEditText)
+        .setView(rootView)
         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int whichButton) {
             String newName = nameEditText.getText().toString();

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    >
+
+  <EditText
+      android:id="@+id/editText"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textCursorDrawable="@drawable/text_cursor"
+      android:textColor="@color/primary_text"
+      />
+
+</FrameLayout>
