@@ -100,13 +100,15 @@ public class MockWalletManager implements WalletManager {
 
   }
 
-  @Override public Observable<Boolean> deleteAddress(final Address address) {
-    return privateKeyManager.deleteAddress(address.getAddress()).map(new Func1<Boolean, Boolean>() {
-      @Override public Boolean call(Boolean aBoolean) {
-        database.deleteAddressAndTranscations(address);
-        return aBoolean;
-      }
-    });
+  @Override public Observable<Boolean> deleteAddress(String pin, final Address address) {
+    // TODO pin --> bytes ?!?!
+    return privateKeyManager.removePrivateKeyForAddress(pin.getBytes(), address.getAddress())
+        .map(new Func1<Boolean, Boolean>() {
+          @Override public Boolean call(Boolean aBoolean) {
+            database.deleteAddressAndTranscations(address);
+            return aBoolean;
+          }
+        });
   }
 
   @Override public Observable<Boolean> renameAddress(final Address address, final String newName) {

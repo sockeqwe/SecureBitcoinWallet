@@ -149,13 +149,13 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
   }
 
   @Override
-  public Observable<Void> removePrivateKeyForAddress(final byte[] pin, final String address) {
-    return Observable.defer(new Func0<Observable<Void>>() {
-      @Override public Observable<Void> call() {
+  public Observable<Boolean> removePrivateKeyForAddress(final byte[] pin, final String address) {
+    return Observable.defer(new Func0<Observable<Boolean>>() {
+      @Override public Observable<Boolean> call() {
         try {
           smartCardManager.authenticate(pin);
           smartCardManager.deleteKey(address);
-          return Observable.empty();
+          return Observable.just(true);
         } catch (SmartCardException e) {
           return Observable.error(e);
         }
@@ -177,16 +177,4 @@ public class PrivateKeyManagerImpl implements PrivateKeyManager {
     });
   }
 
-  @Override public Observable<Boolean> deleteAddress(final String address) {
-    return Observable.defer(new Func0<Observable<Boolean>>() {
-      @Override public Observable<Boolean> call() {
-        try {
-          smartCardManager.deleteKey(address);
-          return Observable.just(true);
-        } catch (Exception e) {
-          return Observable.error(e);
-        }
-      }
-    });
-  }
 }

@@ -199,13 +199,13 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
   }
 
   @Override
-  public Observable<Void> removePrivateKeyForAddress(final byte[] pin, final String address) {
-    return Observable.defer(new Func0<Observable<Void>>() {
-      @Override public Observable<Void> call() {
+  public Observable<Boolean> removePrivateKeyForAddress(final byte[] pin, final String address) {
+    return Observable.defer(new Func0<Observable<Boolean>>() {
+      @Override public Observable<Boolean> call() {
         if (privateKeyMap.containsKey(address)) {
           privateKeyMap.remove(address);
           remainingSlots--;
-          return Observable.empty();
+          return Observable.just(true);
         } else {
           return Observable.error(new NotFoundException());
         }
@@ -262,15 +262,5 @@ public class MockPrivateKeyManager implements PrivateKeyManager {
       throw new AuthenticationFailedExeption();
     }
     remainingRetries = MAX_PIN_RETRIES;
-  }
-
-  @Override public Observable<Boolean> deleteAddress(final String address) {
-    return Observable.defer(new Func0<Observable<Boolean>>() {
-      @Override public Observable<Boolean> call() {
-        privateKeyMap.remove(address);
-        remainingSlots++;
-        return Observable.just(true);
-      }
-    });
   }
 }

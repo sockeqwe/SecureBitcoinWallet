@@ -96,7 +96,7 @@ public interface PrivateKeyManager {
    * @return nothing, {@link Subscriber#onCompleted()} or {@link Subscriber#onError(Throwable)} will
    * be called
    */
-  public Observable<Void> removePrivateKeyForAddress(byte[] pin, String address);
+  public Observable<Boolean> removePrivateKeyForAddress(byte[] pin, String address);
 
   /**
    * Signs the giben hash with the private key specified by the Bitcoin address.
@@ -108,11 +108,4 @@ public interface PrivateKeyManager {
    */
   public Observable<byte[]> signSHA256Hash(byte[] pin, String address, byte[] sha256hash);
 
-  /**
-   * Deletes a address
-   *
-   * @param address The address to delte
-   * @return boolean if successful, otherwise exception will be thrown
-   */
-  public Observable<Boolean> deleteAddress(String address);
 }

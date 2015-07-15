@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -182,15 +183,22 @@ public class AddressListFragment
    * Displays an dialog to delete an address
    */
   private void deleteAddress() {
+
+    View rootView = getActivity().getLayoutInflater().inflate(R.layout.view_textinput, null);
+    final EditText pinEditText = (EditText) rootView.findViewById(R.id.editText);
+    pinEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+    pinEditText.requestFocus();
+
     new AlertDialog.Builder(getActivity()).setTitle(R.string.actionmode_delete_address_title)
         .setMessage(R.string.actionmode_delete_address_message)
-        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+        .setView(rootView)
+        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
           @Override public void onClick(DialogInterface dialog, int which) {
-            presenter.deleteAddress(longClickedAddress);
+            String pin = pinEditText.getText().toString();
+            presenter.deleteAddress(pin, longClickedAddress);
             actionMode.finish();
           }
         })
-        .setNegativeButton(R.string.no, null)
         .show();
   }
 

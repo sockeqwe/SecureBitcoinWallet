@@ -30,9 +30,9 @@ public class AddressListPresenter extends BitcoinMvpLcePresenter<AddressListView
    *
    * @param address The address to rename
    */
-  public void deleteAddress(final Address address) {
+  public void deleteAddress(String pin, final Address address) {
 
-    walletManager.deleteAddress(address)
+    walletManager.deleteAddress(pin, address)
         .compose(new AndroidSchedulerTransformer<Boolean>())
         .subscribe(new Subscriber<Boolean>() {
           @Override public void onCompleted() {

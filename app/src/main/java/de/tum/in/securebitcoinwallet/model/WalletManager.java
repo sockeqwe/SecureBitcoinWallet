@@ -58,10 +58,11 @@ public interface WalletManager {
   /**
    * Delete an Address
    *
+   * @param pin The pin
    * @param address The address to delete
    * @return true if deleted successfully, otherwise exception will be thrown
    */
-  public Observable<Boolean> deleteAddress(Address address);
+  public Observable<Boolean> deleteAddress(String pin, Address address);
 
   /**
    * Renames an address

@@ -95,9 +95,9 @@ public class WalletManagerImpl implements WalletManager {
     return convertedPin;
   }
 
-  @Override public Observable<Boolean> deleteAddress(final Address address) {
+  @Override public Observable<Boolean> deleteAddress(String pin, final Address address) {
 
-    return privateKeyManager.deleteAddress(address.getAddress())
+    return privateKeyManager.removePrivateKeyForAddress(convertPinToBytes(pin), address.getAddress())
         .flatMap(new Func1<Boolean, Observable<Integer>>() {
           @Override public Observable<Integer> call(Boolean aBoolean) {
             return addressDao.delete(address);
