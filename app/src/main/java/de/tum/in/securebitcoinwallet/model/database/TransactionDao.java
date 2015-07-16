@@ -113,6 +113,31 @@ public class TransactionDao extends AbsDao {
   }
 
   /**
+   * update a given transaction
+   *
+   * @param t The transaction to update
+   * @return Updated transaction
+   */
+  public Observable<Transaction> update(final Transaction t) {
+
+    ContentValues cv = TransactionMapper.contentValues()
+        .amount(t.getAmount())
+        .address(t.getAddress())
+        .name(t.getName())
+        .syncState(t.getSyncState())
+        .timestamp(t.getTimestamp())
+        .build();
+
+    return defer(
+        update(Transaction.TABLE_NAME, cv, Transaction.COL_HASH_ID + " = ?", t.getAddress()).map(
+            new Func1<Integer, Transaction>() {
+              @Override public Transaction call(Integer aLong) {
+                return t;
+              }
+            }));
+  }
+
+  /**
    * Deletes a transaction by id
    *
    * @param hashId The hash id

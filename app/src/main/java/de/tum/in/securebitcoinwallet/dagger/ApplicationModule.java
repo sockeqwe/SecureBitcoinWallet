@@ -20,7 +20,7 @@ import de.tum.in.securebitcoinwallet.common.ErrorMessageDeterminer;
 import de.tum.in.securebitcoinwallet.common.RecyclerViewFragment;
 import de.tum.in.securebitcoinwallet.lock.LockFragment;
 import de.tum.in.securebitcoinwallet.model.BackendApi;
-import de.tum.in.securebitcoinwallet.model.BitcoinSync;
+import de.tum.in.securebitcoinwallet.model.sync.BitcoinSync;
 import de.tum.in.securebitcoinwallet.model.CurrencyManager;
 import de.tum.in.securebitcoinwallet.model.PrivateKeyManager;
 import de.tum.in.securebitcoinwallet.model.WalletManager;

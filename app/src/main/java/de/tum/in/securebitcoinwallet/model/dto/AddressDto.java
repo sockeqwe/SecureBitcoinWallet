@@ -2,9 +2,11 @@ package de.tum.in.securebitcoinwallet.model.dto;
 
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
+import java.util.List;
 
 /**
  * DTO (Data transfer object) for loading data from bitcoin network
+ *
  * @author Hannes Dorfmann
  */
 @JsonObject public class AddressDto {
@@ -14,6 +16,7 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
   @JsonField(name = "total_sent") long totalSent;
   @JsonField(name = "total_received") long totalReceived;
   @JsonField(name = "n_tx") int transactionsCount;
+  @JsonField(name = "tx") List<TransactionDto> transactions;
 
   public String getAddress() {
     return address;
@@ -35,6 +38,34 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
     return transactionsCount;
   }
 
+  public List<TransactionDto> getTransactions() {
+    return transactions;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
+  public void setAmount(long amount) {
+    this.amount = amount;
+  }
+
+  public void setTotalSent(long totalSent) {
+    this.totalSent = totalSent;
+  }
+
+  public void setTotalReceived(long totalReceived) {
+    this.totalReceived = totalReceived;
+  }
+
+  public void setTransactionsCount(int transactionsCount) {
+    this.transactionsCount = transactionsCount;
+  }
+
+  public void setTransactions(List<TransactionDto> transactions) {
+    this.transactions = transactions;
+  }
+
   @Override public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
@@ -47,6 +78,4 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
   @Override public int hashCode() {
     return address.hashCode();
   }
-
-
 }

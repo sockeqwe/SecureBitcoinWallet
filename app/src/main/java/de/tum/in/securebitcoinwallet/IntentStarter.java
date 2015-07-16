@@ -20,9 +20,19 @@ public class IntentStarter {
    * @param address The address you want to dispaly the transactions for
    */
   public void showTransactions(Context context, String address) {
+    context.startActivity(getIntentToShowTransactions(context, address));
+  }
+
+  /**
+   * Get the intent to display the transactions list for a certain address
+   *
+   * @param context The who starts this
+   * @param address The address
+   */
+  public Intent getIntentToShowTransactions(Context context, String address) {
     Intent i = new Intent(context, TransactionsActivity.class);
     i.putExtra(TransactionsActivity.KEY_ADDRESS, address);
-    context.startActivity(i);
+    return i;
   }
 
   /**

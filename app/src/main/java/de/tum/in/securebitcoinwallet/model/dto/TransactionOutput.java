@@ -35,4 +35,24 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
   public String getN() {
     return n;
   }
+
+  public void setValue(long value) {
+    this.value = value;
+  }
+
+  public void setHash(String hash) {
+    this.hash = hash;
+  }
+
+  public void setScript(String script) {
+    this.script = script;
+  }
+
+  public void setTxIndex(String txIndex) {
+    this.txIndex = txIndex;
+  }
+
+  public void setN(String n) {
+    this.n = n;
+  }
 }

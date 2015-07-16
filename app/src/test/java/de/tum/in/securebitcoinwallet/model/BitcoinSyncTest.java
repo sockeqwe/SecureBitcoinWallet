@@ -4,6 +4,7 @@ import android.content.Context;
 import com.hannesdorfmann.sqlbrite.dao.DaoManager;
 import de.tum.in.securebitcoinwallet.model.database.AddressDao;
 import de.tum.in.securebitcoinwallet.model.database.TransactionDao;
+import de.tum.in.securebitcoinwallet.model.sync.BitcoinSync;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;

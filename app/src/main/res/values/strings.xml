@@ -68,4 +68,7 @@
   <string name="actionmode_edit_address_empty_name">The name can not be empty!</string>
   <string name="error_invalid_address">Bitcoin address is invalid</string>
 
+  <string name="notification_received">Bitcoins received</string>
+  <string name="noticiations_details">Open to see details</string>
+
 </resources>
