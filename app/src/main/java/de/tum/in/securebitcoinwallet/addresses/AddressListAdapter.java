@@ -115,8 +115,8 @@ public class AddressListAdapter extends ListAdapter<List<Address>>
     vh.longClickListener.address = address;
 
     if (address == selectedItem) {
-      vh.address.setTextColor(colorSelectedTitle);
-      vh.name.setTextColor(colorSelectedSubtitle);
+      vh.address.setTextColor(colorSelectedSubtitle);
+      vh.name.setTextColor(colorSelectedTitle);
     } else {
       vh.address.setTextColor(colorNormalSubtitle);
       vh.name.setTextColor(colorNormalTitle);

@@ -136,7 +136,7 @@ public class AddressListFragment
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     toolbar.setTitle(R.string.app_name);
-    toolbar.inflateMenu(R.menu.menu_account_list);
+    //toolbar.inflateMenu(R.menu.menu_account_list);
     toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
       @Override public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
